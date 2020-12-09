@@ -1,10 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App from './Components/App'
+import App from './App.js'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
-ReactDOM.render(
-  <App />,
-document.querySelector("#root")
-);
+ReactDOM.render(<App />, document.querySelector("#root"));
