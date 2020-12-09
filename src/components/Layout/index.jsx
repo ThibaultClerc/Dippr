@@ -2,7 +2,7 @@ import React from 'react';
 import Nav from "../Navbar";
 import {Switch } from 'react-router-dom'
 import {BrowserRouter as Router, Route} from 'react-router-dom';
-import Signup from "../Signup"
+import Signup from "../../pages/Signup"
 
 const Layout = () => {
   return (
