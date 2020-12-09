@@ -30,11 +30,13 @@ const Connection = () => {
     })
     .then((response) => {
       Cookies.set('token', response.headers.get("Authorization"))
+      console.log(response)
       return response.json()
     })
     .then((response) => {
-      console.log(response.data.attributes)
-      dispatch(loginUser(response.data.attributes))
+      console.log("laaaa")
+      console.log(response)
+      dispatch(loginUser(response.data))
       //setRedirection(true)
     }).catch(error => {
       console.log(error)
