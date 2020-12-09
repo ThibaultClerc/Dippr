@@ -1,12 +1,10 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import App from './Components/App'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-const App = () => {
-  return (
-    <div>
-      APP
-    </div>
-  )
-}
 
-ReactDOM.render(<App />, document.querySelector("#root"));
+ReactDOM.render(
+  <App />,
+document.querySelector("#root")
+);
