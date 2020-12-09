@@ -1,19 +1,21 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Nav from "../Navbar";
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-import {Container, Row, Col, Card, Form, Button } from "react-bootstrap";
 import Home from '../../pages/Home'
+import Signup from "../../pages/Signup"
+import Login from "../../pages/Login"
+import Profil from "../../pages/Profil"
 
 const Layout = () => {
   return (
     <Router>
       <Nav/>
-      <Switch>
+      <Switch> 
         <Route exact path="/"><Home /></Route>
-        {/* <PrivateRouteRegister component={Register} path="/register" exact />
-        <PrivateRouteRegister component={Login} path="/login" exact />
-        <PrivateRoute component={User} path="/users/:userID" exact /> */}
-      </Switch>
+        <Route exact path="/signup" component={Signup}/>
+        <Route exact path="/signin" component={Login}/>
+        <Route exact path="/profil" component={Profil}/>
+      </Switch> 
     </Router>
   )
 }
