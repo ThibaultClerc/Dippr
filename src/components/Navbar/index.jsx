@@ -22,7 +22,7 @@ const Nav = () => {
             {' '}
             {user.length === 0 ? <Button as={Link} to="/signup" variant="primary">S'inscrire</Button> :  '' }
 
-            {user.length !== 0 ? <Button as={Link} to="/profil" variant="primary">Profil</Button>:  '' }
+            {user.length !== 0 ? <Button as={Link} to="/profile" variant="primary">Profil</Button>:  '' }
             {' '}
             {user.length !== 0 ? <Button variant="danger" onClick={(e) => {Cookies.remove('token'); window.location.reload();}}>Déconnexion</Button> :  '' }   
           </div>

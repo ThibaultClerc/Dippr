@@ -20,7 +20,6 @@ const VisitorHome = () => {
       return response.json()
     })
     .then((response) => {
-      console.log(response.data)
       setData(response.data)
     }).catch(error => {
       console.log(error)
@@ -46,8 +45,10 @@ const VisitorHome = () => {
       <CardColumns>
         {data.slice(0, 6).map(dish => {
           const dishData = dish.meta.user_dish
+          console.log(data.slice(0,6))
           return (
             <DishCard
+              key={dish.id}
               market_dish_id={dishData.id}
               name={dishData.name}
               description={dishData.description}
