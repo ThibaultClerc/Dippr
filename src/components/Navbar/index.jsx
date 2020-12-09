@@ -17,7 +17,7 @@ const Nav = () => {
           </div>
           <div className="Connection">
             <Button href="#" variant="outline-primary">Se connecter</Button>{' '}
-            <Button href="#" variant="primary">S'inscrire</Button> 
+            <Button href="/signup" variant="primary">S'inscrire</Button> 
           </div>
         </div>
       </nav>

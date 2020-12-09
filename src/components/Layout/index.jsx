@@ -1,15 +1,16 @@
 import React from 'react';
 import Nav from "../Navbar";
+import {Switch } from 'react-router-dom'
 import {BrowserRouter as Router, Route} from 'react-router-dom';
-import {Container, Row, Col, Card, Form, Button } from "react-bootstrap";
-import SidebarFinal from "../Sidebar"
+import Signup from "../Signup"
 
 const Layout = () => {
   return (
     <Router>
       <Nav/>
-      <SidebarFinal/>
-      <div>appppp</div>
+      <Switch> 
+         <Route exact path="/signup" component={Signup}/>
+      </Switch> 
     </Router>
   )
 }
