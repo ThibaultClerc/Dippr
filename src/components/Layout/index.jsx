@@ -1,15 +1,19 @@
 import React from 'react';
 import Nav from "../Navbar";
-import {BrowserRouter as Router, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import {Container, Row, Col, Card, Form, Button } from "react-bootstrap";
-import SidebarFinal from "../Sidebar"
+import Home from '../../pages/Home'
 
 const Layout = () => {
   return (
     <Router>
       <Nav/>
-      <SidebarFinal/>
-      <div>appppp</div>
+      <Switch>
+        <Route exact path="/"><Home /></Route>
+        {/* <PrivateRouteRegister component={Register} path="/register" exact />
+        <PrivateRouteRegister component={Login} path="/login" exact />
+        <PrivateRoute component={User} path="/users/:userID" exact /> */}
+      </Switch>
     </Router>
   )
 }
