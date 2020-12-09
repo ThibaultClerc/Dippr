@@ -5,16 +5,17 @@ import Home from '../../pages/Home'
 import Signup from "../../pages/Signup"
 import Login from "../../pages/Login"
 import Profile from "../../pages/Profile"
+import PrivateRoute from "../PrivateRoute"
 
 const Layout = () => {
   return (
     <Router>
       <Nav/>
       <Switch> 
-        <Route exact path="/"><Home /></Route>
-        <Route exact path="/signup" component={Signup}/>
-        <Route exact path="/signin" component={Login}/>
-        <Route exact path="/profile" component={Profile}/>
+        <Route        exact path="/"        component={Home}   />
+        <Route        exact path="/signup"  component={Signup} />
+        <Route        exact path="/signin"  component={Login}  />
+        <PrivateRoute       path="/profile" component={Profile}/>
       </Switch> 
     </Router>
   )
