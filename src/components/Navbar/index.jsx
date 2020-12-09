@@ -1,4 +1,4 @@
-import {Link} from "react-router-dom";
+import {Link, NavLink} from "react-router-dom";
 import React from 'react'
 import { useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
@@ -18,10 +18,11 @@ const Nav = () => {
             <Link to="#" className="nav-item nav-link">About</Link>
           </div>
           <div className="Connection">
-            {user.length === 0 ? <Button href="/signin" variant="outline-primary">Se connecter</Button> :  '' }
+            {user.length === 0 ? <Button as={Link} to="/signin" variant="outline-primary">Se connecter</Button> :  '' }
             {' '}
-            {user.length === 0 ? <Button href="/signup" variant="primary">S'inscrire</Button> :  '' }
-            {user.length !== 0 ? <Button href="#" variant="primary">Profil</Button>:  '' }
+            {user.length === 0 ? <Button as={Link} to="/signup" variant="primary">S'inscrire</Button> :  '' }
+
+            {user.length !== 0 ? <Button as={Link} to="/profil" variant="primary">Profil</Button>:  '' }
             {' '}
             {user.length !== 0 ? <Button variant="danger" onClick={(e) => {Cookies.remove('token'); window.location.reload();}}>Déconnexion</Button> :  '' }   
           </div>
