@@ -16,7 +16,7 @@ const Nav = () => {
             <Link to="#" className="nav-item nav-link">About</Link>
           </div>
           <div className="Connection">
-            <Button href="#" variant="outline-primary">Se connecter</Button>{' '}
+            <Button href="/signin" variant="outline-primary">Se connecter</Button>{' '}
             <Button href="/signup" variant="primary">S'inscrire</Button> 
           </div>
         </div>
