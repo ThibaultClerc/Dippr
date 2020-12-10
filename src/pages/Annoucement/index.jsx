@@ -9,22 +9,22 @@ import { Redirect } from 'react-router-dom';
 
 const Announcement = () => {
 
-  const [currentUser, setCurrentUser] = useState(useSelector(state => state.user))
+  const [currentUser, setCurrentUser] = useState(useSelector(state => state.user));
   const [ingredients, setIngredients] = useState([]);
   const [tags, setTags] = useState([]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [redirection, setRedirection] = useState(false);
 
-  const [currentTags, setCurrentTags] = useState([])
-  const [currentIngredients, setCurrentIngredients] = useState([])
+  const [currentTags, setCurrentTags] = useState([]);
+  const [currentIngredients, setCurrentIngredients] = useState([]);
 
   const data = {
     user_dish: {
       name: name,
       description: description,
     }
-    }
+  };
 
   const fetchIngredient = () => {
     fetch("https://dippr-api-development.herokuapp.com/api/ingredients", {
@@ -90,6 +90,9 @@ const Announcement = () => {
       currentIngredients.forEach(element =>{
         handleIngredients(response.id, element.id );
       })
+      currentTags.forEach(element =>{
+        handleTags(response.id, element.id );
+      })
       setRedirection(true)
     }).catch(error => {
       console.log(error)
@@ -109,6 +112,33 @@ const Announcement = () => {
           user_dish_ingredient: {
             user_dish_id: dish,
             ingredient_id: ingredient
+          }
+        }
+      )
+    })
+    .then((response) => {
+      return response.json()
+    })
+    .then((response) => {
+      console.log(response)
+    }).catch(error => {
+      console.log(error)
+    })
+  };
+
+  const handleTags = (dish, tags) => {
+    fetch(`https://dippr-api-development.herokuapp.com/api/user_dish_tags`, {
+      "method": "POST",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": Cookies.get("token")
+      },
+      "body": JSON.stringify(
+        
+        {
+          user_dish_tag: {
+            user_dish_id: dish,
+            tag_id: tags
           }
         }
       )
