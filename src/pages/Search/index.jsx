@@ -1,14 +1,23 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom';
-import CardColumns from 'react-bootstrap/CardColumns';
-import DishCard from '../../components/DishCard';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import ToggleButton from 'react-bootstrap/ToggleButton';
 import Loader from '../../components/UI/Loader';
+import SearchResults from './SearchResults'
 
 
 const Search = () => {
-  const [data, setData] = useState([])
-  const [loading, setLoading] = useState(false)
+  const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [radioValue, setRadioValue] = useState('1');
   let { query } = useParams();
+
+  const radios = [
+    { name: 'TROCS', value: '1' },
+    { name: 'DONS', value: '2' },
+    { name: 'DEMANDES', value: '3' },
+  ];
 
   const fetchData = () => {
     setLoading(true)
@@ -24,41 +33,54 @@ const Search = () => {
     .then((response) => {
       setData(response.data)
       setLoading(false)
-      if (response.data.length === 0) {
-
-      }
     }).catch(error => {
       console.log(error)
     })
   };
 
   useEffect(() => {
-    fetchData()
+    if (typeof query !== undefined) {
+      fetchData()
+    }
   }, [query])
 
+  useEffect(() => {
+    changeCategory(radioValue)
+  }, [radioValue, data])
+
+  const changeCategory = (category) => {
+    switch(category) {
+      case "1":
+        setFilteredData(data.filter(dish => dish.attributes.market_dish_type === "troc"))
+        break;
+      case "2":
+        setFilteredData(data.filter(dish => dish.attributes.market_dish_type === "donation"))
+        break;
+      case "3":
+        console.log("wishes")
+      break;
+    }
+  }
 
   return (
     <>
-    {(!loading && data.length > 0) ?  
-      <CardColumns>
-        {data.map(dish => {
-          const dishData = dish.meta.user_dish
-          return (
-            <DishCard
-              key={dish.id}
-              market_dish_id={dishData.id}
-              name={dishData.name}
-              description={dishData.description}
-              dish_rating={dishData.dish_rating}
-              user_id={dishData.user_id}
-              created_at={dishData.created_at}
-            />
-          )})}
-      </CardColumns>
-      : <Loader/>
-      }
+    <ButtonGroup toggle>
+        {radios.map((radio, idx) => (
+          <ToggleButton
+            key={idx}
+            type="radio"
+            variant="secondary"
+            name="radio"
+            value={radio.value}
+            checked={radioValue === radio.value}
+            onChange={(e) => setRadioValue(e.currentTarget.value)}
+          >
+            {radio.name}
+          </ToggleButton>
+        ))}
+      </ButtonGroup>
+      <SearchResults data={filteredData}/>
     </>
-
   )
 }
 

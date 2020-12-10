@@ -8,13 +8,11 @@ import FormControl from 'react-bootstrap/FormControl';
 
 import Cookies from "js-cookie";
 import { logoutUser } from '../../store/actions'
-// import { newQuery } from '../../store/actions'
 
 const Nav = () => {
   const [query, setQuery] = useState("")
   const dispatch = useDispatch()
   const user = useSelector(state => state.user.user);
-  // const query = useSelector(state => state.query.query);
 
   const handleClick = () => {
     Cookies.remove('token');
@@ -30,7 +28,6 @@ const Nav = () => {
         <Link to="/" className="navbar-brand">DIPPR</Link>
         <div className="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
           <div className="navbar-nav">
-            <Link to="/" className="navbar-brand">Home</Link>
             <Link to="#" className="nav-item nav-link">About</Link>
             <Link to="/announcement" className="nav-item nav-link">Créer une annonce</Link>
             <Form inline>

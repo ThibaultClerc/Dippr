@@ -48,7 +48,6 @@ const VisitorHome = () => {
       <CardColumns>
         {data.slice(0, 6).map(dish => {
           const dishData = dish.meta.user_dish
-          console.log(data.slice(0,6))
           return (
             <DishCard
               key={dish.id}
