@@ -41,6 +41,14 @@ const Profile = () => {
           <h2> Nom : {data.last_name !== "" ? data.last_name : ""} </h2>
           <h2> Email : {data.email} </h2>
           <h3> Référence utilisateur : {user.id} </h3>
+          <h3>Pays : {data.country !== "" ? data.country  : ""} </h3>
+          <h3>Ville : {data.city !== "" ? data.city  : ""} </h3>
+          <h3>Code postale : {data.zip_code !== "" ? data.zip_code  : ""} </h3>
+          <h3>Rue : {data.street !== "" ? data.street  : ""} </h3>
+          <h3>Numéro de téléphone : {data.phone_number !== "" ? data.phone_number  : ""} </h3>
+          <h3>Description : {data.description !== "" ? data.description  : ""} </h3>
+          <h3>Vous avez {data.dippers !== "" ? data.dippers + " dippers"  : "aucun dippers"} </h3>
+
           <Button as={Link} to="/profile/edit" variant="primary">Modifier mon profil</Button>
         </>
         : <Loader/>
