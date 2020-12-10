@@ -4,6 +4,7 @@ import Nav from "../Navbar";
 import Home from '../../pages/Home'
 import Signup from "../../pages/Signup"
 import Login from "../../pages/Login"
+import Annoucement from "../../pages/Annoucement"
 import Profile from "../../pages/Profile"
 import PrivateRoute from "../PrivateRoute"
 
@@ -12,6 +13,7 @@ const Layout = () => {
     <Router>
       <Nav/>
       <Switch> 
+        <Route exact path="/announcement" component={Annoucement}/>
         <Route        exact path="/"        component={Home}   />
         <Route        exact path="/signup"  component={Signup} />
         <Route        exact path="/signin"  component={Login}  />

@@ -21,6 +21,8 @@ const Nav = () => {
           <div className="navbar-nav">
             <Link to="/" className="navbar-brand">Home</Link>
             <Link to="#" className="nav-item nav-link">About</Link>
+            <Link to="/announcement" className="nav-item nav-link">Créer une annonce</Link>
+
           </div>
           <div className="Connection">
             {user.length === 0 ? <Button as={Link} to="/signin" variant="outline-primary mr-3">Se connecter</Button> :  '' }
