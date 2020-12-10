@@ -3,6 +3,9 @@ import {Container, Row, Col, Card, Form, Button } from "react-bootstrap";
 import Sidebar from "../SidebarContent";
 import '../SidebarContent/index.css'
 
+import Home from "../../pages/Home"
+
+
 const SidebarFinal = () => {
   return (
     <Container fluid>
@@ -11,7 +14,7 @@ const SidebarFinal = () => {
             <Sidebar />
             </Col>
             <Col  xs={10} id="page-content-wrapper">
-                this is a test
+              <Home/>
             </Col> 
         </Row>
 

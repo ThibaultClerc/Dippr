@@ -1,19 +1,23 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Nav from "../Navbar";
-import {Switch } from 'react-router-dom'
-import {BrowserRouter as Router, Route} from 'react-router-dom';
+import Home from '../../pages/Home'
 import Signup from "../../pages/Signup"
 import Login from "../../pages/Login"
 import Annoucement from "../../pages/Annoucement"
+import Profile from "../../pages/Profile"
+import PrivateRoute from "../PrivateRoute"
 
 const Layout = () => {
   return (
     <Router>
       <Nav/>
       <Switch> 
-        <Route exact path="/signup" component={Signup}/>
-        <Route exact path="/signin" component={Login}/>
         <Route exact path="/announcement" component={Annoucement}/>
+        <Route        exact path="/"        component={Home}   />
+        <Route        exact path="/signup"  component={Signup} />
+        <Route        exact path="/signin"  component={Login}  />
+        <PrivateRoute       path="/profile" component={Profile}/>
       </Switch> 
     </Router>
   )

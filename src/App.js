@@ -1,7 +1,8 @@
 import React from 'react';
-import Layout from './components/Layout'
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { Provider } from 'react-redux';
-import { store } from './store/store'
+import { store } from './store/store';
+import Layout from './components/Layout';
 
 const App = () => {
   return (
