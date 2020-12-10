@@ -3,10 +3,12 @@ import React, {useState} from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import {loginUser} from '../../store/actions';
 import {Container, Row, Col, Form, Button } from "react-bootstrap";
+import { Redirect } from 'react-router-dom';
 
 const Connection = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [redirection, setRedirection] = useState(false);
 
   const data = {
       user: {
@@ -37,14 +39,15 @@ const Connection = () => {
       console.log("laaaa")
       console.log(response)
       dispatch(loginUser(response.data))
-      //setRedirection(true)
+      setRedirection(true)
     }).catch(error => {
       console.log(error)
     })
   };
 
   return (
-    <>   
+    <>
+    {redirection && <Redirect to='/'/>}
     <Container fluid>
       <Row>
       <Col xs="3"></Col>

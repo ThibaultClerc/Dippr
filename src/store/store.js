@@ -1,8 +1,8 @@
 import { createStore, compose, applyMiddleware } from 'redux';
-import userConnect from '../store/reducers/user'
+import userConnectStatus from './reducers/userConnectStatus'
 import thunkMiddleware from 'redux-thunk';
 
 export const store = createStore(
-  userConnect,
+  userConnectStatus,
   compose(applyMiddleware(thunkMiddleware), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 );
