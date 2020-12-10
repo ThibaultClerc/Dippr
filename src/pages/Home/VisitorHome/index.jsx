@@ -8,9 +8,11 @@ import DishCard from '../../../components/DishCard'
 
 const VisitorHome = () => {
   const [data, setData] = useState([])
+  const [loading, setLoading] = useState(false)
 
   const fetchData = () => {
-    fetch(`https://dippr-api-development.herokuapp.com/api/market_dishes`, {
+    setLoading(true)
+    fetch(`http://localhost:3000/api/market_dishes`, {
       "method": "GET",
       "headers": {
         "Content-Type": "application/json"
@@ -21,6 +23,7 @@ const VisitorHome = () => {
     })
     .then((response) => {
       setData(response.data)
+      setLoading(false)
     }).catch(error => {
       console.log(error)
     })
@@ -41,7 +44,7 @@ const VisitorHome = () => {
           <Button variant="primary">Learn more</Button>
         </p>
       </Jumbotron>
-      {data.length !== 0 ?  
+      {!loading ?  
       <CardColumns>
         {data.slice(0, 6).map(dish => {
           const dishData = dish.meta.user_dish

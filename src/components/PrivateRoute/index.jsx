@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 
   const PrivateRoute = ({component: Component, ...rest}) => {
 
-    const user = useSelector(state => state.user);
+    const user = useSelector(state => state.user.user);
 
     const isLogin = () => {
       if (user.length !== 0) {

@@ -1,7 +1,7 @@
 import React from 'react';
 import {Container, Row, Col, Card, Form, Button } from "react-bootstrap";
-import Sidebar from "../SidebarContent";
-import '../SidebarContent/index.css'
+import Sidebar from "../SidebarContentNOT";
+import '../SidebarContentNOT/index.css'
 
 import Home from "../../pages/Home"
 

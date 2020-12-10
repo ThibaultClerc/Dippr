@@ -7,7 +7,7 @@ import Loader from '../../components/UI/Loader';
 
 
 const Profile = () => {
-  const user = useSelector(state => state.user);
+  const user = useSelector(state => state.user.user);
   const [data, setData] = useState([])
 
   const fetchData = () => {
