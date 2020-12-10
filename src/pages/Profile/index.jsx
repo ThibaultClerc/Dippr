@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Loader from '../../components/UI/Loader';
 import {Link, useParams} from "react-router-dom";
 
-
+import UserDishes from '../../components/UserDishes';
 
 const Profile = () => {
   let {profileId} = useParams();
@@ -62,6 +62,9 @@ const Profile = () => {
           <h3> {data.dippers !== "" && user.id === profileId ? "Vous avez " + data.dippers + " dippers"  : ""} </h3>
 
           <h3>{user.id === profileId ? <Button as={Link} to="/profile/edit" variant="primary">Modifier mon profil</Button> : ""}</h3>
+
+          <h3>{user.id === profileId ? <UserDishes profileId={user.id}/> : ""}</h3>
+
         </>
         : <Loader/>
        }
