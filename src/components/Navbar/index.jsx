@@ -11,6 +11,7 @@ import { logoutUser } from '../../store/actions'
 
 const Nav = () => {
   const [query, setQuery] = useState("")
+  
   const dispatch = useDispatch()
   const user = useSelector(state => state.user.user);
 
@@ -39,7 +40,7 @@ const Nav = () => {
           <div className="Connection">
             {user.length === 0 ? <Button as={Link} to="/signin" variant="outline-primary mr-3">Se connecter</Button> :  '' }
             {user.length === 0 ? <Button as={Link} to="/signup" variant="primary">S'inscrire</Button> :  '' }
-            {user.length !== 0 ? <Button as={Link} to="/profile" variant="primary mr-3">Profil</Button>:  '' }
+            {user.length !== 0 ? <Button as={Link} to={`/profile/${user.id}`} variant="primary mr-3">Profil</Button>:  '' }
             {user.length !== 0 ? <Button as={Link} to="/" variant="danger" onClick={(e) => handleClick()}>Déconnexion</Button> :  '' }   
           </div>
         </div>

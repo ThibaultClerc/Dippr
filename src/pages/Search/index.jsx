@@ -21,7 +21,7 @@ const Search = () => {
 
   const fetchData = () => {
     setLoading(true)
-    fetch(`http://localhost:3000/api/marketdishes/search?query=${query}`, {
+    fetch(`https://dippr-api-development.herokuapp.com/api/marketdishes/search?query=${query}`, {
       "method": "GET",
       "headers": {
         "Content-Type": "application/json"

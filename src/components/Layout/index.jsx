@@ -14,13 +14,13 @@ const Layout = () => {
     <Router>
       <Nav/>
       <Switch> 
-        <Route        exact path="/announcement"   component={Annoucement}/>
-        <Route        exact path="/"        component={Home}/>
-        <Route        exact path="/signup"  component={Signup}/>
-        <Route        exact path="/signin"  component={Login}/>
+        <Route exact path="/announcement" component={Annoucement}/>
+        <Route        exact path="/"        component={Home}   />
+        <Route        exact path="/signup"  component={Signup} />
+        <Route        exact path="/signin"  component={Login}  />
         <Route              path="/search/:query"  component={Search}/>
         <Route              path="/search"  component={Search}/>
-        <PrivateRoute       path="/profile" component={Profile}/>
+        <PrivateRoute       path="/profile/:profileId" component={Profile}/>
       </Switch> 
     </Router>
   )

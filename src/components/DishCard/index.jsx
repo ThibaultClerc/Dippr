@@ -9,8 +9,8 @@ const DishCard = ({market_dish_id, name, description, dish_rating, user_id, crea
       <Card.Body>
         <Card.Title>{name}</Card.Title>
         <Card.Text>{description}</Card.Text>
-        <Card.Text as={Link} to={`/users/${user_id}`}>Qui a fait ce plat ?</Card.Text>
         <small className="text-muted">{type}</small>
+        <Card.Text as={Link} to={`/profile/${user_id}`}>Qui a fait ce plat ?</Card.Text>
       </Card.Body>
       <Card.Footer>
         <small className="text-muted">{dish_rating}</small> • 

@@ -12,7 +12,7 @@ const VisitorHome = () => {
 
   const fetchData = () => {
     setLoading(true)
-    fetch(`http://localhost:3000/api/market_dishes`, {
+    fetch(`https://dippr-api-development.herokuapp.com/api/market_dishes`, {
       "method": "GET",
       "headers": {
         "Content-Type": "application/json"
