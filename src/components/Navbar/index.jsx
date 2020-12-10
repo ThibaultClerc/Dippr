@@ -2,6 +2,10 @@ import { Link } from "react-router-dom";
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import FormControl from 'react-bootstrap/FormControl';
+
+
 import Cookies from "js-cookie";
 import { logoutUser } from '../../store/actions'
 
@@ -22,6 +26,10 @@ const Nav = () => {
             <Link to="/" className="navbar-brand">Home</Link>
             <Link to="#" className="nav-item nav-link">About</Link>
             <Link to="/announcement" className="nav-item nav-link">Créer une annonce</Link>
+            <Form inline>
+              <FormControl type="text" placeholder="Chercher un plat" className="mr-sm-2" />
+              <Button variant="outline-primary">Search</Button>
+            </Form>
 
           </div>
           <div className="Connection">
