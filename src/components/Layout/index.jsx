@@ -17,7 +17,7 @@ const Layout = () => {
         <Route        exact path="/"        component={Home}   />
         <Route        exact path="/signup"  component={Signup} />
         <Route        exact path="/signin"  component={Login}  />
-        <PrivateRoute       path="/profile" component={Profile}/>
+        <PrivateRoute       path="/profile/:profileId" component={Profile}/>
       </Switch> 
     </Router>
   )
