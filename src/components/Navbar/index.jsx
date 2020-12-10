@@ -14,6 +14,8 @@ const Nav = () => {
           <div className="navbar-nav">
             <Link to="/" className="navbar-brand">Home</Link>
             <Link to="#" className="nav-item nav-link">About</Link>
+            <Link to="/announcement" className="nav-item nav-link">Créer une annonce</Link>
+
           </div>
           <div className="Connection">
             <Button href="/signin" variant="outline-primary">Se connecter</Button>{' '}
