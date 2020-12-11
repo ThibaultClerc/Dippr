@@ -10,13 +10,20 @@ const Search = () => {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [radioValue, setRadioValue] = useState('1');
+  const [categoryValue, setCategoryValue] = useState('1');
+  const [listOrMapValue, setListOrMapValue] = useState('list');
+
   let { query } = useParams();
 
-  const radios = [
+  const categories = [
     { name: 'TROCS', value: '1' },
     { name: 'DONS', value: '2' },
     { name: 'DEMANDES', value: '3' },
+  ];
+
+  const listMapButtons = [
+    { name: 'List', value: 'list' },
+    { name: 'Map', value: 'map' },
   ];
 
   const fetchData = () => {
@@ -38,6 +45,7 @@ const Search = () => {
     })
   };
 
+
   useEffect(() => {
     if (typeof query !== undefined) {
       fetchData()
@@ -45,8 +53,8 @@ const Search = () => {
   }, [query])
 
   useEffect(() => {
-    changeCategory(radioValue)
-  }, [radioValue, data])
+    changeCategory(categoryValue)
+  }, [categoryValue, data])
 
   const changeCategory = (category) => {
     switch(category) {
@@ -65,21 +73,36 @@ const Search = () => {
   return (
     <>
     <ButtonGroup toggle>
-        {radios.map((radio, idx) => (
+        {categories.map((radio, idx) => (
           <ToggleButton
             key={idx}
             type="radio"
             variant="secondary"
             name="radio"
             value={radio.value}
-            checked={radioValue === radio.value}
-            onChange={(e) => setRadioValue(e.currentTarget.value)}
+            checked={categoryValue === radio.value}
+            onChange={(e) => setCategoryValue(e.currentTarget.value)}
           >
             {radio.name}
           </ToggleButton>
         ))}
       </ButtonGroup>
-      <SearchResults data={filteredData}/>
+      <ButtonGroup toggle>
+        {listMapButtons.map((radio, idx) => (
+          <ToggleButton
+            key={idx}
+            type="radio"
+            variant="secondary"
+            name="radio"
+            value={radio.value}
+            checked={listOrMapValue === radio.value}
+            onChange={(e) => setListOrMapValue(e.currentTarget.value)}
+          >
+            {radio.name}
+          </ToggleButton>
+        ))}
+      </ButtonGroup>
+      <SearchResults data={filteredData} listOrMapValue={listOrMapValue}/>
     </>
   )
 }

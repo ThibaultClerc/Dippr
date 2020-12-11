@@ -3,14 +3,17 @@ import CardColumns from 'react-bootstrap/CardColumns';
 
 import DishCard from '../../../components/DishCard';
 import Loader from '../../../components/UI/Loader';
+import Map from '../../../components/Map';
 
-const SearchResults = ({data, loading}) => {
+const SearchResults = ({data, listOrMapValue}) => {
 
-  return (
-    <>
-      {data.length > 0 ?
-      <CardColumns>
-        {data.map(dish => {
+  console.log(listOrMapValue)
+
+  const displayRouter = () => {
+    if (data.length > 0 && listOrMapValue === "list") {
+      return (
+        <CardColumns>
+          {data.map(dish => {
           const dishData = dish.meta.user_dish
           return (
             <DishCard
@@ -24,9 +27,18 @@ const SearchResults = ({data, loading}) => {
               type={dish.attributes.market_dish_type}
             />
           )})}
-      </CardColumns>
-      : <h1>Y'a R</h1>
-      }
+        </CardColumns>
+      )
+    } else if (data.length > 0 && listOrMapValue === "map") {
+      return <Map data={data}/>
+    // } else {
+    //   return <Loader/>
+    }   
+  }
+
+  return (
+    <>
+      {displayRouter()}
     </>
   )
 }
