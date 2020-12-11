@@ -4,13 +4,24 @@ import { Provider } from 'react-redux';
 import { store } from './store/store';
 import {
   GoogleMap,
-  UseLoadScript,
+  useLoadScript,
   Marker,
   InfoWindow
-} from 'google-maps-react'
+} from '@react-google-maps/api'
 import Layout from './components/Layout';
+import Loader from './components/UI/Loader'
+
+const libraries = ["places"]
 
 const App = () => {
+  const {isLoaded, loadError} = useLoadScript({
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+    libraries,
+  })
+
+  if (loadError) return "Zrrror loading maps";
+  if (!isLoaded) return <Loader/>
+
   return (
     <Provider store={store}>
       <Layout/>

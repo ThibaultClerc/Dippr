@@ -1,10 +1,11 @@
-import React from 'react'
+import React from 'react';
+import Search from '../../Search'
 
 const UserHome = () => {
   return (
-    <div>
-      userhome
-    </div>
+    <>
+      <Search/>
+    </>
   )
 }
 
