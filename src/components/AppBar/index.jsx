@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -23,7 +23,13 @@ import StarIcon from '@material-ui/icons/Star'
 import { useSelector, useDispatch } from 'react-redux';
 import Cookies from "js-cookie";
 import { logoutUser } from '../../store/actions'
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
+import InputBase from '@material-ui/core/InputBase';
+import Button from '@material-ui/core/Button';
+import SendIcon from '@material-ui/icons/Send';
+
+
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -60,32 +66,72 @@ const useStyles = makeStyles((theme) => ({
   fullList: {
     width: 'auto',
   },
+  search: {
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: fade(theme.palette.common.white, 0.15),
+    '&:hover': {
+      backgroundColor: fade(theme.palette.common.white, 0.25),
+    },
+    marginLeft: 0,
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      marginLeft: theme.spacing(1),
+      width: 'auto',
+    },
+  },
+  searchIcon: {
+    padding: theme.spacing(0, 2),
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  inputRoot: {
+    color: 'inherit',
+  },inputInput: {
+    padding: theme.spacing(3, 3, 3, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+  },
 }));
 
 export default function BottomAppBar() {
   const dispatch = useDispatch()
   const user = useSelector(state => state.user.user);
+  const [query, setQuery] = React.useState("")
+  const [redirection, setRedirection] = React.useState(false);
+
+  const [state, setState] = React.useState({
+    bottom: false,
+    top: false,
+  });
 
   const handleClick = () => {
     Cookies.remove('token');
     dispatch(logoutUser())
   }
 
-  const [state, setState] = React.useState({
-    bottom: false,
-  });
+  const handleChange = (e) => {
+    setQuery(e.target.value)
+  }
+
+  const handleSearch = (e) => {
+    if(e.keyCode == 13 ||e.which == 13){
+      setRedirection(true)
+  }
+  }
 
   const toggleDrawer = (anchor, open) => (event) => {
-    console.log("heya")
     if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
     }
-
     setState({ ...state, [anchor]: open });
   };
 
   const classes = useStyles();
-
 
   const listLogin = (anchor) => (
     <div
@@ -150,16 +196,47 @@ export default function BottomAppBar() {
     </div>
   );
 
+  const searchBar = (anchor) => (
+    <div className={classes.search}>
+      <div className={classes.searchIcon}>
+        <SearchIcon />
+      </div>
+      <InputBase
+        placeholder="Search…"
+        classes={{
+          root: classes.inputRoot,
+          input: classes.inputInput,
+        }}
+        inputProps={{ 'aria-label': 'search' }}
+        value={query} 
+        onChange={(e) => handleChange(e)}
+        onKeyPress={(e) => handleSearch(e)}
+      />
+      <Button
+      variant="contained"
+      color="primary"
+      className={classes.button}
+      size="small"
+      component={Link} 
+      to={`/search/${query}`}
+    ><SendIcon/></Button>  
+    </div>
+  );
+
   return (
-    
+    <div>
+    <Redirect to={`/search/${query}`}/>
+    {['top', 'bottom'].map((anchor) => (
     <React.Fragment>
       <SwipeableDrawer
-            anchor={'bottom'}
-            open={state['bottom']}
-            onClose={toggleDrawer('bottom', false)}
-            onOpen={toggleDrawer('bottom', true)}
+            anchor={anchor}
+            open={state[anchor]}
+            onClose={toggleDrawer(anchor, false)}
+            onOpen={toggleDrawer(anchor, true)}
           >
-            {user.length !== 0? listLogin('bottom') : list('bottom')}
+
+            {state.bottom && (user.length !== 0? listLogin('bottom') : list('bottom'))}
+            {state.top && searchBar('top')}
       </SwipeableDrawer>
       <CssBaseline />
       <AppBar position="fixed" color="primary" className={classes.appBar}>
@@ -190,12 +267,14 @@ export default function BottomAppBar() {
           )
           :""}
 
-          <IconButton color="inherit" button component={Link} to="/search">
+          <IconButton color="inherit" onClick={toggleDrawer('top', true)}>
             <SearchIcon fontSize ="large"/>
           </IconButton>
 
         </Toolbar>
       </AppBar>
     </React.Fragment>
+      ))}
+  </div>
   );
 }
