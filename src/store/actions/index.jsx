@@ -10,3 +10,10 @@ export const logoutUser = () => {
     type: 'USER_LOGOUT'
   }
 }
+
+export const newQuery = (query) => {
+  return {
+    type: 'NEW_QUERY',
+    query
+  }
+}

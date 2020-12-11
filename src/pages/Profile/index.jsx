@@ -8,13 +8,9 @@ import {Link, useParams} from "react-router-dom";
 import UserDishes from '../../components/UserDishes';
 
 const Profile = () => {
-  let {profileId} = useParams();
-  const [profil, setProfil] = useState()
-
-  const user = useSelector(state => state.user);
-  console.log("laaaaaaª")
-  console.log(user)
+  const user = useSelector(state => state.user.user);
   const [data, setData] = useState([])
+  let {profileId} = useParams();
   
   const fetchData = (url) => {
     fetch(url, {
@@ -28,18 +24,11 @@ const Profile = () => {
       return response.json()
     })
     .then((response) => {
-      //console.log(response.data)
       setData(response.data.attributes)
     }).catch(error => {
       console.log(error)
     })
   };
-
-
-
-  useEffect(() => {
-    fetchData(`https://dippr-api-development.herokuapp.com/api/users/${profileId}`)
-  }, [])
   
   useEffect(() => {
     fetchData(`https://dippr-api-development.herokuapp.com/api/users/${profileId}`)
@@ -53,24 +42,19 @@ const Profile = () => {
           <h2> Nom : {data.last_name !== "" ? data.last_name : ""} </h2>
           <h2> Email : {data.email} </h2>
           <h3> Référence utilisateur : {data.id} </h3>
-          <h3>Pays : {data.country !== "" ? data.country  : ""} </h3>
-          <h3>Ville : {data.city !== "" ? data.city  : ""} </h3>
-          <h3> {data.zip_code !== "" && user.id === profileId ? "Code postale : " + data.zip_code  : ""} </h3>
-          <h3> {(data.street !== "" && user.id === profileId )? "Rue : " + data.street  : ""} </h3>
-          <h3> {data.phone_number !== "" && user.id === profileId ? "Numéro de téléphone : " + data.phone_number  : ""} </h3>
+          <h3> Pays : {data.country !== "" ? data.country  : ""} </h3>
+          <h3> Ville : {data.city !== "" ? data.city  : ""} </h3>
+          <h3> {data.zip_code !== "" ? "Code postale : " + data.zip_code  : ""} </h3>
+          <h3> {data.street !== "" ? "Rue : " + data.street  : ""} </h3>
+          <h3> {data.phone_number !== "" ? "Numéro de téléphone : " + data.phone_number  : ""} </h3>
           <h3>Description : {data.description !== "" ? data.description  : ""} </h3>
-          <h3> {data.dippers !== "" && user.id === profileId ? "Vous avez " + data.dippers + " dippers"  : ""} </h3>
-
+          <h3> {data.dippers !== "" ? "Vous avez " + data.dippers + " dippers"  : ""} </h3>
           <h3>{user.id === profileId ? <Button as={Link} to="/profile/edit" variant="primary">Modifier mon profil</Button> : ""}</h3>
-
           <h3>{user.id === profileId ? <UserDishes profileId={user.id}/> : ""}</h3>
-
         </>
         : <Loader/>
-       }
+      }
     </div>
-
-
   );
 }
 export default Profile;

@@ -7,6 +7,7 @@ import Login from "../../pages/Login"
 import Annoucement from "../../pages/Annoucement"
 import Profile from "../../pages/Profile"
 import PrivateRoute from "../PrivateRoute"
+import Search from "../../pages/Search"
 
 const Layout = () => {
   return (
@@ -17,6 +18,8 @@ const Layout = () => {
         <Route        exact path="/"        component={Home}   />
         <Route        exact path="/signup"  component={Signup} />
         <Route        exact path="/signin"  component={Login}  />
+        <Route              path="/search/:query"  component={Search}/>
+        <Route              path="/search"  component={Search}/>
         <PrivateRoute       path="/profile/:profileId" component={Profile}/>
       </Switch> 
     </Router>
