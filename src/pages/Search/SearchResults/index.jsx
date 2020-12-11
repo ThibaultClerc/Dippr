@@ -30,9 +30,9 @@ const SearchResults = ({data, listOrMapValue}) => {
         </CardColumns>
       )
     } else if (data.length > 0 && listOrMapValue === "map") {
-      return <Map/>
-    } else {
-      return <Loader/>
+      return <Map data={data}/>
+    // } else {
+    //   return <Loader/>
     }   
   }
 
