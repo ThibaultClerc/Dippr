@@ -116,7 +116,7 @@ export default function BottomAppBar() {
 
       <Divider />
       <List>
-          <ListItem  button component={Link} to="/" >
+          <ListItem  button component={Link} to="/" onClick={(e) => handleClick()}>
             <ListItemIcon > <ExitToAppIcon /></ListItemIcon>
             <ListItemText primary={"Se Déconnecter"} />
           </ListItem>
