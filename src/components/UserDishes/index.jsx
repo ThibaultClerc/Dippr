@@ -4,7 +4,8 @@ import { useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import Loader from '../../components/UI/Loader';
 import {Link, useParams} from "react-router-dom";
-
+import UserDishCard from '../UserDishCard'
+import CardColumns from 'react-bootstrap/CardColumns'
 
 const UserDishes = (profileId) => {
 
@@ -25,8 +26,6 @@ const UserDishes = (profileId) => {
           return response.json()
         })
         .then((response) => {
-        console.log("iciiiii")
-          console.log(response.data)
           setData(response.data)
         }).catch(error => {
           console.log(error)
@@ -39,7 +38,19 @@ const UserDishes = (profileId) => {
 
     return (
         <div>
-
+          <CardColumns>
+            {data.map(dish => {
+              return (
+                <UserDishCard 
+                  key={dish.id}
+                  name={dish.attributes.name}
+                  description={dish.attributes.description}
+                  dish_rating={dish.attributes.dish_rating}
+                  user_id={dish.attributes.user_id}
+                /> 
+              );
+            })}
+          </CardColumns>
         </div>
     );
 }
