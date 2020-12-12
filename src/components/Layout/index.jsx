@@ -18,7 +18,7 @@ const Layout = () => {
   }, [isMobile])
 
   return (
-    <Router basename="/React">
+    <Router basename="/">
       {!isMobile && <Nav/>}
       {isMobile && <BottomAppBar/>}
 
