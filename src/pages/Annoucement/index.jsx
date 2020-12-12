@@ -6,8 +6,24 @@ import SendIcon from '@material-ui/icons/Send';
 import Cookies from 'js-cookie'
 import { useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+  },
+}));
 
 const Announcement = () => {
+
+  const classes = useStyles();
 
   const [currentUser, setCurrentUser] = useState(useSelector(state => state.user));
   const [ingredients, setIngredients] = useState([]);
@@ -169,48 +185,58 @@ const Announcement = () => {
   }, []);
 
   return(
-    <>
-    {redirection && <Redirect to='/'/>}
-    <TextField
-          required
-          id="outlined-required"
-          label="Titre"
-          style={{ width: 600 }}
-          variant="outlined"
-          onChange={ e => setName(e.target.value) }
-        />
-
-    <br/>
-    <br/>
-
-    <TextField
-      id="outlined-required"
-      label="Description"
-      required
-      multiline
-      style={{ width: 600 }}
-      rows={2}
-      rowsMax={4}
-      variant="outlined"
-      onChange={ e => setDescription(e.target.value) }
-    />
-    <br/>
-    <br/>
-
-    {ingredients.length !== 0 && <SearchBar content={ ingredients } title="Ingredients" data={(content=>handleIngredientData(content))}/>}
-    <br/>
-    {tags.length !== 0 && <SearchBar content={ tags } title="Type de plat" data={(content=>handleTagData(content))}/>}
-    <br/>
-      <Button
-        variant="contained"
-        color="primary"
-        endIcon={<SendIcon/>}
-        onClick={handleSubmit}
+    <div className={classes.root}>
+      <Grid container spacing={3}
+      alignItems="center"
       >
-        Poster mon annonce
-      </Button>
+        <Grid item xs={12}>
+          <Paper className={classes.paper}>
 
-    </>
+            {redirection && <Redirect to='/'/>}
+            <h3>Proposer un plat</h3>
+            <TextField
+                  required
+                  id="outlined-required"
+                  label="Titre"
+                  style={{ width: 300 }}
+                  variant="outlined"
+                  onChange={ e => setName(e.target.value) }
+                />
+
+            <br/>
+            <br/>
+
+            <TextField
+              id="outlined-required"
+              label="Description"
+              required
+              multiline
+              style={{ width: 300 }}
+              rows={2}
+              rowsMax={4}
+              variant="outlined"
+              onChange={ e => setDescription(e.target.value) }
+            />
+            <br/>
+            <br/>
+
+            <SearchBar content={ ingredients } title="Ingredients" data={(content=>handleIngredientData(content))}/>
+            <br/>
+            <SearchBar content={ tags } title="Type de plat" data={(content=>handleTagData(content))}/>
+            <br/>
+          <Button
+            variant="contained"
+            color="primary"
+            endIcon={<SendIcon/>}
+            onClick={handleSubmit}
+          >
+            Poster mon annonce
+          </Button>
+        </Paper>
+      </Grid>
+    </Grid>
+
+    </div>
   )
 }
 
