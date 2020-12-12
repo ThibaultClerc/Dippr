@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import ToggleButton from 'react-bootstrap/ToggleButton';
 import Loader from '../../components/UI/Loader';
@@ -7,13 +7,15 @@ import SearchResults from './SearchResults'
 
 
 const Search = () => {
-  const [data, setData] = useState([]);
+  const location = useLocation();
+  // const [data, setData] = useState(location.state.data);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [categoryValue, setCategoryValue] = useState('1');
   const [listOrMapValue, setListOrMapValue] = useState('list');
 
-  let { query } = useParams();
+
+  console.log(location)
 
   const categories = [
     { name: 'TROCS', value: '1' },
@@ -26,43 +28,20 @@ const Search = () => {
     { name: 'Map', value: 'map' },
   ];
 
-  const fetchData = () => {
-    setLoading(true)
-    fetch(`https://dippr-api-development.herokuapp.com/api/marketdishes/search?query=${query}`, {
-      "method": "GET",
-      "headers": {
-        "Content-Type": "application/json"
-      },
-    })
-    .then((response) => {
-      return response.json()
-    })
-    .then((response) => {
-      setData(response.data)
-      setLoading(false)
-    }).catch(error => {
-      console.log(error)
-    })
-  };
-
 
   useEffect(() => {
-    if (typeof query !== undefined) {
-      fetchData()
+    if (typeof location.state !== 'undefined') {
+      changeCategory(categoryValue)
     }
-  }, [query])
-
-  useEffect(() => {
-    changeCategory(categoryValue)
-  }, [categoryValue, data])
+  }, [categoryValue, location.state])
 
   const changeCategory = (category) => {
     switch(category) {
       case "1":
-        setFilteredData(data.filter(dish => dish.attributes.market_dish_type === "troc"))
+        setFilteredData(location.state.data.filter(dish => dish.attributes.market_dish_type === "troc"))
         break;
       case "2":
-        setFilteredData(data.filter(dish => dish.attributes.market_dish_type === "donation"))
+        setFilteredData(location.state.data.filter(dish => dish.attributes.market_dish_type === "donation"))
         break;
       case "3":
         console.log("wishes")
