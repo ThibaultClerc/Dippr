@@ -27,10 +27,9 @@ import { Link, Redirect } from "react-router-dom";
 import InputBase from '@material-ui/core/InputBase';
 import Button from '@material-ui/core/Button';
 import SendIcon from '@material-ui/icons/Send';
-
-
-
-
+import HomeIcon from '@material-ui/icons/Home';
+import MessageIcon from '@material-ui/icons/Message';
+import  TransitionsModal from '../../components/Modal'
 
 const useStyles = makeStyles((theme) => ({
   text: {
@@ -103,6 +102,7 @@ export default function BottomAppBar() {
   const user = useSelector(state => state.user.user);
   const [query, setQuery] = React.useState("")
   const [redirection, setRedirection] = React.useState(false);
+  const [announce, setAnnounce] = React.useState(null);
 
   const [state, setState] = React.useState({
     bottom: false,
@@ -112,17 +112,26 @@ export default function BottomAppBar() {
   const handleClick = () => {
     Cookies.remove('token');
     dispatch(logoutUser())
-  }
+  };
 
   const handleChange = (e) => {
     setQuery(e.target.value)
-  }
+  };
 
   const handleSearch = (e) => {
-    if(e.keyCode == 13 ||e.which == 13){
+    if(e.keyCode === 13 ||e.which === 13){
       setRedirection(true)
+    }
+  };
+
+  const handleModalChange = () => {
+    setAnnounce(true);
   }
-  }
+
+  const handleAddAnnounce = (value) => {
+    console.log(value)
+    setAnnounce(false)
+  };
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -130,6 +139,7 @@ export default function BottomAppBar() {
     }
     setState({ ...state, [anchor]: open });
   };
+  
 
   const classes = useStyles();
 
@@ -156,6 +166,16 @@ export default function BottomAppBar() {
         <ListItem  button component={Link} to="/" >
           <ListItemIcon> <RestaurantIcon /></ListItemIcon>
           <ListItemText primary={"Mes plats"} />
+        </ListItem>
+
+        <ListItem  button component={Link} to="/" >
+          <ListItemIcon> <StarIcon/></ListItemIcon>
+          <ListItemText primary={"Favoris"} />
+        </ListItem>
+
+        <ListItem  button component={Link} to="/" >
+          <ListItemIcon> <MessageIcon/></ListItemIcon>
+          <ListItemText primary={"Messages"} />
         </ListItem>
 
       </List>
@@ -223,9 +243,14 @@ export default function BottomAppBar() {
     </div>
   );
 
+  React.useEffect(() => {
+    console.log(announce)
+  }, [announce])
+
   return (
     <div>
     <Redirect to={`/search/${query}`}/>
+    {announce && <TransitionsModal value={announce} visibleModal={(()=>handleAddAnnounce(false))}/> }
     {['top', 'bottom'].map((anchor) => (
     <React.Fragment>
       <SwipeableDrawer
@@ -242,34 +267,43 @@ export default function BottomAppBar() {
       <AppBar position="fixed" color="primary" className={classes.appBar}>
         <Toolbar>
 
-          <IconButton edge="start" color="inherit" aria-label="open drawer" id="simple-menu" onClick={toggleDrawer('bottom', true)}>
-            <MenuIcon fontSize ="large"/>
+        <IconButton color="inherit" button component={Link} to="/">
+            <HomeIcon fontSize ="medium"/>
           </IconButton>
-
-          {user.length !== 0?(
-            <IconButton color="inherit" button component={Link} to="/">
-              <StarIcon fontSize ="large" />
-            </IconButton>
-          ):""}
-
-          {user.length !==0?(
-            <Fab color="secondary" aria-label="add" className={classes.fabButton} button component={Link} to="/">
-              <AddIcon fontSize ="large"/>
-            </Fab>
-          ):""}
-
-          <div className={classes.grow} />
 
           {user.length !==0?(
                       <IconButton edge="end" color="inherit"  button component={Link} to="/">
-                      <RestaurantIcon fontSize ="large"/>
+                      <RestaurantIcon fontSize ="medium"/>
                     </IconButton>
           )
           :""}
 
+          {user.length !== 0?(
+            <IconButton color="inherit" button component={Link} to="/">
+              <StarIcon fontSize ="medium" />
+            </IconButton>
+          ):""}
+
+            <Fab color="secondary" aria-label="add" className={classes.fabButton}  onClick={handleModalChange}>
+              <AddIcon fontSize ="medium"/>
+            </Fab>
+
+          <div className={classes.grow} />
+
+          {user.length !== 0?(
+            <IconButton color="inherit" button component={Link} to="/">
+              <MessageIcon fontSize ="medium" />
+            </IconButton>
+          ):""}
+
           <IconButton color="inherit" onClick={toggleDrawer('top', true)}>
-            <SearchIcon fontSize ="large"/>
+            <SearchIcon fontSize ="medium"/>
           </IconButton>
+
+          <IconButton edge="start" color="inherit" aria-label="open drawer" id="simple-menu" onClick={toggleDrawer('bottom', true)}>
+            <MenuIcon fontSize ="medium"/>
+          </IconButton>
+
 
         </Toolbar>
       </AppBar>
