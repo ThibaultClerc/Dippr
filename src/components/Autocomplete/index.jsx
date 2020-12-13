@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
@@ -13,18 +13,17 @@ const AutocompleteSearchBar = ({content, title, data}) =>{
   };
 
   return(
-    
-    <Autocomplete
-    multiple
-    id="combo-box-demo"
-    options={currentValues}
-    getOptionLabel={(options) => options.type}
-    style={{ width: 300 }}
-    onChange={addElement}
-    renderInput={(params) => <TextField required {...params} label={currentTitle} variant="outlined"/>}
-    />
 
-
+          <Autocomplete
+          multiple
+          id={currentTitle}
+          options={currentValues}
+          getOptionLabel={(options) => options.type}
+          style={{ width: 270 }}
+          onChange={addElement}
+          renderInput={(params) => 
+          <TextField required {...params} label={currentTitle} variant="outlined"/>}
+          />
   
   )
 };

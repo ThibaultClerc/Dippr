@@ -1,37 +1,50 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import Cookies from "js-cookie";
+import { logoutUser } from '../../store/actions'
+import { Link, useHistory } from "react-router-dom";
+import  Announcement from '../../pages/Annoucement'
+import useDebounce from './use-debounce';
+
+// Material UI
 import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Fab from '@material-ui/core/Fab';
-import MenuIcon from '@material-ui/icons/Menu';
-import AddIcon from '@material-ui/icons/Add';
-import SearchIcon from '@material-ui/icons/Search';
 import clsx from 'clsx';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp'
+import InputBase from '@material-ui/core/InputBase';
+import Button from '@material-ui/core/Button';
+import Alert from '@material-ui/lab/Alert';
+
+// Icons
+import MenuIcon from '@material-ui/icons/Menu';
+import AddIcon from '@material-ui/icons/Add';
+import SearchIcon from '@material-ui/icons/Search';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 import SettingsIcon from '@material-ui/icons/Settings'
 import RestaurantIcon from '@material-ui/icons/Restaurant'
 import StarIcon from '@material-ui/icons/Star'
-import { useSelector, useDispatch } from 'react-redux';
-import Cookies from "js-cookie";
-import { logoutUser } from '../../store/actions'
-import { Link, Redirect } from "react-router-dom";
-import InputBase from '@material-ui/core/InputBase';
-import Button from '@material-ui/core/Button';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import SendIcon from '@material-ui/icons/Send';
 import HomeIcon from '@material-ui/icons/Home';
 import MessageIcon from '@material-ui/icons/Message';
-import  TransitionsModal from '../../components/Modal'
+
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    width: '100%',
+    '& > * + *': {
+      marginTop: theme.spacing(2),
+    },
+  },
   text: {
     padding: theme.spacing(2, 2, 0),
   },
@@ -100,14 +113,19 @@ const useStyles = makeStyles((theme) => ({
 export default function BottomAppBar() {
   const dispatch = useDispatch()
   const user = useSelector(state => state.user.user);
-  const [query, setQuery] = React.useState("")
-  const [redirection, setRedirection] = React.useState(false);
+  const [searchTerm, setSearchTerm] = React.useState('');
+  const debouncedSearchTerm = useDebounce(searchTerm, 100);
   const [announce, setAnnounce] = React.useState(null);
-
+  const [data, setData] = React.useState([]);
+  const [isSearching, setIsSearching] = React.useState(false);
+  const [publishSuccess, setPublishSuccess] = React.useState(null)
+  const history = useHistory();
   const [state, setState] = React.useState({
     bottom: false,
     top: false,
   });
+
+  const classes = useStyles();
 
   const handleClick = () => {
     Cookies.remove('token');
@@ -115,12 +133,11 @@ export default function BottomAppBar() {
   };
 
   const handleChange = (e) => {
-    setQuery(e.target.value)
-  };
-
-  const handleSearch = (e) => {
-    if(e.keyCode === 13 ||e.which === 13){
-      setRedirection(true)
+    setSearchTerm(e.target.value)
+    if (e.target.value.length < 2) {
+      history.push({
+        pathname: '/search'
+      }); 
     }
   };
 
@@ -128,10 +145,18 @@ export default function BottomAppBar() {
     setAnnounce(true);
   }
 
-  const handleAddAnnounce = (value) => {
-    console.log(value)
+  const handleAddAnnounce = () => {
     setAnnounce(false)
   };
+
+  const handlePublishSuccess = () => {
+    console.log("coucou je suis là")
+    setPublishSuccess(true);
+  };
+
+  const successAlert = () =>(
+    <Alert onClose={() =>setPublishSuccess(false)} severity="success">Votre plat est bien enregistré !</Alert>
+  );
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -140,8 +165,33 @@ export default function BottomAppBar() {
     setState({ ...state, [anchor]: open });
   };
   
-
-  const classes = useStyles();
+  const fetchData = () => {
+    setIsSearching(true);
+    fetch(`https://dippr-api-development.herokuapp.com/api/marketdishes/search?query=${debouncedSearchTerm}`, {
+      "method": "GET",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+    })
+    .then((response) => {
+      return response.json()
+    })
+    .then((response) => {
+      setData(response.data)
+    }).catch(error => {
+      console.log(error)
+    }).finally(() => {
+      setIsSearching(false);
+      history.push({
+        pathname: '/search/',
+        search: `${debouncedSearchTerm}`,
+        state: {
+          data: data,
+          searchTerm: searchTerm
+        },
+      }); 
+    });
+  };
 
   const listLogin = (anchor) => (
     <div
@@ -200,14 +250,14 @@ export default function BottomAppBar() {
       onKeyDown={toggleDrawer(anchor, false)}
     >
 
-      <List >
-          <ListItem  button component={Link} to="/signin">
+      <List  key="list-1">
+          <ListItem  button component={Link} to="/signin" key="signin">
             <ListItemIcon> <AccountCircleIcon /></ListItemIcon>
             <ListItemText primary={"Se Connecter"}/>
           </ListItem>
 
 
-          <ListItem  button component={Link} to="/signup" >
+          <ListItem  button component={Link} to="/signup" key="signup">
             <ListItemIcon > <ExitToAppIcon /></ListItemIcon>
             <ListItemText primary={"S'inscrire"} />
           </ListItem>
@@ -216,41 +266,48 @@ export default function BottomAppBar() {
     </div>
   );
 
-  const searchBar = (anchor) => (
+  const searchBar = () => (
     <div className={classes.search}>
       <div className={classes.searchIcon}>
         <SearchIcon />
       </div>
       <InputBase
-        placeholder="Search…"
+        placeholder="Rechercher des plats..."
         classes={{
           root: classes.inputRoot,
           input: classes.inputInput,
         }}
         inputProps={{ 'aria-label': 'search' }}
-        value={query} 
-        onChange={(e) => handleChange(e)}
-        onKeyPress={(e) => handleSearch(e)}
-      />
+        onChange={e => handleChange(e)}
+        value={searchTerm}
+            />
       <Button
       variant="contained"
       color="primary"
       className={classes.button}
       size="small"
       component={Link} 
-      to={`/search/${query}`}
+      to={`/search/${searchTerm}`}
     ><SendIcon/></Button>  
     </div>
   );
 
+  React.useEffect(
+    () => {
+      if (debouncedSearchTerm) {
+        fetchData()
+      }
+    },
+    [debouncedSearchTerm]
+  );
+
   React.useEffect(() => {
-    console.log(announce)
   }, [announce])
 
   return (
     <div>
-    <Redirect to={`/search/${query}`}/>
-    {announce && <TransitionsModal value={announce} visibleModal={(()=>handleAddAnnounce(false))}/> }
+      {publishSuccess && successAlert()}
+    {announce && <Announcement value={announce} visibleModal={(()=>handleAddAnnounce(false))} Alert={publishSuccess} visibleAlert={content=>handlePublishSuccess(content)}/> }
     {['top', 'bottom'].map((anchor) => (
     <React.Fragment>
       <SwipeableDrawer
@@ -267,41 +324,41 @@ export default function BottomAppBar() {
       <AppBar position="fixed" color="primary" className={classes.appBar}>
         <Toolbar>
 
-        <IconButton color="inherit" button component={Link} to="/">
-            <HomeIcon fontSize ="medium"/>
+        <IconButton color="inherit" button="true" component={Link} to="/">
+            <HomeIcon fontSize ="default"/>
           </IconButton>
 
           {user.length !==0?(
-                      <IconButton edge="end" color="inherit"  button component={Link} to="/">
-                      <RestaurantIcon fontSize ="medium"/>
+                      <IconButton edge="end" color="inherit"  button="true" component={Link} to="/">
+                      <RestaurantIcon fontSize ="default"/>
                     </IconButton>
           )
           :""}
 
           {user.length !== 0?(
-            <IconButton color="inherit" button component={Link} to="/">
-              <StarIcon fontSize ="medium" />
+            <IconButton color="inherit" button="true" component={Link} to="/">
+              <StarIcon fontSize ="default" />
             </IconButton>
           ):""}
 
             <Fab color="secondary" aria-label="add" className={classes.fabButton}  onClick={handleModalChange}>
-              <AddIcon fontSize ="medium"/>
+              <AddIcon fontSize ="default"/>
             </Fab>
 
           <div className={classes.grow} />
 
           {user.length !== 0?(
-            <IconButton color="inherit" button component={Link} to="/">
-              <MessageIcon fontSize ="medium" />
+            <IconButton color="inherit" button="true" component={Link} to="/">
+              <MessageIcon fontSize ="default" />
             </IconButton>
           ):""}
 
           <IconButton color="inherit" onClick={toggleDrawer('top', true)}>
-            <SearchIcon fontSize ="medium"/>
+            <SearchIcon fontSize ="default"/>
           </IconButton>
 
-          <IconButton edge="start" color="inherit" aria-label="open drawer" id="simple-menu" onClick={toggleDrawer('bottom', true)}>
-            <MenuIcon fontSize ="medium"/>
+          <IconButton edge="start" color="inherit" aria-label="open drawer" id="simple-menu"  onClick={toggleDrawer('bottom', true)}>
+            <MenuIcon fontSize ="default"/>
           </IconButton>
 
 
