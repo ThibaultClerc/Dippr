@@ -186,10 +186,13 @@ const Announcement = () => {
 
   return(
     <div className={classes.root}>
-      <Grid container spacing={3}
-      alignItems="center"
-      >
-        <Grid item xs={12}>
+      <Grid container
+        spacing={0}
+        direction="column"
+        alignItems="center"
+        justify="center"
+        style={{ minHeight: '100vh' }}>
+        <Grid item xs={6}>
           <Paper className={classes.paper}>
 
             {redirection && <Redirect to='/'/>}
@@ -220,9 +223,9 @@ const Announcement = () => {
             <br/>
             <br/>
 
-            <SearchBar content={ ingredients } title="Ingredients" data={(content=>handleIngredientData(content))}/>
+            {ingredients.length !==0 && <SearchBar content={ ingredients } title="Ingredients" data={(content=>handleIngredientData(content))}/>}
             <br/>
-            <SearchBar content={ tags } title="Type de plat" data={(content=>handleTagData(content))}/>
+            {tags.length !==0  && <SearchBar content={ tags } title="Type de plat" data={(content=>handleTagData(content))}/>}
             <br/>
           <Button
             variant="contained"
