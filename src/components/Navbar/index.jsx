@@ -1,32 +1,21 @@
-import { withRouter, Redirect, useLocation, useHistory, Link } from "react-router-dom";
-import React, { useState, useEffect, useRef } from 'react';
+import { withRouter, useHistory, Link } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
 import useDebounce from './use-debounce';
 import { useSelector, useDispatch } from 'react-redux';
-import dipprLogoTest from '../../assets/img/dipprLogoTest.png'
 import dipprLogoTest2 from '../../assets/img/dipprLogoTest2.png'
-import dipprLogoTest3 from '../../assets/img/dipprLogoTest3.png'
-
 import './index.scss'
 import Cookies from "js-cookie";
 import { logoutUser } from '../../store/actions'
-// import AutocompleteInputSearch from './AutocompleteInputSearch';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
-import Badge from '@material-ui/core/Badge';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import MailIcon from '@material-ui/icons/Mail';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import MoreIcon from '@material-ui/icons/MoreVert';
 import Button from '@material-ui/core/Button';
-import { spacing } from '@material-ui/system';
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -97,18 +86,13 @@ const Nav = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
-
-  const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
   const dispatch = useDispatch()
   const user = useSelector(state => state.user.user);
   const [searchTerm, setSearchTerm] = useState('');
   const [data, setData] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const debouncedSearchTerm = useDebounce(searchTerm, 100);
-  const [redirect, setRedirect] = useState('')
-  const location = useLocation();
   const history = useHistory();
 
   const fetchData = () => {
@@ -132,7 +116,8 @@ const Nav = () => {
         pathname: '/search/',
         search: `${debouncedSearchTerm}`,
         state: {
-          data: data
+          data: data,
+          searchTerm: searchTerm
         },
       }); 
     });
@@ -142,23 +127,19 @@ const Nav = () => {
     () => {
       if (debouncedSearchTerm) {
         fetchData()
-      };
+      }
     },
     [debouncedSearchTerm]
   );
 
-  useEffect (
-    () => {
+  const handleInputChange = (e) => {
+    setSearchTerm(e.target.value)
+    if (e.target.value.length < 2) {
       history.push({
         pathname: '/search'
       }); 
-    },
-    [searchTerm]
-  );
-
-  const handleInputChange = (e) => {
-    setSearchTerm(e.target.value)
-  };
+    }
+  }
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -166,11 +147,6 @@ const Nav = () => {
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-    handleMobileMenuClose();
   };
 
   const handleMobileMenuOpen = (event) => {
@@ -183,11 +159,9 @@ const Nav = () => {
     dispatch(logoutUser())
   }
 
-  const menuId = 'primary-search-account-menu';
   const mobileMenuId = 'primary-search-account-menu-mobile';
 
-  // hambuger menu
-  const renderMobileMenu = (
+  const renderMenu = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
@@ -199,18 +173,18 @@ const Nav = () => {
     >
       {user.length === 0 ?
         [
-        <MenuItem onClick={handleProfileMenuOpen} component={Link} to="/signup">
+        <MenuItem key="signup" onClick={handleProfileMenuOpen} component={Link} to="/signup">
           <p>S'inscrire</p>
         </MenuItem>,
-        <MenuItem onClick={handleProfileMenuOpen} component={Link} to="/signin">
+        <MenuItem key="signin" onClick={handleProfileMenuOpen} component={Link} to="/signin">
           <p>Se connecter</p>
         </MenuItem>
         ]
         : [
-          <MenuItem onClick={handleProfileMenuOpen} component={Link} to={`/profile/${user.id}`}>
+          <MenuItem key="myProfile" onClick={handleProfileMenuOpen} component={Link} to={`/profile/${user.id}`}>
             <p>Mon profil</p>
           </MenuItem>,
-          <MenuItem onClick={(e) => handleLogout(e)} component={Link} to="/">
+          <MenuItem key="logout" onClick={(e) => handleLogout(e)} component={Link} to="/">
             <p>Se déconnecter</p>
           </MenuItem>
         ]
@@ -227,7 +201,6 @@ const Nav = () => {
         elevation={0}
         >
         <Toolbar className="rootToolbar">
-          
           <Link to="/" className={classes.title} variant="h6" color='inherit'>
             <img src={dipprLogoTest2} className="dipprFullLogo" ></img>
           </Link>
@@ -250,33 +223,19 @@ const Nav = () => {
           <div className={classes.sectionDesktop}>
             {user.length === 0 ?
               [
-                <Button component={Link} to ="/signup" variant="outlined" color="secondary" marginRight={2}>
+                <Button key="btn-signup" component={Link} to ="/signup" variant="outlined" color="secondary">
                   S'inscrire
                 </Button>,
-                <Button component={Link} to ="/signin">Se connecter</Button>
+                <Button key="btn-signin" component={Link} to ="/signin">Se connecter</Button>
               ]
               : [
-              <Button component={Link} to ={`/profile/${user.id}`} marginRight={2}>
+              <Button key="btn-profile" component={Link} to ={`/profile/${user.id}`}>
                   Mon Profil
                 </Button>,
-                <Button component={Link} to ="/" variant="outlined" color="secondary" onClick={(e) => handleLogout(e)}>Se déconnecter</Button>
+                <Button key="btn-logout" component={Link} to ="/" variant="outlined" color="secondary" onClick={(e) => handleLogout(e)}>Se déconnecter</Button>
               ]
             }
-            {/* <IconButton
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              
-            </IconButton> */}
           </div>
-
-
-
-
           <div className={classes.sectionMobile}>
             <IconButton
               aria-label="show more"
@@ -290,8 +249,7 @@ const Nav = () => {
           </div>
         </Toolbar>
       </AppBar>
-      {renderMobileMenu}
-      {/* {renderMenu} */}
+      {renderMenu}
     </div>
   );
 }

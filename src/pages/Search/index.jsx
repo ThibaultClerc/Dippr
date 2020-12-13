@@ -1,33 +1,20 @@
 import React, { useState, useEffect } from 'react'
-import { useParams, useLocation } from 'react-router-dom';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import ToggleButton from 'react-bootstrap/ToggleButton';
-import Loader from '../../components/UI/Loader';
-import SearchResults from './SearchResults'
-
+import { useLocation } from 'react-router-dom';
+import SearchResults from './SearchResults';
+import Paper from '@material-ui/core/Paper';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import MapIcon from '@material-ui/icons/Map';
+import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
+import './index.scss';
+import { Grid, Button, ButtonGroup } from '@material-ui/core';
 
 const Search = () => {
   const location = useLocation();
-  // const [data, setData] = useState(location.state.data);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [categoryValue, setCategoryValue] = useState('1');
-  const [listOrMapValue, setListOrMapValue] = useState('list');
-
-
-  console.log(location)
-
-  const categories = [
-    { name: 'TROCS', value: '1' },
-    { name: 'DONS', value: '2' },
-    { name: 'DEMANDES', value: '3' },
-  ];
-
-  const listMapButtons = [
-    { name: 'List', value: 'list' },
-    { name: 'Map', value: 'map' },
-  ];
-
+  const [listOrMaps, setListOrMaps] = useState("list");
 
   useEffect(() => {
     if (typeof location.state !== 'undefined') {
@@ -51,39 +38,36 @@ const Search = () => {
 
   return (
     <>
-    <ButtonGroup toggle>
-        {categories.map((radio, idx) => (
-          <ToggleButton
-            key={idx}
-            type="radio"
-            variant="secondary"
-            name="radio"
-            value={radio.value}
-            checked={categoryValue === radio.value}
-            onChange={(e) => setCategoryValue(e.currentTarget.value)}
-          >
-            {radio.name}
-          </ToggleButton>
-        ))}
-      </ButtonGroup>
-      <ButtonGroup toggle>
-        {listMapButtons.map((radio, idx) => (
-          <ToggleButton
-            key={idx}
-            type="radio"
-            variant="secondary"
-            name="radio"
-            value={radio.value}
-            checked={listOrMapValue === radio.value}
-            onChange={(e) => setListOrMapValue(e.currentTarget.value)}
-          >
-            {radio.name}
-          </ToggleButton>
-        ))}
-      </ButtonGroup>
-      <SearchResults data={filteredData} listOrMapValue={listOrMapValue}/>
+    <Paper square>
+      <Grid container item justify='center' alignItems='center'>
+        <Tabs
+          value={categoryValue}
+          indicatorColor="primary"
+          textColor="primary"
+          onChange={(e) => setCategoryValue(e.currentTarget.value)}
+          aria-label="disabled tabs example"
+        >
+          <Tab label="Trocs" onClick={(e) => setCategoryValue("1")}/>
+          <Tab label="Dons" onClick={(e) => setCategoryValue("2")}/>
+          <Tab label="Demandes" onClick={(e) => setCategoryValue("3")}/>
+          <ButtonGroup size="small" className="react-switch" color="primary" aria-label="outlined primary button group">
+            <Button onClick={(e) => setListOrMaps("list")}>
+              <FormatListBulletedIcon/>
+            </Button>
+            <Button onClick={(e) => setListOrMaps("map")}>
+              <MapIcon/>
+            </Button>
+          </ButtonGroup>
+        </Tabs>
+      </Grid>
+    </Paper>
+      <SearchResults data={filteredData} listOrMapValue={listOrMaps}/>
     </>
   )
 }
 
 export default Search
+
+
+
+

@@ -1,3 +1,11 @@
 .dishImg {
-  height: 15rem
+  height: 5rem;
+}
+
+.resultsContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: column;
+  height: 100%;
 }
