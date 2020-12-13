@@ -69,8 +69,6 @@ const VisitorHome = () => {
   useEffect(() => {
     fetchData();
   }, [])
-
-  // console.log(moment().locale('fr').startOf('20201202').fromNow())
   
   return (
     <>
@@ -110,7 +108,7 @@ const VisitorHome = () => {
                 <Col md={6} xs={12} className="my-auto">
                   <div>
                     <h2>
-                      Vous pensez être le spécialiste du gratin de courgettes ? Proposez-le à votre ville !
+                      Vous pensez être le spécialiste du gratin de courgettes ? Proposez-le à votre entourage !
                     </h2>
                     <p className="mt-3">
                       Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas odio ullam iste veritatis ad fugit maxime error, quaerat, praesentium, impedit iusto? Cumque ut doloremque ea placeat nulla neque? Explicabo, aspernatur?

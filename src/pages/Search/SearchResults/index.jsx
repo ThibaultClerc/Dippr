@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react'
-import CardColumns from 'react-bootstrap/CardColumns';
+import CardDeck from 'react-bootstrap/CardDeck';
+import Row from 'react-bootstrap/Row'
+
 import DishCard from '../../../components/DishCard';
 import Loader from '../../../components/UI/Loader';
 import Map from '../../../components/Map';
@@ -11,7 +13,8 @@ const SearchResults = ({data, listOrMapValue}) => {
   const displayRouter = () => {
     if (data.length > 0 && listOrMapValue === "list") {
       return (
-        <CardColumns>
+        <Row>
+        <CardDeck className="mt-5">
           {data.map(dish => {
           const dishData = dish.meta.user_dish
           return (
@@ -26,7 +29,8 @@ const SearchResults = ({data, listOrMapValue}) => {
               type={dish.attributes.market_dish_type}
             />
           )})}
-        </CardColumns>
+        </CardDeck>
+        </Row>
       )
     } else if (data.length > 0 && listOrMapValue === "map") {
       return <Map data={data}/>
