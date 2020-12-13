@@ -192,7 +192,6 @@ const Announcement = () => {
         alignItems="center"
         justify="center"
         style={{ minHeight: '100vh' }}>
-        <Grid item xs={6}>
           <Paper className={classes.paper}>
 
             {redirection && <Redirect to='/'/>}
@@ -236,7 +235,6 @@ const Announcement = () => {
             Poster mon annonce
           </Button>
         </Paper>
-      </Grid>
     </Grid>
 
     </div>
