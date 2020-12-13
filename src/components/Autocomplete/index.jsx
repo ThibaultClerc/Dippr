@@ -1,28 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import Grid from '@material-ui/core/Grid';
-import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  },
-}));
-
 
 const AutocompleteSearchBar = ({content, title, data}) =>{
   const [currentTitle,setCurrentTitle] = useState(title);
   const [currentValues, setCurrentValues] = useState(content);
   const [elements, setElements] = useState([]);
-  const classes = useStyles();
-
 
   const addElement = (event, values) => {
     setElements(values)
@@ -33,7 +16,7 @@ const AutocompleteSearchBar = ({content, title, data}) =>{
 
           <Autocomplete
           multiple
-          id="combo-box-demo"
+          id={currentTitle}
           options={currentValues}
           getOptionLabel={(options) => options.type}
           style={{ width: 270 }}
