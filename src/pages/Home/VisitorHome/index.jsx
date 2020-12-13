@@ -10,8 +10,16 @@ import CardColumns from 'react-bootstrap/CardColumns'
 import DishCard from '../../../components/DishCard'
 import welcomeImage2 from '../../../assets/img/welcomeImage2.png'
 import dipprMainLogo from '../../../assets/img/dipprMainLogo.png';
+import search from '../../../assets/img/search.png';
+import share from '../../../assets/img/share.png';
+import donate from '../../../assets/img/donate.png';
+import cooking from '../../../assets/img/cooking.png';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import { makeStyles } from '@material-ui/core/styles';
+import moment from 'moment'
+import SimpleCard from '../../../components/UI/SimpleCard';
+import './index.scss'
+
 
 const useStyles = makeStyles((theme) => ({
   dipprMainLogo: {
@@ -61,6 +69,8 @@ const VisitorHome = () => {
   useEffect(() => {
     fetchData();
   }, [])
+
+  // console.log(moment().locale('fr').startOf('20201202').fromNow())
   
   return (
     <>
@@ -70,7 +80,7 @@ const VisitorHome = () => {
             <Col>
               <img alt="dippr-main-logo" src={dipprMainLogo} className={classes.dipprMainLogo}></img>
               <h1>
-                Troquez ou donnez des plats maisons avec vos voisins ou des associations.
+                Troquez ou donnez vos plats maisons à vos voisins ou des associations
               </h1>
               <p className="mt-3">
                 <Button endIcon={<NavigateNextIcon/>}component={Link} to ="/signup" variant="outlined" color="secondary">
@@ -84,24 +94,41 @@ const VisitorHome = () => {
           </Row>
         </Container>
       </Jumbotron>
-      {!loading ?  
-      <CardColumns>
-        {data.slice(0, 6).map(dish => {
-          const dishData = dish.meta.user_dish
-          return (
-            <DishCard
-              key={dish.id}
-              market_dish_id={dishData.id}
-              name={dishData.name}
-              description={dishData.description}
-              dish_rating={dishData.dish_rating}
-              user_id={dishData.user_id}
-              created_at={dishData.created_at}
-            />
-          )})}
-      </CardColumns>
-      : <Loader/>
-      }
+        <Container className="welcomeCardContainer">
+            <Row>
+              <Col md={6} xs={12} className="mobileSpacing mx-auto my-auto">
+                <DishCard
+                  key="welcome-dish-card"
+                  name="Gratin de courgettes"
+                  first_name="Aline"
+                  description="Je vous propose mon grâtin de courgettes maison fait avec amour."
+                  dish_rating={5}
+                  created_at="il y a 3 heures"
+                  className="welcomeCard"
+                />
+                </Col>
+                <Col md={6} xs={12} className="my-auto">
+                  <div>
+                    <h2>
+                      Vous pensez être le spécialiste du gratin de courgettes ? Proposez-le à votre ville !
+                    </h2>
+                    <p className="mt-3">
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas odio ullam iste veritatis ad fugit maxime error, quaerat, praesentium, impedit iusto? Cumque ut doloremque ea placeat nulla neque? Explicabo, aspernatur?
+                    </p>
+                  </div>
+                </Col>
+              
+            </Row>
+          </Container>
+          <Container fluid className="pt-5 bg-dark p-5">
+            <Row className="justify-content-center">
+              <SimpleCard alt="search" img={search} content="Recherchez des plats aux alentours"/>
+              <SimpleCard alt="cook" img={cooking} content="Préparez vos plats fétiches"/>
+              <SimpleCard alt="share" img={share} content="Echangez vos plats avec vos voisins"/>
+              <SimpleCard alt="donate" img={donate} content="Donnez vos plats à des associations"/>
+            </Row>
+          </Container>
+        
     </>
   )
 }
