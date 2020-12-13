@@ -36,7 +36,7 @@ const AutocompleteSearchBar = ({content, title, data}) =>{
           id="combo-box-demo"
           options={currentValues}
           getOptionLabel={(options) => options.type}
-          style={{ width: 300 }}
+          style={{ width: 270 }}
           onChange={addElement}
           renderInput={(params) => 
           <TextField required {...params} label={currentTitle} variant="outlined"/>}

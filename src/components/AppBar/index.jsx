@@ -1,35 +1,41 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import Cookies from "js-cookie";
+import { logoutUser } from '../../store/actions'
+import { Link, Redirect } from "react-router-dom";
+import  Announcement from '../../pages/Annoucement'
+
+
+// Material UI
 import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Fab from '@material-ui/core/Fab';
-import MenuIcon from '@material-ui/icons/Menu';
-import AddIcon from '@material-ui/icons/Add';
-import SearchIcon from '@material-ui/icons/Search';
 import clsx from 'clsx';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp'
+import InputBase from '@material-ui/core/InputBase';
+import Button from '@material-ui/core/Button';
+
+// Icons
+import MenuIcon from '@material-ui/icons/Menu';
+import AddIcon from '@material-ui/icons/Add';
+import SearchIcon from '@material-ui/icons/Search';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 import SettingsIcon from '@material-ui/icons/Settings'
 import RestaurantIcon from '@material-ui/icons/Restaurant'
 import StarIcon from '@material-ui/icons/Star'
-import { useSelector, useDispatch } from 'react-redux';
-import Cookies from "js-cookie";
-import { logoutUser } from '../../store/actions'
-import { Link, Redirect } from "react-router-dom";
-import InputBase from '@material-ui/core/InputBase';
-import Button from '@material-ui/core/Button';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import SendIcon from '@material-ui/icons/Send';
 import HomeIcon from '@material-ui/icons/Home';
 import MessageIcon from '@material-ui/icons/Message';
-import  TransitionsModal from '../../components/Modal'
+
 
 const useStyles = makeStyles((theme) => ({
   text: {
@@ -129,7 +135,6 @@ export default function BottomAppBar() {
   }
 
   const handleAddAnnounce = (value) => {
-    console.log(value)
     setAnnounce(false)
   };
 
@@ -244,13 +249,12 @@ export default function BottomAppBar() {
   );
 
   React.useEffect(() => {
-    console.log(announce)
   }, [announce])
 
   return (
     <div>
     <Redirect to={`/search/${query}`}/>
-    {announce && <TransitionsModal value={announce} visibleModal={(()=>handleAddAnnounce(false))}/> }
+    {announce && <Announcement value={announce} visibleModal={(()=>handleAddAnnounce(false))}/> }
     {['top', 'bottom'].map((anchor) => (
     <React.Fragment>
       <SwipeableDrawer
