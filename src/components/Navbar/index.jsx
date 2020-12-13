@@ -1,51 +1,257 @@
-import { Link } from "react-router-dom";
-import React, { useState } from 'react'
+import { withRouter, useHistory, Link } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import useDebounce from './use-debounce';
 import { useSelector, useDispatch } from 'react-redux';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import FormControl from 'react-bootstrap/FormControl';
-
-
+import dipprLogoTest2 from '../../assets/img/dipprLogoTest2.png'
+import './index.scss'
 import Cookies from "js-cookie";
 import { logoutUser } from '../../store/actions'
+import { fade, makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import InputBase from '@material-ui/core/InputBase';
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
+import MenuIcon from '@material-ui/icons/Menu';
+import SearchIcon from '@material-ui/icons/Search';
+import Button from '@material-ui/core/Button';
+
+const useStyles = makeStyles((theme) => ({
+  grow: {
+    flexGrow: 1
+  },
+  title: {
+    marginLeft: "1rem",
+    textDecoration: 'none',
+    marginRight: theme.spacing(2),
+    fontWeight: 'bold',
+    fontSize: '1.5rem'
+  },
+  search: {
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: fade(theme.palette.common.white, 0.15),
+    '&:hover': {
+      backgroundColor: fade(theme.palette.common.white, 0.25),
+    },
+    marginRight: theme.spacing(2),
+    marginLeft: 0,
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      marginLeft: theme.spacing(3),
+      width: 'auto',
+    },
+  },
+  searchIcon: {
+    padding: theme.spacing(0, 2),
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  inputRoot: {
+    color: 'inherit',
+  },
+  inputInput: {
+    padding: theme.spacing(1, 1, 1, 0),
+    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('md')]: {
+      width: '20ch',
+    },
+  },
+  sectionDesktop: {
+    display: 'none',
+    [theme.breakpoints.up('md')]: {
+      display: 'flex',
+    },
+  },
+  sectionMobile: {
+    display: 'flex',
+    [theme.breakpoints.up('md')]: {
+      display: 'none',
+    },
+  },
+  rootToolbar: {
+    backgroundColor: '#b51e1e'
+  },
+}));
 
 const Nav = () => {
-  const [query, setQuery] = useState("")
   
+  const classes = useStyles();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
+  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const dispatch = useDispatch()
   const user = useSelector(state => state.user.user);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [data, setData] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const debouncedSearchTerm = useDebounce(searchTerm, 100);
+  const history = useHistory();
 
-  const handleClick = () => {
+  const fetchData = () => {
+    setIsSearching(true);
+    fetch(`https://dippr-api-development.herokuapp.com/api/marketdishes/search?query=${debouncedSearchTerm}`, {
+      "method": "GET",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+    })
+    .then((response) => {
+      return response.json()
+    })
+    .then((response) => {
+      setData(response.data)
+    }).catch(error => {
+      console.log(error)
+    }).finally(() => {
+      setIsSearching(false);
+      history.push({
+        pathname: '/search/',
+        search: `${debouncedSearchTerm}`,
+        state: {
+          data: data,
+          searchTerm: searchTerm
+        },
+      }); 
+    });
+  };
+
+  useEffect(
+    () => {
+      if (debouncedSearchTerm) {
+        fetchData()
+      }
+    },
+    [debouncedSearchTerm]
+  );
+
+  const handleInputChange = (e) => {
+    setSearchTerm(e.target.value)
+    if (e.target.value.length < 2) {
+      history.push({
+        pathname: '/search'
+      }); 
+    }
+  }
+
+  const handleProfileMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMobileMenuClose = () => {
+    setMobileMoreAnchorEl(null);
+  };
+
+  const handleMobileMenuOpen = (event) => {
+    setMobileMoreAnchorEl(event.currentTarget);
+  };
+
+  const handleLogout = (event) => {
+    setAnchorEl(event.currentTarget);
     Cookies.remove('token');
     dispatch(logoutUser())
   }
 
-  const handleChange = (e) => {
-    setQuery(e.target.value)
-  }
+  const mobileMenuId = 'primary-search-account-menu-mobile';
 
-    return (
-      <nav className="navbar navbar-expand-lg navbar-light bg-light ">
-        <Link to="/" className="navbar-brand">DIPPR</Link>
-        <div className="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
-          <div className="navbar-nav">
-            <Link to="#" className="nav-item nav-link">About</Link>
-            <Link to="/announcement" className="nav-item nav-link">Créer une annonce</Link>
-            <Form inline>
-              <FormControl type="text" placeholder="Chercher un plat" className="mr-sm-2" value={query} onChange={(e) => handleChange(e)}/>
-              <Button variant="outline-primary" as={Link} to={`/search/${query}`}>Search</Button>
-            </Form>
+  const renderMenu = (
+    <Menu
+      anchorEl={mobileMoreAnchorEl}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      id={mobileMenuId}
+      keepMounted
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      open={isMobileMenuOpen}
+      onClose={handleMobileMenuClose}
+    >
+      {user.length === 0 ?
+        [
+        <MenuItem key="signup" onClick={handleProfileMenuOpen} component={Link} to="/signup">
+          <p>S'inscrire</p>
+        </MenuItem>,
+        <MenuItem key="signin" onClick={handleProfileMenuOpen} component={Link} to="/signin">
+          <p>Se connecter</p>
+        </MenuItem>
+        ]
+        : [
+          <MenuItem key="myProfile" onClick={handleProfileMenuOpen} component={Link} to={`/profile/${user.id}`}>
+            <p>Mon profil</p>
+          </MenuItem>,
+          <MenuItem key="logout" onClick={(e) => handleLogout(e)} component={Link} to="/">
+            <p>Se déconnecter</p>
+          </MenuItem>
+        ]
+      }
+    </Menu>
+  );
 
+  return (
+    <div className={classes.grow}>
+      <AppBar
+        position="static"
+        className="appBar"
+        style={{backgroundColor: "white", color: "black"}}
+        elevation={0}
+        >
+        <Toolbar className="rootToolbar">
+          <Link to="/" className={classes.title} variant="h6" color='inherit'>
+            <img src={dipprLogoTest2} className="dipprFullLogo" ></img>
+          </Link>
+          <div className={classes.search}>
+            <div className={classes.searchIcon}>
+              <SearchIcon />
+            </div>
+            <InputBase
+              placeholder="Rechercher des plats..."
+              classes={{
+                root: classes.inputRoot,
+                input: classes.inputInput,
+              }}
+              inputProps={{ 'aria-label': 'search' }}
+              onChange={e => handleInputChange(e)}
+              value={searchTerm}
+            />
           </div>
-          <div className="Connection">
-            {user.length === 0 ? <Button as={Link} to="/signin" variant="outline-primary mr-3">Se connecter</Button> :  '' }
-            {user.length === 0 ? <Button as={Link} to="/signup" variant="primary">S'inscrire</Button> :  '' }
-            {user.length !== 0 ? <Button as={Link} to={`/profile/${user.id}`} variant="primary mr-3">Profil</Button>:  '' }
-            {user.length !== 0 ? <Button as={Link} to="/" variant="danger" onClick={(e) => handleClick()}>Déconnexion</Button> :  '' }   
+          <div className={classes.grow} />
+          <div className={classes.sectionDesktop}>
+            {user.length === 0 ?
+              [
+                <Button key="btn-signup" component={Link} to ="/signup" variant="outlined" color="secondary">
+                  S'inscrire
+                </Button>,
+                <Button key="btn-signin" component={Link} to ="/signin">Se connecter</Button>
+              ]
+              : [
+              <Button key="btn-profile" component={Link} to ={`/profile/${user.id}`}>
+                  Mon Profil
+                </Button>,
+                <Button key="btn-logout" component={Link} to ="/" variant="outlined" color="secondary" onClick={(e) => handleLogout(e)}>Se déconnecter</Button>
+              ]
+            }
           </div>
-        </div>
-      </nav>
-    );
-  };
+          <div className={classes.sectionMobile}>
+            <IconButton
+              aria-label="show more"
+              aria-controls={mobileMenuId}
+              aria-haspopup="true"
+              onClick={handleMobileMenuOpen}
+              color="inherit"
+            >
+              <MenuIcon />
+            </IconButton>
+          </div>
+        </Toolbar>
+      </AppBar>
+      {renderMenu}
+    </div>
+  );
+}
 
-export default Nav;
+export default withRouter(Nav);

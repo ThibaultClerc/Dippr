@@ -1,13 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import CardColumns from 'react-bootstrap/CardColumns';
-
 import DishCard from '../../../components/DishCard';
 import Loader from '../../../components/UI/Loader';
 import Map from '../../../components/Map';
+import dishSearch1 from '../../../assets/img/dishSearch1.png'
+import './index.scss'
 
 const SearchResults = ({data, listOrMapValue}) => {
-
-  console.log(listOrMapValue)
 
   const displayRouter = () => {
     if (data.length > 0 && listOrMapValue === "list") {
@@ -31,10 +30,17 @@ const SearchResults = ({data, listOrMapValue}) => {
       )
     } else if (data.length > 0 && listOrMapValue === "map") {
       return <Map data={data}/>
-    // } else {
-    //   return <Loader/>
+    } else {
+      return <img src={dishSearch1} alt="search-logo" className="dishImg"/>;
     }   
   }
+
+  useEffect(
+    () => {
+    displayRouter()
+  },
+    [data]
+  )
 
   return (
     <>

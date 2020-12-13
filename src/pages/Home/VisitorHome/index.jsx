@@ -1,12 +1,41 @@
 import React, { useState, useEffect } from 'react';
-import Loader from '../../../components/UI/Loader'
-
+import { Link } from 'react-router-dom';
+import Loader from '../../../components/UI/Loader';
 import Jumbotron from 'react-bootstrap/Jumbotron';
-import Button from 'react-bootstrap/Button'
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import Button from '@material-ui/core/Button';
 import CardColumns from 'react-bootstrap/CardColumns'
 import DishCard from '../../../components/DishCard'
+import welcomeImage2 from '../../../assets/img/welcomeImage2.png'
+import dipprMainLogo from '../../../assets/img/dipprMainLogo.png';
+import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
+  dipprMainLogo: {
+    [theme.breakpoints.down('md')]: {
+      width: '40vw',
+      margin: 'auto',
+      display: 'block'
+    },
+    [theme.breakpoints.down('sm')]: {
+      width: '70vw',
+      margin: 'auto'
+    },
+  },
+  dipprWelcomeImage: {
+    [theme.breakpoints.down('md')]: {
+      width: '80vw',
+      display: 'block',
+      margin: 'auto'
+    },
+  },
+}));
 
 const VisitorHome = () => {
+  const classes = useStyles();
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(false)
 
@@ -36,13 +65,24 @@ const VisitorHome = () => {
   return (
     <>
       <Jumbotron>
-        <h1>Bienvenue sur DIPPR</h1>
-        <p>
-          Echangez ou donnez des plats maisons entre voisins !
-        </p>
-        <p>
-          <Button variant="primary">Learn more</Button>
-        </p>
+        <Container>
+          <Row>
+            <Col>
+              <img alt="dippr-main-logo" src={dipprMainLogo} className={classes.dipprMainLogo}></img>
+              <h1>
+                Troquez ou donnez des plats maisons avec vos voisins ou des associations.
+              </h1>
+              <p className="mt-3">
+                <Button endIcon={<NavigateNextIcon/>}component={Link} to ="/signup" variant="outlined" color="secondary">
+                  proposez votre plat
+                </Button>
+              </p>
+            </Col>
+            <Col>
+              <img alt="welcome" src={welcomeImage2} className={classes.dipprWelcomeImage}></img>
+            </Col>
+          </Row>
+        </Container>
       </Jumbotron>
       {!loading ?  
       <CardColumns>

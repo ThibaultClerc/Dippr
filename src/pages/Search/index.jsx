@@ -1,68 +1,34 @@
 import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import ToggleButton from 'react-bootstrap/ToggleButton';
-import Loader from '../../components/UI/Loader';
-import SearchResults from './SearchResults'
-
+import { useLocation } from 'react-router-dom';
+import SearchResults from './SearchResults';
+import Paper from '@material-ui/core/Paper';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import MapIcon from '@material-ui/icons/Map';
+import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
+import './index.scss';
+import { Grid, Button, ButtonGroup } from '@material-ui/core';
 
 const Search = () => {
-  const [data, setData] = useState([]);
+  const location = useLocation();
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [categoryValue, setCategoryValue] = useState('1');
-  const [listOrMapValue, setListOrMapValue] = useState('list');
-
-  let { query } = useParams();
-
-  const categories = [
-    { name: 'TROCS', value: '1' },
-    { name: 'DONS', value: '2' },
-    { name: 'DEMANDES', value: '3' },
-  ];
-
-  const listMapButtons = [
-    { name: 'List', value: 'list' },
-    { name: 'Map', value: 'map' },
-  ];
-
-  const fetchData = () => {
-    setLoading(true)
-    fetch(`https://dippr-api-development.herokuapp.com/api/marketdishes/search?query=${query}`, {
-      "method": "GET",
-      "headers": {
-        "Content-Type": "application/json"
-      },
-    })
-    .then((response) => {
-      return response.json()
-    })
-    .then((response) => {
-      setData(response.data)
-      setLoading(false)
-    }).catch(error => {
-      console.log(error)
-    })
-  };
-
+  const [listOrMaps, setListOrMaps] = useState("list");
 
   useEffect(() => {
-    if (typeof query !== undefined) {
-      fetchData()
+    if (typeof location.state !== 'undefined') {
+      changeCategory(categoryValue)
     }
-  }, [query])
-
-  useEffect(() => {
-    changeCategory(categoryValue)
-  }, [categoryValue, data])
+  }, [categoryValue, location.state])
 
   const changeCategory = (category) => {
     switch(category) {
       case "1":
-        setFilteredData(data.filter(dish => dish.attributes.market_dish_type === "troc"))
+        setFilteredData(location.state.data.filter(dish => dish.attributes.market_dish_type === "troc"))
         break;
       case "2":
-        setFilteredData(data.filter(dish => dish.attributes.market_dish_type === "donation"))
+        setFilteredData(location.state.data.filter(dish => dish.attributes.market_dish_type === "donation"))
         break;
       case "3":
         console.log("wishes")
@@ -72,39 +38,36 @@ const Search = () => {
 
   return (
     <>
-    <ButtonGroup toggle>
-        {categories.map((radio, idx) => (
-          <ToggleButton
-            key={idx}
-            type="radio"
-            variant="secondary"
-            name="radio"
-            value={radio.value}
-            checked={categoryValue === radio.value}
-            onChange={(e) => setCategoryValue(e.currentTarget.value)}
-          >
-            {radio.name}
-          </ToggleButton>
-        ))}
-      </ButtonGroup>
-      <ButtonGroup toggle>
-        {listMapButtons.map((radio, idx) => (
-          <ToggleButton
-            key={idx}
-            type="radio"
-            variant="secondary"
-            name="radio"
-            value={radio.value}
-            checked={listOrMapValue === radio.value}
-            onChange={(e) => setListOrMapValue(e.currentTarget.value)}
-          >
-            {radio.name}
-          </ToggleButton>
-        ))}
-      </ButtonGroup>
-      <SearchResults data={filteredData} listOrMapValue={listOrMapValue}/>
+    <Paper square>
+      <Grid container item justify='center' alignItems='center'>
+        <Tabs
+          value={categoryValue}
+          indicatorColor="primary"
+          textColor="primary"
+          onChange={(e) => setCategoryValue(e.currentTarget.value)}
+          aria-label="disabled tabs example"
+        >
+          <Tab label="Trocs" onClick={(e) => setCategoryValue("1")}/>
+          <Tab label="Dons" onClick={(e) => setCategoryValue("2")}/>
+          <Tab label="Demandes" onClick={(e) => setCategoryValue("3")}/>
+          <ButtonGroup size="small" className="react-switch" color="primary" aria-label="outlined primary button group">
+            <Button onClick={(e) => setListOrMaps("list")}>
+              <FormatListBulletedIcon/>
+            </Button>
+            <Button onClick={(e) => setListOrMaps("map")}>
+              <MapIcon/>
+            </Button>
+          </ButtonGroup>
+        </Tabs>
+      </Grid>
+    </Paper>
+      <SearchResults data={filteredData} listOrMapValue={listOrMaps}/>
     </>
   )
 }
 
 export default Search
+
+
+
+
