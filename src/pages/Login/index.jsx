@@ -2,13 +2,29 @@ import Cookies from 'js-cookie'
 import React, {useState} from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import {loginUser} from '../../store/actions';
-import {Container, Row, Col, Form, Button } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import { Redirect } from 'react-router-dom';
+import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  paper: {
+    padding: theme.spacing(2),
+    color: theme.palette.text.secondary,
+  },
+}));
+
 
 const Connection = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [redirection, setRedirection] = useState(false);
+  const classes = useStyles();
+
 
   const data = {
       user: {
@@ -47,11 +63,17 @@ const Connection = () => {
 
   return (
     <>
-    {redirection && <Redirect to='/'/>}
-    <Container fluid>
-      <Row>
-      <Col xs="3"></Col>
-      <Col xs="6">
+    <Grid
+        container
+        spacing={0}
+        direction="column"
+        alignItems="center"
+        justify="center"
+        >
+
+        {redirection && <Redirect to='/'/>}
+        <Grid item xs={12}>
+        <Paper className={classes.paper}>
         <Form onSubmit={handleSubmit}>
           <Form.Group controlId="email">
             <Form.Label>Email</Form.Label>
@@ -67,9 +89,10 @@ const Connection = () => {
             Se connecter
           </Button>
         </Form>
-      </Col>
-      </Row>
-    </Container>
+        </Paper>
+        </Grid> 
+      </Grid> 
+
     </>
 
   );
