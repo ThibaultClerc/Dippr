@@ -61,7 +61,7 @@ const Search = () => {
         </Tabs>
       </Grid>
     </Paper>
-      <SearchResults data={filteredData} listOrMapValue={listOrMaps}/>
+      <SearchResults data={filteredData} listOrMapValue={listOrMaps} className="searchResults"/>
     </>
   )
 }
