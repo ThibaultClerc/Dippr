@@ -1,32 +1,10 @@
-// import React from 'react';
-// import Card from 'react-bootstrap/Card';
-// import { Link } from 'react-router-dom';
-
-// const DishCard = ({market_dish_id, name, description, dish_rating, user_id, created_at, type}) => {
-//   return (
-//     <Card as={Link} to={`/marketdishes/${market_dish_id}`} style={{ textDecoration: 'none' }}>
-//       <Card.Img variant="top" src="holder.js/100px160" />
-//       <Card.Body>
-//         <Card.Title>{name}</Card.Title>
-//         <Card.Text>{description}</Card.Text>
-//         <small className="text-muted">{type}</small>
-//         <Card.Text as={Link} to={`/profile/${user_id}`}>Qui a fait ce plat ?</Card.Text>
-//       </Card.Body>
-//       <Card.Footer>
-//         <small className="text-muted">{dish_rating}</small> • 
-//         <small className="text-muted"> {created_at}</small>
-//       </Card.Footer>
-//     </Card>
-//   )
-// }
-
-// export default DishCard
-
 import React, { useState } from 'react';
+import { withRouter, useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
+import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
@@ -34,19 +12,33 @@ import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Stars from '../UI/Stars'
-import "./index.scss"
+import moment from 'moment';
+import "./index.scss";
+import burger from '../../assets/img/burger.jpg'
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    maxWidth: '200',
-    [theme.breakpoints.down('sm')]: {
-      maxWidth: '45%',
-      maxHeight: 220,
+  dishCard: {
+    width: '200',
+    height: '100',
+    [theme.breakpoints.down('xs')]: {
+      maxWidth: 150,
+      maxHeight: 200,
+      minWidth: 150,
+      minHeight: 200,
+    },
+    transition: "transform 0.15s ease-in-out",
+    '&:hover': {
+      cursor: "pointer",
+      transform: "scale3d(1.05, 1.05, 1)"
     },
   },
   media: {
-    height: 0,
+    height: "120px !important",
     paddingTop: '56.25%',
+    [theme.breakpoints.down('xs')]: {
+      height: "130px",
+      paddingTop: 0
+    },
   },
   expand: {
     transform: 'rotate(0deg)',
@@ -60,35 +52,62 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     backgroundColor: red[500],
+    width: "2rem",
+    height: "2rem"
   },
   header: {
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('xs')]: {
       display: 'none'
     },
   },
   title: {
     fontSize: '1em',
-    fontWeght: "bold",
-    wordWrap: "break-word"
+    fontWeight: "bold",
+    wordWrap: "break-word",
+    overflow: "hidden",
+    whiteSpace: "nowrap",
+    wordBreak: "break-word",
+    textOverflow: "ellipsis",
   },
   description: {
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('xs')]: {
       display: 'none'
     },
-    wordWrap: "break-word"
+    wordBreak: "break-word",
+    textOverflow: "ellipsis",
+    fontSize: '13px',
+    overflow: "hidden",
+    whiteSpace: "nowrap",
+  },
+  stars: {
+    [theme.breakpoints.down('xs')]: {
+      padding: 0,
+    },
+  textContainer: {
+    padding: "200px"
+  }
   }
 }));
 
-const DishCard = ({market_dish_id, name, description, dish_rating, user_id, created_at, type, first_name}) => {
+const DishCard = ({market_dish_id, name, description, dish_rating, user_id, created_at, type, first_name, user_first_name}) => {
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
+  const history = useHistory();
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
+  const handleCardClick = () => {
+    history.push({
+      pathname: `/marketdishes/${market_dish_id}`
+    });
+  }
+
+  const handleProfileClick = () => {
+    history.push({
+      pathname: `/users/${user_id}`
+    });
+  }
 
   return (
-    <Card className={classes.root}>
+    <Card className={classes.dishCard} onClick={(e) => handleCardClick(e)}>
       <CardHeader
         avatar={
           <Avatar aria-label="recipe" className={classes.avatar}>
@@ -100,27 +119,28 @@ const DishCard = ({market_dish_id, name, description, dish_rating, user_id, crea
             <MoreVertIcon />
           </IconButton>
         }
-        title={first_name}
-        subheader={created_at}
+        title={user_first_name}
+        subheader={moment(created_at).fromNow()}
         className={classes.header}
+        onClick={(e) => handleProfileClick(e)}
       />
       <CardMedia
         className={classes.media}
-        image="/static/images/cards/paella.jpg"
-        title="Paella dish"
+        image={burger}
       />
-      <CardContent>
+      <CardContent className={classes.textContainer}>
       <Typography className={classes.title} variant="h4" color="textSecondary" component="h5">
           {name}
         </Typography>
         <Typography className={classes.description} variant="body2" color="textSecondary" component="p">
           {description}
         </Typography>
-        {/* <Stars className={classes.stars} dish_rating={dish_rating}/> */}
+        <CardActions className={classes.stars}>
+          <Stars dish_rating={dish_rating}/>
+        </CardActions>
         </CardContent>
-      
     </Card>
   );
 }
 
-export default DishCard;
+export default withRouter(DishCard);
