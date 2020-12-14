@@ -16,7 +16,6 @@ export default function CameraDialog() {
   const [open, setOpen] = React.useState(false);
   const webcamRef = React.useRef(null);
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -27,11 +26,11 @@ export default function CameraDialog() {
   };
 
   const videoConstraints = {
-    width: 1280,
-    height: 720,
+    width: { min: 480 },
+    height: { min: 720 },
+    aspectRatio: 0.6666666667,
     facingMode: "environment" 
   };
-
   return (
     <>
     <div>
@@ -48,6 +47,8 @@ export default function CameraDialog() {
         <Webcam
               audio={false}
               ref={webcamRef}
+              width={480} 
+              height={720}
               screenshotFormat="image/jpeg"
               videoConstraints={videoConstraints}
             />
