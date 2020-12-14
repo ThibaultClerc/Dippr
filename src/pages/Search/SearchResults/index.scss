@@ -9,3 +9,8 @@
   flex-flow: column;
   height: 100%;
 }
+
+.cardContainer > .MuiCardContent-root {
+  height: 120px;
+  padding-bottom: 5px !important;
+}
