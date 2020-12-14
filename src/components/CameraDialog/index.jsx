@@ -26,7 +26,7 @@ export default function CameraDialog() {
   };
 
   const videoConstraints = {
-    // aspectRatio: 0.56,
+    aspectRatio: 0.56,
     facingMode: "environment" 
   };
   return (
