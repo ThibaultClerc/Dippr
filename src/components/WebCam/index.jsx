@@ -16,6 +16,9 @@ const WebcamCapture = () => {
         audio={false}
         ref={webcamRef}
         screenshotFormat="image/jpeg"
+        videoConstraints={{
+          facingMode: 'environment',
+      }}
       />
       <button onClick={capture}>Capture photo</button>
       {imgSrc && (
