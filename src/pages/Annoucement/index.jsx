@@ -10,7 +10,7 @@ import Cookies from 'js-cookie'
 import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Connection from '../../pages/Login'
-import Alert from '@material-ui/lab/Alert';
+import WebcamCapture from '../../components/WebCam'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -214,6 +214,9 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
       {ingredients.length !==0 && <SearchBar content={ ingredients } title="Ingredients" data={(content=>handleIngredientData(content))}/>}
       <br/>
       {tags.length !==0  && <SearchBar content={ tags } title="Type de plat" data={(content=>handleTagData(content))}/>}
+      <br/>
+      <br/>
+      <WebcamCapture/>
       </>
     );
 
