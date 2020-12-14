@@ -116,7 +116,7 @@ const DishCard = ({market_dish_id, name, description, dish_rating, user_id, crea
         <Typography className={classes.description} variant="body2" color="textSecondary" component="p">
           {description}
         </Typography>
-        <Stars className={classes.stars} dish_rating={dish_rating}/>
+        {/* <Stars className={classes.stars} dish_rating={dish_rating}/> */}
         </CardContent>
       
     </Card>

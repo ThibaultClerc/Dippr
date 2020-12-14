@@ -150,7 +150,6 @@ export default function BottomAppBar() {
   };
 
   const handlePublishSuccess = () => {
-    console.log("coucou je suis là")
     setPublishSuccess(true);
   };
 

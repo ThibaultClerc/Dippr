@@ -8,7 +8,6 @@ const Stars = ({dish_rating}) => {
     for(let i=1; i <= dish_rating ; i++) {
       stars.push(<StarIcon/>)
     }
-    console.log(stars)
     return stars
   }
 

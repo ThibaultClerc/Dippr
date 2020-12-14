@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { css } from "@emotion/core";
-import ClipLoader from "react-spinners/ClipLoader";
+import PulseLoader from "react-spinners/PulseLoader";
 
 const override = css`
   display: block;
@@ -13,10 +13,10 @@ const Loader = () => {
   
   return (
     <div className="sweet-loading">
-      <ClipLoader
+      <PulseLoader
         css={override}
-        size={35}
-        color={"blue"}
+        size={15}
+        color={"#F5436D"}
         loading={loading}
       />
     </div>

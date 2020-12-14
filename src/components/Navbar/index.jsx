@@ -1,9 +1,7 @@
 import { withRouter, useHistory, Link } from "react-router-dom";
 import React, { useState, useEffect } from 'react';
-import useDebounce from './use-debounce';
 import { useSelector, useDispatch } from 'react-redux';
 import dipprLogoTest2 from '../../assets/img/dipprLogoTest2.png'
-import './index.scss'
 import Cookies from "js-cookie";
 import { logoutUser } from '../../store/actions'
 import { fade, makeStyles } from '@material-ui/core/styles';
@@ -16,6 +14,8 @@ import Menu from '@material-ui/core/Menu';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import Button from '@material-ui/core/Button';
+import useDebouncedEffect from 'use-debounced-effect-hook'
+import './index.scss'
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -89,57 +89,37 @@ const Nav = () => {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const dispatch = useDispatch()
   const user = useSelector(state => state.user.user);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [data, setData] = useState([]);
-  const [isSearching, setIsSearching] = useState(false);
-  const debouncedSearchTerm = useDebounce(searchTerm, 100);
+  const [searchTerm, setSearchTerm] = useState("");
   const history = useHistory();
+  const [lastSearch, setLastSearch] = useState('')
 
-  const fetchData = () => {
-    setIsSearching(true);
-    fetch(`https://dippr-api-development.herokuapp.com/api/marketdishes/search?query=${debouncedSearchTerm}`, {
-      "method": "GET",
-      "headers": {
-        "Content-Type": "application/json"
-      },
-    })
-    .then((response) => {
-      return response.json()
-    })
-    .then((response) => {
-      setData(response.data)
-    }).catch(error => {
-      console.log(error)
-    }).finally(() => {
-      setIsSearching(false);
-      history.push({
-        pathname: '/search/',
-        search: `${debouncedSearchTerm}`,
-        state: {
-          data: data,
-          searchTerm: searchTerm
-        },
-      }); 
-    });
-  };
-
-  useEffect(
-    () => {
-      if (debouncedSearchTerm) {
-        fetchData()
-      }
-    },
-    [debouncedSearchTerm]
-  );
 
   const handleInputChange = (e) => {
     setSearchTerm(e.target.value)
-    if (e.target.value.length < 2) {
-      history.push({
-        pathname: '/search'
-      }); 
-    }
   }
+
+  useDebouncedEffect(() => {
+    if (searchTerm !== "") {
+      history.push({
+        pathname: '/search/',
+        search: searchTerm
+      });
+    }
+  },
+  [ searchTerm ],
+    1000
+  );
+
+  useEffect(() => {
+    if (searchTerm.length < 2) {
+      return
+    }
+    if (searchTerm !== "") {
+      history.push({
+        pathname: '/search/'
+      });
+    }
+  }, [searchTerm])
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
