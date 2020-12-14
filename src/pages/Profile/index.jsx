@@ -55,8 +55,8 @@ const Profile = () => {
         {data.length !== 0 ?
           <>
           <br/><br/><br/>
-          <Container xs="8" className="block">
-          <Row className="block">
+          <Container xs="8" className="">
+          <Row className="block border-dark">
            
            <Col xs="4">
               <Avatar alt="Remy Sharp" src="../../assets/img/dishLogo.png" className={classes.large} />
