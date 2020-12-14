@@ -26,6 +26,12 @@ export default function CameraDialog() {
     setOpen(false);
   };
 
+  const videoConstraints = {
+    width: 720,
+    height: 1280,
+    facingMode: "environnement"
+  };
+
   return (
     <>
     <div>
@@ -43,11 +49,10 @@ export default function CameraDialog() {
         <Webcam
               audio={false}
               ref={webcamRef}
+              height={1280}
               screenshotFormat="image/jpeg"
-              videoConstraints={{
-                facingMode: 'user',
-                height: '100vh',
-                }}
+              width={720}
+              videoConstraints={videoConstraints}
             >
         </Webcam>
         <DialogActions>
