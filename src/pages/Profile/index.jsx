@@ -49,7 +49,7 @@ const Profile = () => {
           <h3> {data.phone_number !== "" ? "Numéro de téléphone : " + data.phone_number  : ""} </h3>
           <h3>Description : {data.description !== "" ? data.description  : ""} </h3>
           <h3> {data.dippers !== "" ? "Vous avez " + data.dippers + " dippers"  : ""} </h3>
-          <h3>{user.id === profileId ? <Button as={Link} to="/profile/edit" variant="primary">Modifier mon profil</Button> : ""}</h3>
+          <h3>{user.id === profileId ? <Button as={Link} to="/users/edit" variant="primary">Modifier mon profil</Button> : ""}</h3>
           <h3>{user.id === profileId ? <UserDishes profileId={user.id}/> : ""}</h3>
         </>
         : <Loader/>
