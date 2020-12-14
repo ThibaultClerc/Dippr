@@ -44,10 +44,14 @@ export default function CameraDialog() {
               videoConstraints={{
                 facingMode: 'user',
                 height: '100vh',
+                textarea:'enable'
             }}
+            videoSettingsText={{
+              textarea:"hello",
+            }}
+
             >
         </Webcam>
-
         <DialogActions>
           <Button onClick={handleClose} color="primary" autoFocus>
             Agree
