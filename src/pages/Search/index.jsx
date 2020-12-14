@@ -23,7 +23,7 @@ const Search = () => {
       isMounted.current = true
       if (location.search !== "") {
         setIsSearching(true);
-        fetch(`http://localhost:3090/api/marketdishes/search?query=${location.search}`, {
+        fetch(`https://dippr-development.herokuapp.com/marketdishes/search?query=${location.search}`, {
           "method": "GET",
           "headers": {
             "Content-Type": "application/json"
