@@ -6,6 +6,7 @@ import Signup from "../../pages/Signup"
 import Login from "../../pages/Login"
 import Annoucement from "../../pages/Annoucement"
 import Profile from "../../pages/Profile"
+import EditProfile from "../../pages/EditProfile"
 import PrivateRoute from "../PrivateRoute"
 import Search from "../../pages/Search"
 import BottomAppBar from "../../components/AppBar"
@@ -29,6 +30,7 @@ const Layout = () => {
         <Route              path="/search/:query"      component={Search}/>
         <Route              path="/search"             component={Search}/>
         <PrivateRoute       path="/profile/:profileId" component={Profile}/>
+        <PrivateRoute       path="/users/edit"         component={EditProfile}/>
       </Switch> 
     </Router>
   )
