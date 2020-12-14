@@ -27,9 +27,9 @@ export default function CameraDialog() {
   };
 
   const videoConstraints = {
-    width: 720,
-    height: 1280,
-    facingMode: "environnement"
+    width: 1280,
+    height: 720,
+    facingMode: "environment" 
   };
 
   return (
@@ -41,7 +41,6 @@ export default function CameraDialog() {
       </div>
       <div>
       <Dialog
-        fullScreen={fullScreen}
         open={open}
         onClose={handleClose}
         aria-labelledby="responsive-dialog-title"
@@ -49,18 +48,13 @@ export default function CameraDialog() {
         <Webcam
               audio={false}
               ref={webcamRef}
-              height={1280}
               screenshotFormat="image/jpeg"
-              width={720}
               videoConstraints={videoConstraints}
-            >
-        </Webcam>
-        <DialogActions>
+            />
           <Button onClick={handleClose} color="primary" autoFocus>
             Agree
           </Button>
       
-        </DialogActions>
       </Dialog>
     </div>
     </>
