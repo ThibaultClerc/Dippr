@@ -119,7 +119,6 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
       return response.json()
     })
     .then((response) => {
-      console.log(response)
       currentIngredients.forEach(element =>{
         handleIngredients(response.id, element.id );
       })
@@ -154,7 +153,6 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
       return response.json()
     })
     .then((response) => {
-      console.log(response)
     }).catch(error => {
       console.log(error)
     })
@@ -181,7 +179,6 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
       return response.json()
     })
     .then((response) => {
-      console.log(response)
     }).catch(error => {
       console.log(error)
     })

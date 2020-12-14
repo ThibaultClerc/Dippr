@@ -37,7 +37,6 @@ const Signup = () => {
     })
     .then((response) => {
       dispatch(loginUser(response.data.attributes))
-      console.log(loginUser(response.data.attributes))
       setRedirection(true)
     }).catch(error => {
       console.log(error)

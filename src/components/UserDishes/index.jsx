@@ -10,11 +10,8 @@ import CardColumns from 'react-bootstrap/CardColumns'
 const UserDishes = (profileId) => {
 
     const [data, setData] = useState([])
-    console.log("depuis userdishes")
-    console.log(profileId)
 
     const fetchData = (url) => {
-        console.log(url)
         fetch(url, {
           "method": "GET",
           "headers": {
