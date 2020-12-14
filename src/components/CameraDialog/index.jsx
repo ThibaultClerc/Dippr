@@ -27,10 +27,13 @@ export default function CameraDialog() {
   };
 
   return (
+    <>
     <div>
       <IconButton variant="outlined" color="primary" onClick={handleClickOpen}>
         <PhotoCameraIcon/>
       </IconButton>
+      </div>
+      <div>
       <Dialog
         fullScreen={fullScreen}
         open={open}
@@ -44,12 +47,7 @@ export default function CameraDialog() {
               videoConstraints={{
                 facingMode: 'user',
                 height: '100vh',
-                textarea:'enable'
-            }}
-            videoSettingsText={{
-              textarea:"hello",
-            }}
-
+                }}
             >
         </Webcam>
         <DialogActions>
@@ -60,5 +58,6 @@ export default function CameraDialog() {
         </DialogActions>
       </Dialog>
     </div>
+    </>
   );
 }
