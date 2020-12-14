@@ -1,0 +1,6 @@
+.block {
+    padding-top: 10px;
+    border-radius: 30px;
+    background-color: #eee;
+    display: inline-block;
+}
