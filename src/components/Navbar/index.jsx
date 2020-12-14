@@ -91,7 +91,6 @@ const Nav = () => {
   const user = useSelector(state => state.user.user);
   const [searchTerm, setSearchTerm] = useState("");
   const history = useHistory();
-  const [lastSearch, setLastSearch] = useState('')
 
 
   const handleInputChange = (e) => {
