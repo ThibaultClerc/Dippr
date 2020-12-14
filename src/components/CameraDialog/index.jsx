@@ -45,7 +45,8 @@ export default function CameraDialog() {
         <Webcam
               audio={false}
               ref={webcamRef}
-              width={340} 
+              height={192}
+              weight={341}
               screenshotFormat="image/jpeg"
               videoConstraints={videoConstraints}
             />
