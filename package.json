@@ -26,6 +26,7 @@
     "react-scripts": "4.0.1",
     "react-spinners": "^0.9.0",
     "react-switch": "^5.0.1",
+    "react-webcam": "^5.2.2",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
     "use-debounced-effect-hook": "^1.1.62",
