@@ -52,7 +52,7 @@ const Map = ({data}) => {
       {data.map(dish => {
         return <Marker
                 key={dish.attributes.id}
-                position={{lat: parseFloat(dish.meta.user_lat), lng: parseFloat(dish.meta.user_lng)}}
+                position={{lat: Number.parseFloat(dish.meta.user_lat), lng: Number.parseFloat(dish.meta.user_lng)}}
                 icon={{
                   url: dishLogo,
                   scaledSize: new window.google.maps.Size(30, 30),

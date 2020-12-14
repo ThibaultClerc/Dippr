@@ -14,6 +14,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import Button from '@material-ui/core/Button';
+import useDebouncedEffect from 'use-debounced-effect-hook'
 import './index.scss'
 
 const useStyles = makeStyles((theme) => ({
@@ -88,16 +89,37 @@ const Nav = () => {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const dispatch = useDispatch()
   const user = useSelector(state => state.user.user);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const history = useHistory();
+  const [lastSearch, setLastSearch] = useState('')
+
 
   const handleInputChange = (e) => {
     setSearchTerm(e.target.value)
-    history.push({
-      pathname: '/search/',
-      search: e.target.value
-    });
   }
+
+  useDebouncedEffect(() => {
+    if (searchTerm !== "") {
+      history.push({
+        pathname: '/search/',
+        search: searchTerm
+      });
+    }
+  },
+  [ searchTerm ],
+    1000
+  );
+
+  useEffect(() => {
+    if (searchTerm.length < 2) {
+      return
+    }
+    if (searchTerm !== "") {
+      history.push({
+        pathname: '/search/'
+      });
+    }
+  }, [searchTerm])
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);

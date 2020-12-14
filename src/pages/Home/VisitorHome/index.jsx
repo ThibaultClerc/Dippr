@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Loader from '../../../components/UI/Loader';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Button from '@material-ui/core/Button';
-import CardColumns from 'react-bootstrap/CardColumns'
 import DishCard from '../../../components/DishCard'
 import welcomeImage2 from '../../../assets/img/welcomeImage2.png'
 import dipprMainLogo from '../../../assets/img/dipprMainLogo.png';
@@ -44,31 +42,6 @@ const useStyles = makeStyles((theme) => ({
 
 const VisitorHome = () => {
   const classes = useStyles();
-  const [data, setData] = useState([])
-  const [loading, setLoading] = useState(false)
-
-  const fetchData = () => {
-    setLoading(true)
-    fetch(`https://dippr-api-development.herokuapp.com/api/market_dishes`, {
-      "method": "GET",
-      "headers": {
-        "Content-Type": "application/json"
-      },
-    })
-    .then((response) => {
-      return response.json()
-    })
-    .then((response) => {
-      setData(response.data)
-      setLoading(false)
-    }).catch(error => {
-      console.log(error)
-    })
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, [])
   
   return (
     <>

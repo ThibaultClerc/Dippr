@@ -27,6 +27,7 @@
     "react-switch": "^5.0.1",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
+    "use-debounced-effect-hook": "^1.1.62",
     "web-vitals": "^0.2.4"
   },
   "scripts": {

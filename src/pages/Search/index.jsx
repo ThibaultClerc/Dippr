@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useLocation } from 'react-router-dom';
 import SearchResults from './SearchResults';
 import Paper from '@material-ui/core/Paper';
@@ -7,56 +7,42 @@ import Tab from '@material-ui/core/Tab';
 import MapIcon from '@material-ui/icons/Map';
 import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
 import { Grid, Button, ButtonGroup } from '@material-ui/core';
-import useDebounce from './use-debounce';
 import './index.scss';
 
 const Search = () => {
   const location = useLocation();
   const [filteredData, setFilteredData] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [categoryValue, setCategoryValue] = useState(1);
   const [listOrMaps, setListOrMaps] = useState("list");
   const [isSearching, setIsSearching] = useState(false);
-  const [searchTerm, setSearchTerm] = useState(location.search)
-  const debouncedSearchTerm = useDebounce(searchTerm, 300);
   const [data, setData] = useState([]);
-  const [lastSearch, setLastSearch] = useState('')
-
-  const fetchData = () => {
-    setIsSearching(true);
-    fetch(`https://dippr-api-development.herokuapp.com/api/marketdishes/search?query=${debouncedSearchTerm}`, {
-      "method": "GET",
-      "headers": {
-        "Content-Type": "application/json"
-      },
-    })
-    .then((response) => {
-      return response.json()
-    })
-    .then((response) => {
-      setData(response.data)
-    }).catch(error => {
-      console.log(error)
-    }).finally(() => {
-      changeCategory(categoryValue)
-      setIsSearching(false);
-    });
-  };
+  const isMounted = useRef(false)
 
   useEffect(
     () => {
-      if (debouncedSearchTerm && debouncedSearchTerm.length > 1) {
-        fetchData()
-      }
-    },
-    [debouncedSearchTerm]
-  );
-
-  useEffect(
-    () => {
-      setLastSearch(location.search)
-      if (!(lastSearch.length > location.search.length)) {
-        setSearchTerm(location.search)
+      isMounted.current = true
+      if (location.search !== "") {
+        setIsSearching(true);
+        fetch(`http://localhost:3090/api/marketdishes/search?query=${location.search}`, {
+          "method": "GET",
+          "headers": {
+            "Content-Type": "application/json"
+          },
+        })
+        .then((response) => {
+          return response.json()
+        })
+        .then((response) => {
+          if (isMounted.current) {
+            setData(response.data)
+          }
+        }).catch(error => {
+          console.log(error)
+        }).finally(() => {
+          if (isMounted.current) {
+            setIsSearching(false);
+          }
+        });
       }
     },
     [location.search]
@@ -64,7 +50,7 @@ const Search = () => {
 
   useEffect(() => {
       changeCategory(categoryValue)
-  }, [categoryValue])
+  }, [categoryValue, data])
 
   const changeCategory = (category) => {
     switch(category) {
@@ -103,11 +89,16 @@ const Search = () => {
           </ButtonGroup>
       </Grid>
     </Paper>
-      <SearchResults
-        data={filteredData}
-        listOrMapValue={listOrMaps}
-        isSearching={isSearching}
-        className="searchResults"/>
+      {data.length > 0 &&
+        <> 
+          <SearchResults
+              data={filteredData}
+              listOrMapValue={listOrMaps}
+              isSearching={isSearching}
+              className="searchResults"
+          />
+        </>
+      }
     </>
   )
 }

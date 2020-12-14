@@ -13,7 +13,6 @@ const SearchResults = ({data, listOrMapValue, isSearching}) => {
     if (data.length > 0 && listOrMapValue === "list") {
       return (
         <>
-        {!isSearching ? 
           <Row>
             <CardDeck className="mt-5">
               {data.map(dish => {
@@ -32,8 +31,6 @@ const SearchResults = ({data, listOrMapValue, isSearching}) => {
               )})}
             </CardDeck>
           </Row>
-          : <Loader/>
-        }
         </>
       )
     } else if (data.length > 0 && listOrMapValue === "map") {
@@ -51,7 +48,10 @@ const SearchResults = ({data, listOrMapValue, isSearching}) => {
 
   return (
     <>
-      {displayRouter()}
+      {!isSearching ?
+        displayRouter()
+        : <Loader/>
+      }
     </>
   )
 }
