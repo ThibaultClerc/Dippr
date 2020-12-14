@@ -36,7 +36,7 @@ const Signup = () => {
       return response.json()
     })
     .then((response) => {
-      dispatch(loginUser(response.data.attributes))
+      dispatch(loginUser(response.data))
       setRedirection(true)
     }).catch(error => {
       console.log(error)
