@@ -7,8 +7,10 @@ import IconButton from '@material-ui/core/IconButton';
 import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
 import Webcam from "react-webcam";
 import CancelIcon from '@material-ui/icons/Cancel';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
-export default function CameraDialog() {
+
+export default function CameraDialog({imageSetting}) {
   const [open, setOpen] = React.useState(false);
   const webcamRef = React.useRef(null);
   const [imgSrc, setImgSrc] = React.useState(null);
@@ -25,6 +27,9 @@ export default function CameraDialog() {
 
   const handleClose = () => {
     setOpen(false);
+    if(imgSrc !== null){
+      imageSetting(imgSrc)
+    };
   };
 
   const videoConstraints = {
@@ -35,10 +40,20 @@ export default function CameraDialog() {
   const photoIcon = (value)=>(
     <>
     <IconButton variant="outlined" color="primary" onClick={value}>
-        <PhotoCameraIcon/>
+        <PhotoCameraIcon/> 
       </IconButton>
+      {imgSrc && <CheckCircleIcon style={{color: "green",}}/> }
     </>
-  )
+  );
+
+  const CheckButton = (value) =>(
+    <>
+    <Button onClick={handleClose} color="primary" autoFocus>
+      {value}
+    </Button>
+    </>
+  );
+
   return (
     <>
       <div>
@@ -49,7 +64,6 @@ export default function CameraDialog() {
       open={open}
       onClose={handleClose}
       aria-labelledby="responsive-dialog-title"
-      // fullWidth={true}
 
       >
       {imgSrc !==null && (
@@ -66,12 +80,11 @@ export default function CameraDialog() {
 
         <DialogActions>
           {imgSrc === null && photoIcon(()=>capture())}
+          {imgSrc === null && CheckButton("Retour")}
 
-          {imgSrc && <CancelIcon onClick={()=>setImgSrc(null)}/>}
+          {imgSrc && <CancelIcon onClick={()=>setImgSrc(null)} style={{color: "red"}}/>}
+          {imgSrc && CheckButton("Valider")}
 
-          <Button onClick={handleClose} color="primary" autoFocus>
-                    Valider
-          </Button>
         </DialogActions>
 
       </Dialog>
