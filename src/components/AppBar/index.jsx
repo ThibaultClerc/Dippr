@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Cookies from "js-cookie";
 import { logoutUser } from '../../store/actions'
 import { Link, useHistory } from "react-router-dom";
 import  Announcement from '../../pages/Annoucement'
-import useDebounce from './use-debounce';
+import useDebouncedEffect from 'use-debounced-effect-hook'
 
 // Material UI
 import { fade, makeStyles } from '@material-ui/core/styles';
@@ -113,14 +113,13 @@ const useStyles = makeStyles((theme) => ({
 export default function BottomAppBar() {
   const dispatch = useDispatch()
   const user = useSelector(state => state.user.user);
-  const [searchTerm, setSearchTerm] = React.useState('');
-  const debouncedSearchTerm = useDebounce(searchTerm, 100);
-  const [announce, setAnnounce] = React.useState(null);
-  const [data, setData] = React.useState([]);
-  const [isSearching, setIsSearching] = React.useState(false);
-  const [publishSuccess, setPublishSuccess] = React.useState(null)
+  const [searchTerm, setSearchTerm] = useState('');
+  const [announce, setAnnounce] = useState(null);
+  const [data, setData] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [publishSuccess, setPublishSuccess] = useState(null)
   const history = useHistory();
-  const [state, setState] = React.useState({
+  const [state, setState] = useState({
     bottom: false,
     top: false,
   });
@@ -134,12 +133,31 @@ export default function BottomAppBar() {
 
   const handleChange = (e) => {
     setSearchTerm(e.target.value)
-    if (e.target.value.length < 2) {
-      history.push({
-        pathname: '/search'
-      }); 
-    }
   };
+
+  useDebouncedEffect(() => {
+    if (searchTerm !== "") {
+      history.push({
+        pathname: '/search/',
+        search: searchTerm
+      });
+    }
+  },
+  [ searchTerm ],
+    1000
+  );
+
+  useEffect(() => {
+    if (searchTerm.length < 2) {
+      return
+    }
+    if (searchTerm !== "") {
+      history.push({
+        pathname: '/search/'
+      });
+    }
+  }, [searchTerm])
+
 
   const handleModalChange = () => {
     setAnnounce(true);
@@ -164,33 +182,6 @@ export default function BottomAppBar() {
     setState({ ...state, [anchor]: open });
   };
   
-  const fetchData = () => {
-    setIsSearching(true);
-    fetch(`https://dippr-api-development.herokuapp.com/api/marketdishes/search?query=${debouncedSearchTerm}`, {
-      "method": "GET",
-      "headers": {
-        "Content-Type": "application/json"
-      },
-    })
-    .then((response) => {
-      return response.json()
-    })
-    .then((response) => {
-      setData(response.data)
-    }).catch(error => {
-      console.log(error)
-    }).finally(() => {
-      setIsSearching(false);
-      history.push({
-        pathname: '/search/',
-        search: `${debouncedSearchTerm}`,
-        state: {
-          data: data,
-          searchTerm: searchTerm
-        },
-      }); 
-    });
-  };
 
   const listLogin = (anchor) => (
     <div
@@ -279,28 +270,11 @@ export default function BottomAppBar() {
         inputProps={{ 'aria-label': 'search' }}
         onChange={e => handleChange(e)}
         value={searchTerm}
-            />
-      <Button
-      variant="contained"
-      color="primary"
-      className={classes.button}
-      size="small"
-      component={Link} 
-      to={`/search/${searchTerm}`}
-    ><SendIcon/></Button>  
+      /> 
     </div>
   );
 
-  React.useEffect(
-    () => {
-      if (debouncedSearchTerm) {
-        fetchData()
-      }
-    },
-    [debouncedSearchTerm]
-  );
-
-  React.useEffect(() => {
+  useEffect(() => {
   }, [announce])
 
   return (
