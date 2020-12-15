@@ -28,7 +28,7 @@ export default function CameraDialog() {
   };
 
   const videoConstraints = {
-    aspectRatio: 0.56,
+    aspectRatio: 0.6667,
     facingMode: "environment" 
   };
 
@@ -49,6 +49,8 @@ export default function CameraDialog() {
       open={open}
       onClose={handleClose}
       aria-labelledby="responsive-dialog-title"
+      // fullWidth={true}
+
       >
       {imgSrc !==null && (
       <img src={imgSrc}/>
@@ -57,7 +59,7 @@ export default function CameraDialog() {
       {imgSrc === null && <Webcam
             audio={false}
             ref={webcamRef}
-            width={341} 
+            width={'320vh'} 
             screenshotFormat="image/jpeg"
             videoConstraints={videoConstraints}
           />}
