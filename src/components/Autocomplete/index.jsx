@@ -19,7 +19,7 @@ const AutocompleteSearchBar = ({content, title, data}) =>{
           id={currentTitle}
           options={currentValues}
           getOptionLabel={(options) => options.type}
-          style={{ width: 270 }}
+          fullWidth
           onChange={addElement}
           renderInput={(params) => 
           <TextField required {...params} label={currentTitle} variant="outlined"/>}

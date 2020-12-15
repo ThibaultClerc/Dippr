@@ -20,7 +20,6 @@ import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import InputBase from '@material-ui/core/InputBase';
-import Button from '@material-ui/core/Button';
 import Alert from '@material-ui/lab/Alert';
 
 // Icons
@@ -33,9 +32,10 @@ import SettingsIcon from '@material-ui/icons/Settings'
 import RestaurantIcon from '@material-ui/icons/Restaurant'
 import StarIcon from '@material-ui/icons/Star'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
-import SendIcon from '@material-ui/icons/Send';
 import HomeIcon from '@material-ui/icons/Home';
 import MessageIcon from '@material-ui/icons/Message';
+import ShoppingBasket from '@material-ui/icons/ShoppingBasket';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -301,18 +301,18 @@ export default function BottomAppBar() {
             <HomeIcon fontSize ="default"/>
           </IconButton>
 
+          {user.length !== 0?(
+            <IconButton color="inherit" button="true" component={Link} to="/users/swap">
+              <ShoppingBasket fontSize ="default" />
+            </IconButton>
+          ):""}
+
           {user.length !==0?(
-                      <IconButton edge="end" color="inherit"  button="true" component={Link} to="/">
+                    <IconButton edge="end" color="inherit"  button="true" component={Link} to="/users/dish">
                       <RestaurantIcon fontSize ="default"/>
                     </IconButton>
           )
           :""}
-
-          {user.length !== 0?(
-            <IconButton color="inherit" button="true" component={Link} to="/">
-              <StarIcon fontSize ="default" />
-            </IconButton>
-          ):""}
 
             <Fab color="secondary" aria-label="add" className={classes.fabButton}  onClick={handleModalChange}>
               <AddIcon fontSize ="default"/>
