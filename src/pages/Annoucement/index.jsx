@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import TextField from '@material-ui/core/TextField';
 import SearchBar from '../../components/Autocomplete'
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
 import SendIcon from '@material-ui/icons/Send';
 import Cookies from 'js-cookie'
 import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Connection from '../../pages/Login'
 import CameraDialog from '../../components/CameraDialog'
+import useDeviceDetect from "../../components/DeviceDetect"
+import PublishIcon from '@material-ui/icons/Publish';
+import { Grid, Button, ButtonGroup, Dialog, DialogActions, DialogContent, InputBase, IconButton  } from '@material-ui/core';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+
+
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,6 +29,8 @@ const useStyles = makeStyles((theme) => ({
 const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
   const classes = useStyles();
 
+  const { isMobile } = useDeviceDetect();
+
   const [currentUser, setCurrentUser] = useState(useSelector(state => state.user));
   const [ingredients, setIngredients] = useState([]);
   const [tags, setTags] = useState([]);
@@ -33,6 +38,10 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
   const [description, setDescription] = useState("");
   const [open, setOpen] = React.useState(value);
   const [publishSuccess, setPublishSuccess] = React.useState(alert)
+  const [picture, setPicture] = React.useState(null)
+  const [file, setFile] = React.useState(null)
+  const imageSrc = React.useRef(null)
+
 
   const user = useSelector(state => state.user.user);
   const [currentTags, setCurrentTags] = useState([]);
@@ -53,6 +62,14 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
   const handlePublishSuccess = () => {
     setPublishSuccess(true);
     visibleAlert(true)
+  };
+
+  const handlePicture = (value) =>{
+    setPicture(value);
+  };
+
+  const handleFile = ({target}) =>{
+    setFile(target.files[0]);
   };
 
   const fetchIngredient = () => {
@@ -183,6 +200,16 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
   const announceContent = () => (
     <>
     <h5>Proposer un plat</h5>
+
+    <ButtonGroup size="small" className="react-switch" color="primary" aria-label="outlined primary button group">
+      <Button onClick={()=>console.log("Hello")}>
+        Publier une annonce
+      </Button>
+      <Button onClick={()=>console.log("Hello")}>
+        Ajouter une spécialité
+      </Button>
+    </ButtonGroup>
+
     <TextField
       required
       autoFocus
@@ -211,7 +238,20 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
       <br/>
       {tags.length !==0  && <SearchBar content={ tags } title="Type de plat" data={(content=>handleTagData(content))}/>}
       <br/>
-      <CameraDialog/>
+      <ButtonGroup size="small" className="react-switch" color="primary" aria-label="outlined primary button group">
+        <Button onClick={()=>console.log("Hello")}>
+          <CameraDialog imageSetting={content => handlePicture(content)}/>
+        </Button>
+        <Button onClick={()=>imageSrc.current}>
+          <label htmlFor="icon-button-file">
+            <IconButton color="primary" className={classes.button} component="span">
+              <PublishIcon />
+              {file && <CheckCircleIcon style={{color: "green",}}/> }
+            </IconButton>
+          </label>        
+        </Button>
+      </ButtonGroup>
+      <InputBase accept="image/*" id="icon-button-file" type="file"  hidden ref={imageSrc} onChange={handleFile}/>
       </>
     );
 
@@ -254,6 +294,17 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
     fetchIngredient();
     fetchTag();
   }, []);
+
+  useEffect(() => {
+  }, [isMobile])
+
+  useEffect(()=>{
+    console.log(picture)
+  },[picture])
+
+  useEffect(()=>{
+    console.log(file)
+  },[file])
 
   return(
       <div className={classes.root}>
