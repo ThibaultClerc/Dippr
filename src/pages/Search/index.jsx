@@ -22,8 +22,9 @@ const Search = () => {
     () => {
       isMounted.current = true
       if (location.search !== "") {
+        const query = location.search.split('?').pop()
         setIsSearching(true);
-        fetch(`https://dippr-api-development.herokuapp.com/marketdishes/search?query=${location.search}`, {
+        fetch(`https://dippr-api-development.herokuapp.com/api/marketdishes/search?query=${query}`, {
           "method": "GET",
           "headers": {
             "Content-Type": "application/json"
@@ -34,6 +35,7 @@ const Search = () => {
         })
         .then((response) => {
           if (isMounted.current) {
+            console.log(response.data)
             setData(response.data)
           }
         }).catch(error => {
