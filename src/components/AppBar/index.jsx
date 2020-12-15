@@ -34,6 +34,8 @@ import StarIcon from '@material-ui/icons/Star'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import HomeIcon from '@material-ui/icons/Home';
 import MessageIcon from '@material-ui/icons/Message';
+import ShoppingBasket from '@material-ui/icons/ShoppingBasket';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -300,19 +302,17 @@ export default function BottomAppBar() {
           </IconButton>
 
           {user.length !== 0?(
-            <IconButton color="inherit" button="true" component={Link} to="/">
-              <StarIcon fontSize ="default" />
+            <IconButton color="inherit" button="true" component={Link} to="/users/swap">
+              <ShoppingBasket fontSize ="default" />
             </IconButton>
           ):""}
 
           {user.length !==0?(
-                      <IconButton edge="end" color="inherit"  button="true" component={Link} to="/">
+                    <IconButton edge="end" color="inherit"  button="true" component={Link} to="/users/dish">
                       <RestaurantIcon fontSize ="default"/>
                     </IconButton>
           )
           :""}
-
-
 
             <Fab color="secondary" aria-label="add" className={classes.fabButton}  onClick={handleModalChange}>
               <AddIcon fontSize ="default"/>

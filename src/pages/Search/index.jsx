@@ -62,9 +62,6 @@ const Search = () => {
       case 2:
         setFilteredData(data.filter(dish => dish.attributes.market_dish_type === "donation"))
         break;
-      case 3:
-        console.log("wishes")
-      break;
     }
   }
 
@@ -79,7 +76,6 @@ const Search = () => {
         >
           <Tab value={1} label="Trocs" onClick={(e) => setCategoryValue(1)} style={{outline: 'none'}}/>
           <Tab value={2} label="Dons" onClick={(e) => setCategoryValue(2)} style={{outline: 'none'}}/>
-          <Tab value={3} label="Demandes" onClick={(e) => setCategoryValue(3)} style={{outline: 'none'}}/>
         </Tabs>
         <ButtonGroup size="small" className="react-switch" color="primary" aria-label="outlined primary button group">
             <Button onClick={(e) => setListOrMaps("list")}>

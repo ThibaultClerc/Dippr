@@ -11,6 +11,9 @@ import PrivateRoute from "../PrivateRoute"
 import Search from "../../pages/Search"
 import BottomAppBar from "../../components/AppBar"
 import useDeviceDetect from "../DeviceDetect"
+import Swap from "../../pages/Swap"
+import Dish from "../../pages/Dish"
+
 
 const Layout = () => {
   const { isMobile } = useDeviceDetect();
@@ -23,7 +26,6 @@ const Layout = () => {
       {!isMobile && <Nav/>}
       {isMobile && <BottomAppBar/>}
       <Switch> 
-        <Route exact path="/announcement"              component={Annoucement}/>
         <Route        exact path="/"                   component={Home}/>
         <Route        exact path="/signup"             component={Signup}/>
         <Route        exact path="/signin"             component={Login}/>
@@ -31,6 +33,10 @@ const Layout = () => {
         <Route              path="/search"             component={Search}/>
         <PrivateRoute       path="/profile/:profileId" component={Profile}/>
         <PrivateRoute       path="/users/edit"         component={EditProfile}/>
+        <PrivateRoute       path="/users/swap"         component={Swap}/>
+        <PrivateRoute       path="/users/dish"         component={Dish}/>
+
+
       </Switch> 
     </Router>
   )
