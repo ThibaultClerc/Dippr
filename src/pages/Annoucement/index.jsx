@@ -9,11 +9,8 @@ import Connection from '../../pages/Login'
 import CameraDialog from '../../components/CameraDialog'
 import useDeviceDetect from "../../components/DeviceDetect"
 import PublishIcon from '@material-ui/icons/Publish';
-import { Grid, Button, ButtonGroup, Dialog, DialogActions, DialogContent, InputBase, IconButton  } from '@material-ui/core';
+import { Button, ButtonGroup, Dialog, DialogActions, DialogContent, InputBase, IconButton  } from '@material-ui/core';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-
-
-
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -201,7 +198,7 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
     <>
     <h5>Proposer un plat</h5>
 
-    <ButtonGroup size="small" className="react-switch" color="primary" aria-label="outlined primary button group">
+    <ButtonGroup fullWidth size="small" className="react-switch" color="primary" aria-label="outlined primary button group">
       <Button onClick={()=>console.log("Hello")}>
         Publier une annonce
       </Button>
@@ -218,7 +215,7 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
       label="Titre"
       type="text"
       onChange={ e => setName(e.target.value) }
-      style={{ width: 270 }}
+      fullWidth
       />
       <br/>
     <TextField
@@ -227,7 +224,7 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
         required
         autoFocus
         multiline
-        style={{ width: 270 }}
+        fullWidth
         rows={2}
         rowsMax={4}
         onChange={ e => setDescription(e.target.value) }
@@ -238,49 +235,72 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
       <br/>
       {tags.length !==0  && <SearchBar content={ tags } title="Type de plat" data={(content=>handleTagData(content))}/>}
       <br/>
+        {isMobile && mobileButton()}
+        {!isMobile && desktopButton()}
+
+      <InputBase accept="image/*" id="icon-button-file" type="file"  hidden ref={imageSrc} onChange={handleFile}/>
+      </>
+    );
+
+  const announceAction = () => (
+    <>
+    <DialogActions>
+      <Button onClick={handleClose} color="primary">
+        Annuler
+      </Button>
+      <Button
+        variant="contained"
+        color="primary"
+        endIcon={<SendIcon/>}
+        onClick={handleSubmit}
+        style={{ height: 50 }}
+      >
+        Poster mon annonce
+      </Button>
+      </DialogActions>
+    </>
+  )
+
+  const loginContent = () => (
+    <>
+      <h5>Connectes-toi et propose ta spécialité</h5>
+      <Connection/>
+    </>
+
+  );
+
+  const mobileButton = () => (
+    <>
       <ButtonGroup size="small" className="react-switch" color="primary" aria-label="outlined primary button group">
         <Button onClick={()=>console.log("Hello")}>
           <CameraDialog imageSetting={content => handlePicture(content)}/>
         </Button>
         <Button onClick={()=>imageSrc.current}>
-          <label htmlFor="icon-button-file">
-            <IconButton color="primary" className={classes.button} component="span">
-              <PublishIcon />
-              {file && <CheckCircleIcon style={{color: "green",}}/> }
-            </IconButton>
-          </label>        
-        </Button>
+            <label htmlFor="icon-button-file">
+              <IconButton color="primary" className={classes.button} component="span">
+                <PublishIcon />
+                {file && <CheckCircleIcon style={{color: "green",}}/> }
+              </IconButton>
+            </label>        
+          </Button>
       </ButtonGroup>
-      <InputBase accept="image/*" id="icon-button-file" type="file"  hidden ref={imageSrc} onChange={handleFile}/>
-      </>
-    );
+    </>
+  );
 
-    const announceAction = () => (
-      <>
-      <DialogActions>
-        <Button onClick={handleClose} color="primary">
-          Annuler
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          endIcon={<SendIcon/>}
-          onClick={handleSubmit}
-          style={{ height: 50 }}
-        >
-          Poster mon annonce
-        </Button>
-        </DialogActions>
-      </>
-    )
-
-    const loginContent = () => (
-      <>
-        <h5>Connectes-toi et propose ta spécialité</h5>
-        <Connection/>
-      </>
-
-    );
+  const desktopButton = () => (
+    <>
+      <ButtonGroup size="small" className="react-switch" color="primary" aria-label="outlined primary button group">
+        <Button onClick={()=>imageSrc.current}>
+            <label htmlFor="icon-button-file">
+              <IconButton color="primary" className={classes.button} component="span">
+                <PublishIcon />
+                {file && <CheckCircleIcon style={{color: "green",}}/> }
+              </IconButton>
+            </label>        
+          </Button>
+      </ButtonGroup>
+    </>
+  );
 
   const handleIngredientData = (content) =>{
     setCurrentIngredients(content)
