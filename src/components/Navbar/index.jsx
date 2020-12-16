@@ -16,7 +16,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import Button from '@material-ui/core/Button';
 import useDebouncedEffect from 'use-debounced-effect-hook'
 import Alert from '@material-ui/lab/Alert';
-import  Announcement from '../../pages/Annoucement'
+import  Announcement from '../../pages/Announcement'
 import './index.scss'
 
 const useStyles = makeStyles((theme) => ({
