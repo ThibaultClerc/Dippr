@@ -4,7 +4,6 @@ import Nav from "../Navbar";
 import Home from '../../pages/Home'
 import Signup from "../../pages/Signup"
 import Login from "../../pages/Login"
-import Annoucement from "../../pages/Annoucement"
 import Profile from "../../pages/Profile"
 import EditProfile from "../../pages/EditProfile"
 import PrivateRoute from "../PrivateRoute"

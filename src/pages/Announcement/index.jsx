@@ -6,8 +6,6 @@ import Cookies from 'js-cookie'
 import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Connection from '../../pages/Login'
-import CameraDialog from '../../components/CameraDialog'
-import useDeviceDetect from "../../components/DeviceDetect"
 import PublishIcon from '@material-ui/icons/Publish';
 import { Button, ButtonGroup, Dialog, DialogActions, DialogContent, InputBase, IconButton  } from '@material-ui/core';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
@@ -26,8 +24,6 @@ const useStyles = makeStyles((theme) => ({
 const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
   const classes = useStyles();
 
-  const { isMobile } = useDeviceDetect();
-
   const [currentUser, setCurrentUser] = useState(useSelector(state => state.user));
   const [ingredients, setIngredients] = useState([]);
   const [tags, setTags] = useState([]);
@@ -35,7 +31,6 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
   const [description, setDescription] = useState("");
   const [open, setOpen] = React.useState(value);
   const [publishSuccess, setPublishSuccess] = React.useState(alert)
-  const [picture, setPicture] = React.useState(null)
   const [file, setFile] = React.useState(null)
   const imageSrc = React.useRef(null)
 
@@ -51,18 +46,14 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
     }
   };
 
-  const handleClose = () => {
-    setOpen(false);
-    visibleModal(false)
-  };
-
   const handlePublishSuccess = () => {
     setPublishSuccess(true);
     visibleAlert(true)
   };
 
-  const handlePicture = (value) =>{
-    setPicture(value);
+
+  const handleClose = () => {
+    visibleModal(false)
   };
 
   const handleFile = ({target}) =>{
@@ -235,8 +226,17 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
       <br/>
       {tags.length !==0  && <SearchBar content={ tags } title="Type de plat" data={(content=>handleTagData(content))}/>}
       <br/>
-        {isMobile && mobileButton()}
-        {!isMobile && desktopButton()}
+
+      <ButtonGroup size="small" className="react-switch" color="primary" aria-label="outlined primary button group">
+        <Button onClick={()=>imageSrc.current}>
+            <label htmlFor="icon-button-file">
+              <IconButton color="primary" className={classes.button} component="span">
+                <PublishIcon />
+                {file && <CheckCircleIcon style={{color: "green",}}/> }
+              </IconButton>
+            </label>        
+          </Button>
+      </ButtonGroup>
 
       <InputBase accept="image/*" id="icon-button-file" type="file"  hidden ref={imageSrc} onChange={handleFile}/>
       </>
@@ -269,39 +269,6 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
 
   );
 
-  const mobileButton = () => (
-    <>
-      <ButtonGroup size="small" className="react-switch" color="primary" aria-label="outlined primary button group">
-        <Button onClick={()=>console.log("Hello")}>
-          <CameraDialog imageSetting={content => handlePicture(content)}/>
-        </Button>
-        <Button onClick={()=>imageSrc.current}>
-            <label htmlFor="icon-button-file">
-              <IconButton color="primary" className={classes.button} component="span">
-                <PublishIcon />
-                {file && <CheckCircleIcon style={{color: "green",}}/> }
-              </IconButton>
-            </label>        
-          </Button>
-      </ButtonGroup>
-    </>
-  );
-
-  const desktopButton = () => (
-    <>
-      <ButtonGroup size="small" className="react-switch" color="primary" aria-label="outlined primary button group">
-        <Button onClick={()=>imageSrc.current}>
-            <label htmlFor="icon-button-file">
-              <IconButton color="primary" className={classes.button} component="span">
-                <PublishIcon />
-                {file && <CheckCircleIcon style={{color: "green",}}/> }
-              </IconButton>
-            </label>        
-          </Button>
-      </ButtonGroup>
-    </>
-  );
-
   const handleIngredientData = (content) =>{
     setCurrentIngredients(content)
   }
@@ -314,13 +281,6 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
     fetchIngredient();
     fetchTag();
   }, []);
-
-  useEffect(() => {
-  }, [isMobile])
-
-  useEffect(()=>{
-    console.log(picture)
-  },[picture])
 
   useEffect(()=>{
     console.log(file)
