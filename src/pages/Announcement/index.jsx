@@ -51,9 +51,9 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
     visibleAlert(true)
   };
 
-
-  const handleClose = () => {
-    visibleModal(false)
+  const handleClose = () => {	
+    setOpen(false);	
+    visibleModal(false)	
   };
 
   const handleFile = ({target}) =>{
