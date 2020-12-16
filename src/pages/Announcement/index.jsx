@@ -11,7 +11,6 @@ import { Button, ButtonGroup, Dialog, DialogActions, DialogContent, InputBase, I
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
 import useDeviceDetect from '../../components/DeviceDetect'
-import { Camera } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
 const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
   const classes = useStyles();
   const { isMobile } = useDeviceDetect();
-  const [currentUser, setCurrentUser] = useState(useSelector(state => state.user));
   const [ingredients, setIngredients] = useState([]);
   const [tags, setTags] = useState([]);
   const [name, setName] = useState("");
@@ -42,13 +40,14 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
   const [currentTags, setCurrentTags] = useState([]);
   const [currentIngredients, setCurrentIngredients] = useState([]);
 
+
+
   const data = {
-    user_dish: {
       name: name,
       description: description,
-    }
+      file: file
   };
-
+console.log("user !!", {user})
 
   useEffect(() => {
   }, [isMobile])
@@ -115,7 +114,8 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    fetch(`https://dippr-api-development.herokuapp.com/api/users/${currentUser.id}/user_dishes`, {
+    console.log(data.file)
+    fetch(`https://dippr-api-development.herokuapp.com/api/users/${user.id}/user_dishes`, {
       "method": "POST",
       "headers": {
         "Content-Type": "application/json",
@@ -127,12 +127,12 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
       return response.json()
     })
     .then((response) => {
-      currentIngredients.forEach(element =>{
-        handleIngredients(response.id, element.id );
-      })
-      currentTags.forEach(element =>{
-        handleTags(response.id, element.id );
-      })
+      // currentIngredients.forEach(element =>{
+      //   handleIngredients(response.data.id, element.id );
+      // })
+      // currentTags.forEach(element =>{
+      //   handleTags(response.data.id, element.id );
+      // })
       handlePublishSuccess();
       handleClose();
     }).catch(error => {
