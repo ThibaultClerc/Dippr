@@ -9,6 +9,9 @@ import Connection from '../../pages/Login'
 import PublishIcon from '@material-ui/icons/Publish';
 import { Button, ButtonGroup, Dialog, DialogActions, DialogContent, InputBase, IconButton  } from '@material-ui/core';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
+import useDeviceDetect from '../../components/DeviceDetect'
+import { Camera } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
   const classes = useStyles();
-
+  const { isMobile } = useDeviceDetect();
   const [currentUser, setCurrentUser] = useState(useSelector(state => state.user));
   const [ingredients, setIngredients] = useState([]);
   const [tags, setTags] = useState([]);
@@ -45,6 +48,10 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
       description: description,
     }
   };
+
+
+  useEffect(() => {
+  }, [isMobile])
 
   const handlePublishSuccess = () => {
     setPublishSuccess(true);
@@ -231,7 +238,7 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
         <Button onClick={()=>imageSrc.current}>
             <label htmlFor="icon-button-file">
               <IconButton color="primary" className={classes.button} component="span">
-                <PublishIcon />
+                {isMobile? <PhotoCameraIcon/> : <PublishIcon/>}
                 {file && <CheckCircleIcon style={{color: "green",}}/> }
               </IconButton>
             </label>        
