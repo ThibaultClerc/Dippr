@@ -89,15 +89,22 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const DishCard = ({market_dish_id, name, description, dish_rating, user_id, created_at, type, first_name, user_first_name}) => {
+const DishCard = ({market_dish_id, name, description, dish_rating, user_id, created_at, type, first_name, user_first_name, type_of_card}) => {
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
+  const [cardType, setCardType] = useState(type_of_card)
   const history = useHistory();
 
   const handleCardClick = () => {
+    if (cardType ==="market_dish"){
     history.push({
       pathname: `/marketdishes/${market_dish_id}`
     });
+  } else if (cardType ==="user_dish"){
+    history.push({
+      pathname: `/userdishes/${market_dish_id}`
+    });
+    }
   }
 
   const handleProfileClick = () => {
