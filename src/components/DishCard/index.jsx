@@ -89,7 +89,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const DishCard = ({market_dish_id, name, description, dish_rating, user_id, created_at, type, first_name, user_first_name, type_of_card}) => {
+const DishCard = ({market_dish_id, name, description, dish_rating, user_id, created_at, type, first_name, user_first_name, type_of_card, photo_url}) => {
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
   const [cardType, setCardType] = useState(type_of_card)
@@ -113,6 +113,14 @@ const DishCard = ({market_dish_id, name, description, dish_rating, user_id, crea
     });
   }
 
+  const handleImageCard = (noPhoto, photo_url) => {
+    if (photo_url === null) {
+      return noPhoto
+    } else {
+      return `https://dippr-api-development.herokuapp.com/${photo_url}`
+    }
+  }
+
   return (
     <Card className={classes.dishCard} onClick={(e) => handleCardClick(e)}>
       <CardHeader
@@ -133,7 +141,7 @@ const DishCard = ({market_dish_id, name, description, dish_rating, user_id, crea
       />
       <CardMedia
         className={classes.media}
-        image={burger}
+        image={handleImageCard(burger, photo_url)}
       />
       <CardContent className={classes.textContainer}>
       <Typography className={classes.title} variant="h4" color="textSecondary" component="h5">
