@@ -225,7 +225,7 @@ const Nav = () => {
                   Poster une annonce
           </Button>
           {user.length !== 0 && 
-              <Button key="btn-btn-swap" component={Link} to ={`/users/dish`}>
+              <Button key="btn-btn-dish" component={Link} to ={`/users/dish`}>
                 Mes Plats
               </Button>
           }

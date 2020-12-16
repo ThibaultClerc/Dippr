@@ -9,6 +9,10 @@ import RestaurantIcon from '@material-ui/icons/Restaurant'
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { Grid, Button, ButtonGroup } from '@material-ui/core';
+import { useSelector } from 'react-redux';
+import DishCard from '../../components/DishCard';
+import Cookies from 'js-cookie'
+
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -50,16 +54,101 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
   },  grow: {
     flexGrow: 1,
+  }, cardContainer: {
+    flexGrow: 1,
+    padding: theme.spacing(2)
   }
 }));
 
 const Dish = ()=> {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
+  const [data, setData] = useState([])
+  const [marketData, setMarketData] = useState([])
+  const user = useSelector(state => state.user.user);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const cardsDiplays = (value, type) =>(
+    <>
+    <div className={classes.cardContainer}>
+      <Grid
+          container
+          spacing={2}
+          direction="row"
+          justify="flex-start"
+          alignItems="flex-start"
+      >
+        {value.map(dish => {
+          let dishData = dish.attributes
+            if (type === "marketdish"){
+              dishData = dish.meta.user_dish
+            }
+        return (
+          <Grid item xs={6} sm={4} md={3} lg={2} key={dish.id} width={300}>
+            <DishCard
+              market_dish_id={dishData.id}
+              name={dishData.name}
+              description={dishData.description}
+              dish_rating={dishData.dish_rating}
+              created_at={dishData.created_at}
+              type_of_card='user_dish'
+            />
+          </Grid>
+        )})}
+      </Grid>
+    </div>
+  </>
+  );
+
+  const fetchData = (url) => {
+    fetch(url, {
+      "method": "GET",
+      "headers": {
+        "Content-Type": "application/json",
+        'Authorization': `${Cookies.get('token')}`
+      },
+    })
+    .then((response) => {
+      return response.json()
+    })
+    .then((response) => {
+      setData(response.data)
+    }).catch(error => {
+      console.log(error)
+    })
+  };
+
+  const fetchMarketData = (url) => {
+    fetch(url, {
+      "method": "GET",
+      "headers": {
+        "Content-Type": "application/json",
+        'Authorization': `${Cookies.get('token')}`
+      },
+    })
+    .then((response) => {
+      return response.json()
+    })
+    .then((response) => {
+      setMarketData(response.data)
+    }).catch(error => {
+      console.log(error)
+    })
+  };
+  
+  useEffect(() => {
+    fetchData(`https://dippr-api-development.herokuapp.com/api/users/${user.id}/user_dishes`);
+    fetchMarketData(`https://dippr-api-development.herokuapp.com/api/users/${user.id}/market_dishes`)
+  }, []);
+
+  useEffect(() => {
+    console.log(data)
+    console.log(marketData)
+  }, [data])
+
 
   return (
     <div className={classes.root}>
@@ -82,10 +171,10 @@ const Dish = ()=> {
         </Grid>
       </AppBar>
       <TabPanel value={value} index={0}>
-        Item One
+        {cardsDiplays(data, "dish")}
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Item Two
+        {cardsDiplays(marketData, "marketdish")}
       </TabPanel>
     </div>
   );
