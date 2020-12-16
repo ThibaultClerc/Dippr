@@ -44,10 +44,8 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
 
   const data = {
       name: name,
-      description: description,
-      file: file
+      description: description
   };
-console.log("user !!", {user})
 
   useEffect(() => {
   }, [isMobile])
@@ -127,16 +125,38 @@ console.log("user !!", {user})
       return response.json()
     })
     .then((response) => {
-      // currentIngredients.forEach(element =>{
-      //   handleIngredients(response.data.id, element.id );
-      // })
-      // currentTags.forEach(element =>{
-      //   handleTags(response.data.id, element.id );
-      // })
-      handlePublishSuccess();
-      handleClose();
+      currentIngredients.forEach(element =>{
+        handleIngredients(response.data.id, element.id );
+      })
+      currentTags.forEach(element =>{
+        handleTags(response.data.id, element.id );
+      })
+      handleFileUpload(response.data.id)
     }).catch(error => {
       console.log(error)
+    })
+  };
+
+  const handleFileUpload = (user_dish_id) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    fetch(`https://dippr-api-development.herokuapp.com/api/users/${user.id}/user_dishes/${user_dish_id}`, {
+      "method": "PUT",
+      "headers": {
+        "Authorization": Cookies.get("token")
+      },
+      "body": formData
+    })
+    .then((response) => {
+      return response.json()
+    })
+    .then((response) => {
+      console.log(response)
+    }).catch(error => {
+      console.log(error)
+    }).finally(() => {
+      handlePublishSuccess();
+      handleClose();
     })
   };
 

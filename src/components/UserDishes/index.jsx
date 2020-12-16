@@ -22,8 +22,8 @@ const useStyles = makeStyles({
   },
 });
 
-function createData(name, description, rate) {
-  return { name, description, rate };
+function createData(name, description, rate, photo_url) {
+  return { name, description, rate, photo_url };
 }
 
 const UserDishes = (profileId) => {
@@ -55,7 +55,7 @@ const UserDishes = (profileId) => {
       const rows = [];
         data.map(dish => {
           rows.push(
-            createData(dish.attributes.name, dish.attributes.description, dish.attributes.dish_rating) 
+            createData(dish.attributes.name, dish.attributes.description, dish.attributes.dish_rating, dish.attributes.photo_url) 
           );
         })
       

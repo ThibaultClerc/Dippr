@@ -95,6 +95,7 @@ const Dish = ()=> {
               dish_rating={dishData.dish_rating}
               created_at={dishData.created_at}
               type_of_card='user_dish'
+              photo_url={dishData.photo_url}
             />
           </Grid>
         )})}
