@@ -34,7 +34,7 @@ const Connection = () => {
   };
 
   const user = useSelector(state => state.user.user);
- 
+
   const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
@@ -55,6 +55,7 @@ const Connection = () => {
       setRedirection(true)
     }).catch(error => {
       console.log(error)
+      {redirection && <Redirect to='/signin'/>}
     })
   };
 

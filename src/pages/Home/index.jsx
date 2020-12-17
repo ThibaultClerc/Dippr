@@ -10,7 +10,7 @@ const Home = () => {
 
   return (
     <>
-    {user.length === 0  ?
+    {user !== undefined && user.length === 0  ?
       <VisitorHome/>
     : <UserHome/>
     }
