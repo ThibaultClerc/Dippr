@@ -43,6 +43,7 @@ const SearchResults = ({data, listOrMapValue, isSearching}) => {
                     created_at={dishData.created_at}
                     type={dish.attributes.market_dish_type}
                     type_of_card='market_dish'
+                    photo_url={dishData.photo_url}
                   />
                 </Grid>
               )})}
