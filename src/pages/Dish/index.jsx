@@ -84,7 +84,6 @@ const Dish = ()=> {
         {value.map(dish => {
           
           let dishData = dish.attributes
-          console.log(dishData.photo_url)
             if (type === "marketdish"){
               dishData = dish.meta.user_dish
             }
@@ -146,12 +145,6 @@ const Dish = ()=> {
     fetchData(`https://dippr-api-development.herokuapp.com/api/users/${user.id}/user_dishes`);
     fetchMarketData(`https://dippr-api-development.herokuapp.com/api/users/${user.id}/market_dishes`)
   }, []);
-
-  useEffect(() => {
-    console.log(data)
-    console.log(marketData)
-  }, [data])
-
 
   return (
     <div className={classes.root}>

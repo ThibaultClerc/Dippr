@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 import Loader from '../UI/Loader'
 import {
   GoogleMap,
@@ -38,7 +38,6 @@ const MiniMap = ({dishID, dishLat, dishLng}) => {
   if (loadError) return "Error loading maps";
   if (!isLoaded) return <Loader/>
 
-  console.log(typeof dishLat, typeof dishLng)
   return (
     <>
     <GoogleMap

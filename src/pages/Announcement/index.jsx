@@ -38,12 +38,9 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
   const [announceType, setAnnounceType] = React.useState(0)
   const [date, setDate] = React.useState(moment().format("YYYY-MM-DD"))
 
-
   const user = useSelector(state => state.user.user);
   const [currentTags, setCurrentTags] = useState([]);
   const [currentIngredients, setCurrentIngredients] = useState([]);
-
-
 
   const data = {
       name: name,
@@ -159,11 +156,9 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
       "body": JSON.stringify(
         
         {
-          market_dish: {
-            user_dish_id: dish,
-            market_dish_type: announceType,
-            end_date: date,
-          }
+          user_dish_id: dish,
+          market_dish_type: announceType,
+          end_date: date
         }
       )
     })
@@ -276,7 +271,7 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
         Publier un troc
       </Button>
       <Button onClick={()=>handleAnnounce(1)}>
-        Publier un donc
+        Publier un don
       </Button>
       <Button onClick={()=>handleAnnounce(2)}>
         Ajouter une spécialité
