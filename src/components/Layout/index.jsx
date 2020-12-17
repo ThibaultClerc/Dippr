@@ -12,6 +12,7 @@ import BottomAppBar from "../../components/AppBar"
 import useDeviceDetect from "../DeviceDetect"
 import Swap from "../../pages/Swap"
 import Dish from "../../pages/Dish"
+import DashboardAdmin from "../../components/DashboardAdmin"
 
 
 const Layout = () => {
@@ -34,6 +35,7 @@ const Layout = () => {
         <PrivateRoute       path="/users/edit"         component={EditProfile}/>
         <PrivateRoute       path="/users/swap"         component={Swap}/>
         <PrivateRoute       path="/users/dish"         component={Dish}/>
+        <PrivateRoute       path="/admin"              component={DashboardAdmin}/>
 
 
       </Switch> 

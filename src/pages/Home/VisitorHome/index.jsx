@@ -18,7 +18,6 @@ import moment from 'moment'
 import SimpleCard from '../../../components/UI/SimpleCard';
 import './index.scss'
 
-
 const useStyles = makeStyles((theme) => ({
   dipprMainLogo: {
     [theme.breakpoints.down('md')]: {
@@ -99,7 +98,6 @@ const VisitorHome = () => {
               <SimpleCard alt="donate" img={donate} content="Donnez vos plats à des associations"/>
             </Row>
           </Container>
-        
     </>
   )
 }
