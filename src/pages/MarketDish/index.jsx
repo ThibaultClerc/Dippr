@@ -58,7 +58,8 @@ const useStyles = makeStyles((theme) => ({
       paddingRight: '0 !important',
       paddingTop: '0 !important',
       position: 'absolute',
-      top: '50%'
+      top: '50%',
+      width: '100vw'
     }
   },
   textPaper: {
@@ -67,7 +68,10 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 20,
     [theme.breakpoints.down('xs')]: {
       marginBottom: 0,
-      borderRadius: '35px 35px 0px 0px'
+      borderRadius: '35px 35px 0px 0px',
+      webkitBoxShadow: '0px -18px 100px 0px rgba(0,0,0,0.60)',
+      mozBoxShadow: '0px -18px 100px 0px rgba(0,0,0,0.60)',
+      boxShadow: '0px -18px 100px 0px rgba(0,0,0,0.60)'
     }
   },
   mapPaper: {
@@ -80,16 +84,35 @@ const useStyles = makeStyles((theme) => ({
     padding: 10,
     width: '50%',
     lineHeight: 2.5,
-    boxShadow: '0px 8px 15px rgba(0, 0, 0, 0.1)',
+    webkitBoxShadow: '0px 0px 50px 0px rgba(0,0,0,0.50)',
+    mozBoxShadow: '0px 0px 50px 0px rgba(0,0,0,0.50)',
+    boxShadow: '0px 0px 50px 0px rgba(0,0,0,0.50)',
     [theme.breakpoints.down('xs')]: {
       zIndex: '100',
-      top: '-13%',
+      top: '-27%',
       '& > *': {
         fontSize: "0.7rem",
       },
+      display: 'none'
     },
     [theme.breakpoints.down('sm')]: {
-      bottom: '5.5%'
+      bottom: '5.5%',
+    }
+  },
+  askButton2: {
+    display: 'none',
+    left: '24%',
+    borderRadius: 50,
+    padding: 10,
+    width: '50%',
+    lineHeight: 2.5,
+    boxShadow: '0px 8px 15px rgba(0, 0, 0, 0.1)',
+    [theme.breakpoints.down('xs')]: {
+      zIndex: '100',
+      position: 'absolute',
+      top: '-3%',
+      display: 'initial',
+      fontSize: "0.8rem",
     }
   },
   avatar: {
@@ -98,7 +121,9 @@ const useStyles = makeStyles((theme) => ({
     left: 40,
     border: "1px solid white",
     maxWidth: "fit-content",
-    boxShadow: '0px 8px 15px rgba(0, 0, 0, 0.1)',
+    webkitBoxShadow: '0px 0px 50px 0px rgba(0,0,0,0.60)',
+    mozBoxShadow: '0px 0px 50px 0px rgba(0,0,0,0.60)',
+    boxShadow: '0px 0px 50px 0px rgba(0,0,0,0.60)',
     [theme.breakpoints.down('xs')]: {
       top: 40,
       marginLeft: 'auto',
@@ -115,6 +140,11 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('xs')]: {
       top: 44,
       left: 240,
+    }
+  },
+  title : {
+    [theme.breakpoints.down('xs')]: {
+      marginTop: '20px',
     }
   }
 }));
@@ -152,6 +182,12 @@ const MarketDish = () => {
     });
   }
 
+  const handleAvatarClick = (chipName) => {
+    history.push({
+      pathname: `/profile/${data.meta.user_dish.user_id}`
+    });
+  }
+
   const handleAskClick = () => {
     if (data.attributes.market_dish_type === "troc") {
       console.log("do this")
@@ -167,11 +203,12 @@ const MarketDish = () => {
       <Container fixed className={classes.mainContainer}>
         <Grid container fixed spacing={3} className={classes.subMainContainer}>
           <Grid item xs={12} md={6} className={classes.imgContainer}>
-            <img className={classes.image} src={data.meta.user_dish.photo_url} alt="dish-photo"></img>
+            <img className={classes.image} src={`https://dippr-api-development.herokuapp.com${data.meta.user_dish.photo_url}`} alt="dish-photo"></img>   
             <Chip
               avatar={<Avatar alt="Natacha" src="/static/images/avatar/1.jpg" />}
               label={data.meta.user_first_name}
               className={classes.avatar}
+              onClick={handleAvatarClick}
             />
             <Button variant="contained" color="secondary" size="large" className={classes.askButton} handleClick={handleAskClick}>
               {data.attributes.market_dish_type === "troc" ?
@@ -182,8 +219,14 @@ const MarketDish = () => {
             
           </Grid>
           <Grid item xs={12} md={6} className={classes.textContainer}>
+          <Button variant="contained" color="secondary" size="large" className={classes.askButton2} handleClick={handleAskClick}>
+              {data.attributes.market_dish_type === "troc" ?
+              "PROPOSER UN TROC"
+              : "DEMANDER CE PLAT"
+            }
+            </Button>
             <Paper className={classes.textPaper}>
-              <Typography variant="h2" gutterBottom>
+              <Typography variant="h2" gutterBottom className={classes.title}>
                 {data.meta.user_dish.name}
               </Typography>
               <Typography variant="overline" display="block" gutterBottom>
