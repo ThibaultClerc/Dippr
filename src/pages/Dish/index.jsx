@@ -82,7 +82,9 @@ const Dish = ()=> {
           alignItems="flex-start"
       >
         {value.map(dish => {
+          
           let dishData = dish.attributes
+          console.log(dishData.photo_url)
             if (type === "marketdish"){
               dishData = dish.meta.user_dish
             }
