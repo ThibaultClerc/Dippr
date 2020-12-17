@@ -236,6 +236,10 @@ const Nav = () => {
           }
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
+          { user.length !== 0 && user.attributes.email === "admin@admin.fr"  ? <Button key="btn-signup" component={Link} to ="/admin" variant="outlined" color="secondary">
+            Dashboard Admin
+            </Button>: ""}
+
             {user.length === 0 ?
               [
                 <Button key="btn-signup" component={Link} to ="/signup" variant="outlined" color="secondary">

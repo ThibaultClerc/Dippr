@@ -15,6 +15,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import CreateIcon from '@material-ui/icons/Create';
 
 const useStyles = makeStyles({
   table: {
@@ -22,12 +23,11 @@ const useStyles = makeStyles({
   },
 });
 
-function createData(name, description, rate, photo_url) {
-  return { name, description, rate, photo_url };
+function createData(email,first_name, last_name, description, country, city, street, zip_code, phone_number, user_rating, dippers, icon) {
+  return { email, first_name, last_name, description, country, city, street, zip_code, phone_number, user_rating, dippers, icon };
 }
 
 const UserDishes = (profileId) => {
-  const user = useSelector(state => state.user.user);
 
     const [data, setData] = useState([])
 
@@ -50,18 +50,14 @@ const UserDishes = (profileId) => {
       };
 
       useEffect(() => {
-        
-        if (user.attributes.email === "admin@admin.fr" ){
-          fetchData(`https://dippr-api-development.herokuapp.com//api/user_dishes`)
-        } else {
-          fetchData(`https://dippr-api-development.herokuapp.com/api/users/${profileId.profileId}/user_dishes`)
-        }
+        fetchData(`https://dippr-api-development.herokuapp.com/api/users`)
       }, []);
 
       const rows = [];
-        data.map(dish => {
+        data.map(user => {
           rows.push(
-            createData(dish.attributes.name, dish.attributes.description, dish.attributes.dish_rating, dish.attributes.photo_url) 
+            createData(user.attributes.email, user.attributes.first_name, user.attributes.last_name, user.attributes.description,user.attributes.country, user.attributes.city, user.attributes.street, user.attributes.zip_code, user.attributes.phone_number, user.attributes.user_rating, user.attributes.dippers,   <CreateIcon/>
+            ) 
           );
         })
       
@@ -73,19 +69,41 @@ const UserDishes = (profileId) => {
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>Nom du plat </TableCell>
+          <TableCell>Email </TableCell>
+            <TableCell>Prénom </TableCell>
+            <TableCell align="left">Nom</TableCell>
             <TableCell align="left">Description</TableCell>
+            <TableCell align="left">Pays</TableCell>
+            <TableCell align="left">Ville</TableCell>
+            <TableCell align="left">Rue</TableCell>
+            <TableCell align="left">Code Postal</TableCell>
+            <TableCell align="left">Numéro</TableCell>
             <TableCell align="left">Note</TableCell>
+            <TableCell align="left">Dippers</TableCell>
+            <TableCell align="left">Modifier</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {rows.map((row) => (
             <TableRow key={row.name}>
-              <TableCell component="th" scope="row">
-                {row.name}
+             <TableCell component="th" scope="row">
+                {row.email}
               </TableCell>
+
+              <TableCell component="th" scope="row">
+                {row.first_name}
+              </TableCell>
+              <TableCell align="left">{row.last_name}</TableCell>
               <TableCell align="left">{row.description}</TableCell>
-              <TableCell align="left">{row.rate}</TableCell>
+              <TableCell align="left">{row.country}</TableCell>
+              <TableCell align="left">{row.city}</TableCell>
+              <TableCell align="left">{row.street}</TableCell>
+              <TableCell align="left">{row.zip_code}</TableCell>
+              <TableCell align="left">{row.phone_number}</TableCell>
+              <TableCell align="left">{row.user_rating}</TableCell>
+              <TableCell align="left">{row.dippers}</TableCell>
+              <TableCell align="left"><Button key="btn-logout" component={Link} to ="/users/edit" variant="outlined" color="secondary" >{row.icon}</Button></TableCell>
+
             </TableRow>
           ))}
         </TableBody>
