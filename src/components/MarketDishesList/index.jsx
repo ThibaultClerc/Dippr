@@ -23,11 +23,11 @@ const useStyles = makeStyles({
   },
 });
 
-function createData(id, email,first_name, last_name, description, country, city, street, zip_code, phone_number, user_rating, dippers, icon) {
-  return { id, email, first_name, last_name, description, country, city, street, zip_code, phone_number, user_rating, dippers, icon };
+function createData(email,first_name, last_name, description, country, city, street, zip_code, phone_number, user_rating, dippers, icon) {
+  return { email, first_name, last_name, description, country, city, street, zip_code, phone_number, user_rating, dippers, icon };
 }
 
-const UserDishes = (profileId) => {
+const MarketDishesList = (profileId) => {
 
     const [data, setData] = useState([])
 
@@ -56,7 +56,7 @@ const UserDishes = (profileId) => {
       const rows = [];
         data.map(user => {
           rows.push(
-            createData(user.attributes.id, user.attributes.email, user.attributes.first_name, user.attributes.last_name, user.attributes.description,user.attributes.country, user.attributes.city, user.attributes.street, user.attributes.zip_code, user.attributes.phone_number, user.attributes.user_rating, user.attributes.dippers,   <CreateIcon/>
+            createData(user.attributes.email, user.attributes.first_name, user.attributes.last_name, user.attributes.description,user.attributes.country, user.attributes.city, user.attributes.street, user.attributes.zip_code, user.attributes.phone_number, user.attributes.user_rating, user.attributes.dippers,   <CreateIcon/>
             ) 
           );
         })
@@ -102,7 +102,7 @@ const UserDishes = (profileId) => {
               <TableCell align="left">{row.phone_number}</TableCell>
               <TableCell align="left">{row.user_rating}</TableCell>
               <TableCell align="left">{row.dippers}</TableCell>
-              <TableCell align="left"><Button key="btn-logout" as={Link} to ={`/edit/${row.id}`} variant="outlined" color="secondary" >{row.icon}</Button></TableCell>
+              <TableCell align="left"><Button key="btn-logout" component={Link} to ="/users/edit" variant="outlined" color="secondary" >{row.icon}</Button></TableCell>
 
             </TableRow>
           ))}
@@ -112,4 +112,4 @@ const UserDishes = (profileId) => {
     );
 }
 
-export default UserDishes
+export default MarketDishesList

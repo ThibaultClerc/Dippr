@@ -6,6 +6,7 @@ import Signup from "../../pages/Signup"
 import Login from "../../pages/Login"
 import Profile from "../../pages/Profile"
 import EditProfile from "../../pages/EditProfile"
+import EditProfileAdmin from "../../pages/EditProfileAdmin"
 import PrivateRoute from "../PrivateRoute"
 import Search from "../../pages/Search"
 import BottomAppBar from "../../components/AppBar"
@@ -37,6 +38,8 @@ const Layout = () => {
         <Route              path="/userdish/:dishID"   component={Dish}/>
         <PrivateRoute       path="/profile/:profileId" component={Profile}/>
         <PrivateRoute       path="/users/edit"         component={EditProfile}/>
+        <PrivateRoute       path="/edit/:userId"       component={EditProfileAdmin}/>
+
         <PrivateRoute       path="/users/swap"         component={Swap}/>
         <PrivateRoute       path="/users/dish"         component={Dish}/>
         <PrivateRoute       path="/admin"              component={DashboardAdmin}/>
