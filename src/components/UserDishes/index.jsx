@@ -27,6 +27,7 @@ function createData(name, description, rate, photo_url) {
 }
 
 const UserDishes = (profileId) => {
+  const user = useSelector(state => state.user.user);
 
     const [data, setData] = useState([])
 
@@ -49,7 +50,12 @@ const UserDishes = (profileId) => {
       };
 
       useEffect(() => {
-        fetchData(`https://dippr-api-development.herokuapp.com/api/users/${profileId.profileId}/user_dishes`)
+        
+        if (user.attributes.email === "admin@admin.fr" ){
+          fetchData(`https://dippr-api-development.herokuapp.com//api/user_dishes`)
+        } else {
+          fetchData(`https://dippr-api-development.herokuapp.com/api/users/${profileId.profileId}/user_dishes`)
+        }
       }, []);
 
       const rows = [];

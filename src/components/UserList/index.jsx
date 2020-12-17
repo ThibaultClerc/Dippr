@@ -56,7 +56,8 @@ const UserDishes = (profileId) => {
       const rows = [];
         data.map(user => {
           rows.push(
-            createData(user.attributes.email, user.attributes.first_name, user.attributes.last_name, user.attributes.description,user.attributes.country, user.attributes.city, user.attributes.street, user.attributes.zip_code, user.attributes.phone_number, user.attributes.user_rating, user.attributes.dippers, <CreateIcon/>) 
+            createData(user.attributes.email, user.attributes.first_name, user.attributes.last_name, user.attributes.description,user.attributes.country, user.attributes.city, user.attributes.street, user.attributes.zip_code, user.attributes.phone_number, user.attributes.user_rating, user.attributes.dippers,   <CreateIcon/>
+            ) 
           );
         })
       
@@ -101,7 +102,7 @@ const UserDishes = (profileId) => {
               <TableCell align="left">{row.phone_number}</TableCell>
               <TableCell align="left">{row.user_rating}</TableCell>
               <TableCell align="left">{row.dippers}</TableCell>
-              <TableCell align="left">{row.icon}</TableCell>
+              <TableCell align="left"><Button key="btn-logout" component={Link} to ="/users/edit" variant="outlined" color="secondary" >{row.icon}</Button></TableCell>
 
             </TableRow>
           ))}
