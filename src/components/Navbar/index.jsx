@@ -15,6 +15,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import Button from '@material-ui/core/Button';
 import useDebouncedEffect from 'use-debounced-effect-hook'
+import Alert from '@material-ui/lab/Alert';
+import  Announcement from '../../pages/Announcement'
 import './index.scss'
 
 const useStyles = makeStyles((theme) => ({
@@ -90,6 +92,8 @@ const Nav = () => {
   const dispatch = useDispatch()
   const user = useSelector(state => state.user.user);
   const [searchTerm, setSearchTerm] = useState("");
+  const [announce, setAnnounce] = useState(null);
+  const [publishSuccess, setPublishSuccess] = useState(null)
   const history = useHistory();
 
 
@@ -138,6 +142,24 @@ const Nav = () => {
     dispatch(logoutUser())
   }
 
+  const handleDialogAnnounce = () => {
+    setAnnounce(true);
+  }
+
+  const handlePublishSuccess = () => {
+    setPublishSuccess(true);
+  };
+
+  const handleAddAnnounce = () => {
+    setAnnounce(false)
+  };
+
+
+  const successAlert = () =>(
+    <Alert onClose={() =>setPublishSuccess(false)} severity="success">Votre plat est bien enregistré !</Alert>
+  );
+
+
   const mobileMenuId = 'primary-search-account-menu-mobile';
 
   const renderMenu = (
@@ -173,6 +195,7 @@ const Nav = () => {
 
   return (
     <div className={classes.grow}>
+    {announce && <Announcement value={announce} visibleModal={(()=>handleAddAnnounce(false))} Alert={publishSuccess} visibleAlert={content=>handlePublishSuccess(content)}/> }
       <AppBar
         position="static"
         className="appBar"
@@ -198,11 +221,24 @@ const Nav = () => {
               value={searchTerm}
             />
           </div>
+          <Button key="btn-announce" onClick={()=>handleDialogAnnounce()}  variant="outlined" color="secondary">
+                  Poster une annonce
+          </Button>
+          {user.length !== 0 && 
+              <Button key="btn-btn-dish" component={Link} to ={`/users/dish`}>
+                Mes Plats
+              </Button>
+          }
+          {user.length !== 0 && 
+              <Button key="btn-btn-swap" component={Link} to ={`/users/swap`}>
+                Mes échanges
+              </Button>
+          }
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
           { user.length !== 0 && user.attributes.email === "admin@admin.fr"  ? <Button key="btn-signup" component={Link} to ="/admin" variant="outlined" color="secondary">
-                  Dashboard Admin
-                </Button>: ""}
+            Dashboard Admin
+            </Button>: ""}
 
             {user.length === 0 ?
               [
@@ -218,7 +254,6 @@ const Nav = () => {
                 <Button key="btn-logout" component={Link} to ="/" variant="outlined" color="secondary" onClick={(e) => handleLogout(e)}>Se déconnecter</Button>
               ]
             }
-            
           </div>
           <div className={classes.sectionMobile}>
             <IconButton
