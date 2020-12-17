@@ -96,7 +96,6 @@ const Nav = () => {
   const [publishSuccess, setPublishSuccess] = useState(null)
   const history = useHistory();
 
-
   const handleInputChange = (e) => {
     setSearchTerm(e.target.value)
   }
@@ -172,7 +171,7 @@ const Nav = () => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      {user.length === 0 ?
+      {user === undefined || user.length === 0 ?
         [
         <MenuItem key="signup" onClick={handleProfileMenuOpen} component={Link} to="/signup">
           <p>S'inscrire</p>
@@ -224,23 +223,23 @@ const Nav = () => {
           <Button key="btn-announce" onClick={()=>handleDialogAnnounce()}  variant="outlined" color="secondary">
                   Poster une annonce
           </Button>
-          {user.length !== 0 && 
+          {(user !== undefined && user.length !== 0) && 
               <Button key="btn-btn-dish" component={Link} to ={`/users/dish`}>
                 Mes Plats
               </Button>
           }
-          {user.length !== 0 && 
-              <Button key="btn-btn-swap" component={Link} to ={`/users/swap`}>
+          {(user !== undefined && user.length !== 0) && 
+              (<Button key="btn-btn-swap" component={Link} to ={`/users/swap`}>
                 Mes échanges
-              </Button>
+              </Button>)
           }
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-          { user.length !== 0 && user.attributes.email === "admin@admin.fr"  ? <Button key="btn-signup" component={Link} to ="/admin" variant="outlined" color="secondary">
+          { (user !== undefined && user.length !== 0) && user.attributes.is_admin === true  ? <Button key="btn-signup" component={Link} to ="/admin" variant="outlined" color="secondary">
             Dashboard Admin
             </Button>: ""}
 
-            {user.length === 0 ?
+            {user === undefined || user.length === 0?
               [
                 <Button key="btn-signup" component={Link} to ="/signup" variant="outlined" color="secondary">
                   S'inscrire

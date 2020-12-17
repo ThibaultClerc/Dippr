@@ -42,6 +42,8 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
   const [currentTags, setCurrentTags] = useState([]);
   const [currentIngredients, setCurrentIngredients] = useState([]);
 
+  console.log(user)
+
   const data = {
       name: name,
       description: description
@@ -377,10 +379,10 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
       <div className={classes.root}>
         <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogContent>
-          {user.length === 0 && loginContent()}
-          {user.length !== 0 && announceContent()}
+          {(user === undefined || user.length === 0) && loginContent()}
+          {(user !== undefined && user.length !== 0) && announceContent()}
         </DialogContent>
-          {user.length !== 0 && announceAction()}
+          {(user !== undefined && user.length !== 0) && announceAction()}
       </Dialog>
     </div>
   )
