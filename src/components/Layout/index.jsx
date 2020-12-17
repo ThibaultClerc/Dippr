@@ -12,6 +12,7 @@ import BottomAppBar from "../../components/AppBar"
 import useDeviceDetect from "../DeviceDetect"
 import Swap from "../../pages/Swap"
 import Dish from "../../pages/Dish"
+import MarketDish from '../../pages/MarketDish'
 
 
 const Layout = () => {
@@ -30,6 +31,8 @@ const Layout = () => {
         <Route        exact path="/signin"             component={Login}/>
         <Route              path="/search/:query"      component={Search}/>
         <Route              path="/search"             component={Search}/>
+        <Route              path="/marketdish/:dishID" component={MarketDish}/>
+        <Route              path="/userdish/:dishID"   component={Dish}/>
         <PrivateRoute       path="/profile/:profileId" component={Profile}/>
         <PrivateRoute       path="/users/edit"         component={EditProfile}/>
         <PrivateRoute       path="/users/swap"         component={Swap}/>

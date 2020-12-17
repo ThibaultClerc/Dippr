@@ -98,11 +98,11 @@ const DishCard = ({market_dish_id, name, description, dish_rating, user_id, crea
   const handleCardClick = () => {
     if (cardType ==="market_dish"){
     history.push({
-      pathname: `/marketdishes/${market_dish_id}`
+      pathname: `/marketdish/${market_dish_id}`
     });
   } else if (cardType ==="user_dish"){
     history.push({
-      pathname: `/userdishes/${market_dish_id}`
+      pathname: `/userdish/${market_dish_id}`
     });
     }
   }
@@ -114,10 +114,11 @@ const DishCard = ({market_dish_id, name, description, dish_rating, user_id, crea
   }
 
   const handleImageCard = (noPhoto, photo_url) => {
-    if (photo_url === null) {
+    console.log(photo_url)
+    if (photo_url === undefined) {
       return noPhoto
     } else {
-      return `https://dippr-api-development.herokuapp.com/${photo_url}`
+      return photo_url
     }
   }
 

@@ -7,7 +7,6 @@ import {Container, Row, Col, Form, Button } from "react-bootstrap";
 
 
 const Signup = () => {
-  const [userCategory, setUserCategory] = useState(1);
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [redirection, setRedirection] = useState(false)
