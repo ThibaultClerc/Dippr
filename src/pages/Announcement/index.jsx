@@ -10,7 +10,8 @@ import PublishIcon from '@material-ui/icons/Publish';
 import { Button, ButtonGroup, Dialog, DialogActions, DialogContent, InputBase, IconButton  } from '@material-ui/core';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
-import useDeviceDetect from '../../components/DeviceDetect'
+import useDeviceDetect from '../../components/DeviceDetect';
+import moment from 'moment';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,6 +35,8 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
   const [publishSuccess, setPublishSuccess] = React.useState(alert)
   const [file, setFile] = React.useState(null)
   const imageSrc = React.useRef(null)
+  const [announceType, setAnnounceType] = React.useState(0)
+  const [date, setDate] = React.useState(moment().format("YYYY-MM-DD"))
 
 
   const user = useSelector(state => state.user.user);
@@ -62,6 +65,14 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
 
   const handleFile = ({target}) =>{
     setFile(target.files[0]);
+  };
+
+  const handleDate = (e) =>{
+    setDate(e.target.value);
+  };
+
+  const handleAnnounce = (value) =>{
+    setAnnounceType(value)
   };
 
   const fetchIngredient = () => {
@@ -131,7 +142,35 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
       currentTags.forEach(element =>{
         handleTags(response.data.id, element.id );
       })
+      {(announceType === 0 || announceType === 1) && handleMarketDish(response.data.id)}
       handleFileUpload(response.data.id)
+    }).catch(error => {
+      console.log(error)
+    })
+  };
+
+  const handleMarketDish = (dish) => {
+    fetch(`https://dippr-api-development.herokuapp.com/api/users/${user.id}/market_dishes`, {
+      "method": "POST",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": Cookies.get("token")
+      },
+      "body": JSON.stringify(
+        
+        {
+          market_dish: {
+            user_dish_id: dish,
+            market_dish_type: announceType,
+            end_date: date,
+          }
+        }
+      )
+    })
+    .then((response) => {
+      return response.json()
+    })
+    .then((response) => {
     }).catch(error => {
       console.log(error)
     })
@@ -212,15 +251,34 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
     })
   };
 
+  const dateContent = () => (
+      <TextField
+      id="date"
+      label="Date limite"
+      value = {date}
+      type="date"
+      className={classes.textField}
+      onChange={handleDate}
+      InputLabelProps={{
+        shrink: true,
+      }}
+    />
+  )
+
   const announceContent = () => (
     <>
-    <h5>Proposer un plat</h5>
+    {announceType === 0 && <h5>Proposer un troc</h5>}
+    {announceType === 1 && <h5>Proposer un don</h5>}
+    {announceType === 2 && <h5>Proposer une spécialité</h5>}
 
     <ButtonGroup fullWidth size="small" className="react-switch" color="primary" aria-label="outlined primary button group">
-      <Button onClick={()=>console.log("Hello")}>
-        Publier une annonce
+      <Button onClick={()=>handleAnnounce(0)}>
+        Publier un troc
       </Button>
-      <Button onClick={()=>console.log("Hello")}>
+      <Button onClick={()=>handleAnnounce(1)}>
+        Publier un donc
+      </Button>
+      <Button onClick={()=>handleAnnounce(2)}>
         Ajouter une spécialité
       </Button>
     </ButtonGroup>
@@ -264,6 +322,8 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
             </label>        
           </Button>
       </ButtonGroup>
+
+      {(announceType === 0 || announceType === 1) && dateContent()}
 
       <InputBase accept="image/*" id="icon-button-file" type="file"  hidden ref={imageSrc} onChange={handleFile}/>
       </>
@@ -312,6 +372,11 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
   useEffect(()=>{
     console.log(file)
   },[file])
+
+  useEffect(()=>{
+    console.log(date)
+    console.log(announceType)
+  },[date, announceType])
 
   return(
       <div className={classes.root}>
