@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {loginUser} from '../../store/actions';
 import { Form, Button } from "react-bootstrap";
 import { Redirect } from 'react-router-dom';
+import {Link, useParams} from "react-router-dom";
 
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -21,25 +22,27 @@ const useStyles = makeStyles((theme) => ({
   }));
   
 
-const EditProfile = () => {
+const EditProfileAdmin = () => {
+  let {userId} = useParams();
+
     const userStore = useSelector(state => state.user.user);
 
-    const [firstName, setFirstName] = useState(userStore.attributes.first_name);
-    const [lastName, setLastName] = useState(userStore.attributes.last_name);
-    const [country, setCountry] = useState(userStore.attributes.country);
-    const [city, setCity] = useState(userStore.attributes.city);
-    const [zipCode, setZipCode] = useState(userStore.attributes.zip_code);
-    const [street, setStreet] = useState(userStore.attributes.street);
-    const [phoneNumber, setPhoneNumber] = useState(userStore.attributes.phone_number);
-    const [description, setDescription] = useState(userStore.attributes.description);
-    const dippers = useState(userStore.attributes.dippers);
-    const [email, setEmail] = useState(userStore.attributes.email);
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [country, setCountry] = useState('');
+    const [city, setCity] = useState('');
+    const [zipCode, setZipCode] = useState('');
+    const [street, setStreet] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [description, setDescription] = useState('');
+    const dippers = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState();
     const [redirection, setRedirection] = useState(false);
     const classes = useStyles();
 
     const data = {
-         
+        
           first_name: firstName,
           last_name: lastName,
           email: email,
@@ -54,11 +57,11 @@ const EditProfile = () => {
     };
   
    
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
   
     const handleSubmit = (e) => {
         e.preventDefault()
-        fetch(`https://dippr-api-development.herokuapp.com/api/users/${userStore.id}`, {
+        fetch(`https://dippr-api-development.herokuapp.com/api/users/${userId}`, {
           "method": "PUT",
           "headers": {
             "Content-Type": "application/json",
@@ -73,22 +76,20 @@ const EditProfile = () => {
         })
         .then((response) => {
           console.log("laaaa");
-          console.log(data)
           console.log(response);
-          dispatch(loginUser( { "id": userStore.id, "attributes": {
-              email: email,
-              first_name: firstName,
-              last_name: lastName,
-              country: country,
-              city: city,
-              zip_code: zipCode,
-              street: street,
-              description: description,
-              phone_number: phoneNumber,
-              dippers: dippers
-          }}))
+          // dispatch(loginUser( { "id": userStore.id, "attributes": {
+          //     email: email,
+          //     first_name: firstName,
+          //     last_name: lastName,
+          //     country: country,
+          //     city: city,
+          //     zip_code: zipCode,
+          //     street: street,
+          //     description: description,
+          //     phone_number: phoneNumber,
+          //     dippers: dippers
+          // }}))
           console.log('updated')
-          console.log(userStore)
           setRedirection(true);
         }).catch(error => {
           console.log(error)
@@ -104,7 +105,7 @@ const EditProfile = () => {
         alignItems="center"
         justify="center"
         >
-            {redirection && <Redirect to={`/profile/${userStore.id}`}/>}
+            {redirection && <Redirect to={`/admin}`}/>}
             <Grid item xs={12}>
                 <Paper className={classes.paper}>
                 <Form onSubmit={handleSubmit}>
@@ -165,4 +166,4 @@ const EditProfile = () => {
     );
 }
 
-export default EditProfile
+export default EditProfileAdmin

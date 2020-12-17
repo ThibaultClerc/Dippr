@@ -47,6 +47,8 @@ const Profile = () => {
   useEffect(() => {
     fetchData(`https://dippr-api-development.herokuapp.com/api/users/${profileId}`)
   }, [profileId])
+ console.log("dataaaaaaaaaaa")
+ console.log(data)
 
   return (
     
