@@ -155,9 +155,10 @@ const MarketDish = () => {
   const [data, setData] = useState(null)
   const [isSearching, setIsSearching] = useState(false);
   const history = useHistory();
+  const [open, setOpen] = useState(false);
+
 
   useEffect(() => {
-    console.log(dishID)
     setIsSearching(true)
     fetch(`https://dippr-api-development.herokuapp.com/api/market_dishes/${dishID}`, {
       "method": "GET",
@@ -182,7 +183,7 @@ const MarketDish = () => {
     });
   }
 
-  const handleAvatarClick = (chipName) => {
+  const handleAvatarClick = () => {
     history.push({
       pathname: `/profile/${data.meta.user_dish.user_id}`
     });
@@ -195,6 +196,10 @@ const MarketDish = () => {
       console.log("do that")
     }
   }
+
+  // const handleDialogAnnounce = () => {
+  //   setAnnounce(true);
+  // }
 
   return (
     <>
