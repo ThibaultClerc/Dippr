@@ -55,9 +55,7 @@ const Map = ({data}) => {
                 position={{lat: Number.parseFloat(dish.meta.user_lat), lng: Number.parseFloat(dish.meta.user_lng)}}
                 icon={{
                   url: dishLogo,
-                  scaledSize: new window.google.maps.Size(30, 30),
-                  origin: new window.google.maps.Point(0, 0),
-                  anchor: new  window.google.maps.Point(15, 15)
+                  scaledSize: new window.google.maps.Size(45, 45)
                 }}
                 onClick={() => {
                   setSelected(dish);

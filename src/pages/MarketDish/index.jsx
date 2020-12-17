@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from "react-router-dom";
 import { Grid, Container, Paper, Chip, Avatar, Button } from "@material-ui/core"
-import { borders } from '@material-ui/system';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Cookies from 'js-cookie';
 import Loader from '../../components/UI/Loader';
 import moment from 'moment'
+import MiniMap from '../../components/MiniMap'
 
 const useStyles = makeStyles((theme) => ({
   mainContainer: {
@@ -58,28 +58,38 @@ const useStyles = makeStyles((theme) => ({
       paddingRight: '0 !important',
       paddingTop: '0 !important',
       position: 'absolute',
-      bottom: '15%'
+      top: '50%'
     }
   },
   textPaper: {
     borderRadius: 35,
-    padding: 20
+    padding: 25,
+    marginBottom: 20,
+    [theme.breakpoints.down('xs')]: {
+      marginBottom: 0,
+      borderRadius: '35px 35px 0px 0px'
+    }
   },
   mapPaper: {
-    borderRadius: 35,
+    borderRadius: 35
   },
   askButton: {
-    position: 'absolute',
-    bottom: '-3%',
+    bottom: '4%',
     left: '24%',
     borderRadius: 50,
     padding: 10,
     width: '50%',
     lineHeight: 2.5,
+    boxShadow: '0px 8px 15px rgba(0, 0, 0, 0.1)',
     [theme.breakpoints.down('xs')]: {
+      zIndex: '100',
+      top: '-13%',
       '& > *': {
-        fontSize: "0.7rem"
+        fontSize: "0.7rem",
       },
+    },
+    [theme.breakpoints.down('sm')]: {
+      bottom: '5.5%'
     }
   },
   avatar: {
@@ -87,9 +97,14 @@ const useStyles = makeStyles((theme) => ({
     top: 40,
     left: 40,
     border: "1px solid white",
+    maxWidth: "fit-content",
+    boxShadow: '0px 8px 15px rgba(0, 0, 0, 0.1)',
     [theme.breakpoints.down('xs')]: {
       top: 40,
-      right: 40,
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      left: 0,
+      right: 0
     }
   },
   nameChip: {
@@ -99,7 +114,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "white",
     [theme.breakpoints.down('xs')]: {
       top: 44,
-      right: 90,
+      left: 240,
     }
   }
 }));
@@ -137,6 +152,14 @@ const MarketDish = () => {
     });
   }
 
+  const handleAskClick = () => {
+    if (data.attributes.market_dish_type === "troc") {
+      console.log("do this")
+    } else {
+      console.log("do that")
+    }
+  }
+
   return (
     <>
     {isSearching && <Loader/>}
@@ -145,10 +168,12 @@ const MarketDish = () => {
         <Grid container fixed spacing={3} className={classes.subMainContainer}>
           <Grid item xs={12} md={6} className={classes.imgContainer}>
             <img className={classes.image} src={data.meta.user_dish.photo_url} alt="dish-photo"></img>
-            <Avatar className={classes.avatar}>H</Avatar>
-            <Chip className={classes.nameChip} label={data.meta.user_first_name} />
-            
-            <Button variant="contained" color="secondary" size="large" className={classes.askButton}>
+            <Chip
+              avatar={<Avatar alt="Natacha" src="/static/images/avatar/1.jpg" />}
+              label={data.meta.user_first_name}
+              className={classes.avatar}
+            />
+            <Button variant="contained" color="secondary" size="large" className={classes.askButton} handleClick={handleAskClick}>
               {data.attributes.market_dish_type === "troc" ?
               "PROPOSER UN TROC"
               : "DEMANDER CE PLAT"
@@ -193,7 +218,12 @@ const MarketDish = () => {
               </Typography>
             </Paper>
             <Paper className={classes.mapPaper}>
-
+              <MiniMap
+                dishID={data.attributes.user_dish_id}
+                dishLat={data.meta.user_lat}
+                dishLng={data.meta.user_lng}
+                className={classes.miniMap}
+                />
             </Paper>
           </Grid>
         </Grid>

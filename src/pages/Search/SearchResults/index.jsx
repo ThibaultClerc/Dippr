@@ -34,7 +34,7 @@ const SearchResults = ({data, listOrMapValue, isSearching}) => {
               return (
                 <Grid item xs={6} sm={4} md={3} lg={2} key={dish.id} width={300}>
                   <DishCard
-                    market_dish_id={dishData.id}
+                    market_dish_id={dish.id}
                     user_first_name={dish.meta.user_first_name}
                     name={dishData.name}
                     description={dishData.description}
