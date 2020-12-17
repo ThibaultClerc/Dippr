@@ -15,6 +15,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import CreateIcon from '@material-ui/icons/Create';
 
 const useStyles = makeStyles({
   table: {
@@ -22,8 +23,8 @@ const useStyles = makeStyles({
   },
 });
 
-function createData(email,first_name, last_name, description, country, city, street, zip_code, phone_number, user_rating, dippers) {
-  return { email, first_name, last_name, description, country, city, street, zip_code, phone_number, user_rating, dippers };
+function createData(email,first_name, last_name, description, country, city, street, zip_code, phone_number, user_rating, dippers, icon) {
+  return { email, first_name, last_name, description, country, city, street, zip_code, phone_number, user_rating, dippers, icon };
 }
 
 const UserDishes = (profileId) => {
@@ -55,7 +56,7 @@ const UserDishes = (profileId) => {
       const rows = [];
         data.map(user => {
           rows.push(
-            createData(user.attributes.email, user.attributes.first_name, user.attributes.last_name, user.attributes.description,user.attributes.country, user.attributes.city, user.attributes.street, user.attributes.zip_code, user.attributes.phone_number, user.attributes.user_rating, user.attributes.dippers) 
+            createData(user.attributes.email, user.attributes.first_name, user.attributes.last_name, user.attributes.description,user.attributes.country, user.attributes.city, user.attributes.street, user.attributes.zip_code, user.attributes.phone_number, user.attributes.user_rating, user.attributes.dippers, <CreateIcon/>) 
           );
         })
       
@@ -78,6 +79,7 @@ const UserDishes = (profileId) => {
             <TableCell align="left">Numéro</TableCell>
             <TableCell align="left">Note</TableCell>
             <TableCell align="left">Dippers</TableCell>
+            <TableCell align="left">Modifier</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -99,6 +101,8 @@ const UserDishes = (profileId) => {
               <TableCell align="left">{row.phone_number}</TableCell>
               <TableCell align="left">{row.user_rating}</TableCell>
               <TableCell align="left">{row.dippers}</TableCell>
+              <TableCell align="left">{row.icon}</TableCell>
+
             </TableRow>
           ))}
         </TableBody>
