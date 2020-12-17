@@ -203,7 +203,7 @@ const MarketDish = () => {
       <Container fixed className={classes.mainContainer}>
         <Grid container fixed spacing={3} className={classes.subMainContainer}>
           <Grid item xs={12} md={6} className={classes.imgContainer}>
-            <img className={classes.image} src={data.meta.user_dish.photo_url} alt="dish-photo"></img>
+            <img className={classes.image} src={`https://dippr-api-development.herokuapp.com${data.meta.user_dish.photo_url}`} alt="dish-photo"></img>   
             <Chip
               avatar={<Avatar alt="Natacha" src="/static/images/avatar/1.jpg" />}
               label={data.meta.user_first_name}
