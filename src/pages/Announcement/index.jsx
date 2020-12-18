@@ -32,18 +32,18 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
   const [tags, setTags] = useState([]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [open, setOpen] = React.useState(value);
-  const [publishSuccess, setPublishSuccess] = React.useState(alert)
-  const [file, setFile] = React.useState(null)
+  const [open, setOpen] = useState(value);
+  const [publishSuccess, setPublishSuccess] = useState(alert)
+  const [file, setFile] = useState(null)
   const imageSrc = React.useRef(null)
   const [announceType, setAnnounceType] = React.useState(0)
-  const [date, setDate] = React.useState(moment().format("YYYY-MM-DD"))
+  const [date, setDate] = seState(moment().format("YYYY-MM-DD"))
 
   const user = useSelector(state => state.user.user);
   const [currentTags, setCurrentTags] = useState([]);
   const [currentIngredients, setCurrentIngredients] = useState([]);
-  const [visibleSignup, setVisibleSignup] = React.useState(null)
-  const [visibleLogin, setVisibleLogin] = React.useState(true)
+  const [visibleSignup, setVisibleSignup] = useState(null)
+  const [visibleLogin, setVisibleLogin] = useState(true)
 
   const data = {
       name: name,
