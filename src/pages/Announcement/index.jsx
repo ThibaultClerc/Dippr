@@ -347,7 +347,7 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
 
   const loginContent = () => (
     <>
-      <h5>Connectes-toi et propose ta spécialité</h5>
+      <h6>Connectes-toi et propose ta spécialité</h6>
       <Connection/>
     </>
 
