@@ -88,10 +88,7 @@ const EditProfileAdmin = () => {
     useEffect(() => {
       fetchData(`https://dippr-api-development.herokuapp.com/api/users/${userId}`)
     }, [])
-  
-   
-    // const dispatch = useDispatch();
-  
+    
     const handleSubmit = (e) => {
         e.preventDefault()
         fetch(`https://dippr-api-development.herokuapp.com/api/users/${userId}`, {
@@ -110,18 +107,6 @@ const EditProfileAdmin = () => {
         .then((response) => {
           console.log("laaaa");
           console.log(response);
-          // dispatch(loginUser( { "id": userStore.id, "attributes": {
-          //     email: email,
-          //     first_name: firstName,
-          //     last_name: lastName,
-          //     country: country,
-          //     city: city,
-          //     zip_code: zipCode,
-          //     street: street,
-          //     description: description,
-          //     phone_number: phoneNumber,
-          //     dippers: dippers
-          // }}))
           console.log('updated')
           setRedirection(true);
         }).catch(error => {
