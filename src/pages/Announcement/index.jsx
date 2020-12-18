@@ -6,6 +6,7 @@ import Cookies from 'js-cookie'
 import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Connection from '../../pages/Login'
+import Signup from '../../pages/Signup'
 import PublishIcon from '@material-ui/icons/Publish';
 import { Button, ButtonGroup, Dialog, DialogActions, DialogContent, InputBase, IconButton  } from '@material-ui/core';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
@@ -41,8 +42,8 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
   const user = useSelector(state => state.user.user);
   const [currentTags, setCurrentTags] = useState([]);
   const [currentIngredients, setCurrentIngredients] = useState([]);
-
-  console.log(user)
+  const [visibleSignup, setVisibleSignup] = React.useState(null)
+  const [visibleLogin, setVisibleLogin] = React.useState(true)
 
   const data = {
       name: name,
@@ -71,7 +72,17 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
   };
 
   const handleAnnounce = (value) =>{
-    setAnnounceType(value)
+    setAnnounceType(value);
+  };
+
+  const handleSignup = (value) =>{
+    setVisibleSignup(true);
+    setVisibleLogin(false);
+  };
+
+  const handleLogin = (value) =>{
+    setVisibleSignup(false);
+    setVisibleLogin(true);
   };
 
   const fetchIngredient = () => {
@@ -347,8 +358,8 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
 
   const loginContent = () => (
     <>
-      <h6>Connectes-toi et propose ta spécialité</h6>
-      <Connection/>
+      {visibleLogin && <Connection signup={()=>handleSignup(true)} isModal={true}/>}
+      {visibleSignup && <Signup login={()=>handleLogin(true)} isModal={true}/>}
     </>
 
   );
@@ -365,15 +376,6 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
     fetchIngredient();
     fetchTag();
   }, []);
-
-  useEffect(()=>{
-    console.log(file)
-  },[file])
-
-  useEffect(()=>{
-    console.log(date)
-    console.log(announceType)
-  },[date, announceType])
 
   return(
       <div className={classes.root}>
