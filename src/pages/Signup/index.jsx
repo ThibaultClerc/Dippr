@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../../store/actions/index';
 import Cookies from "js-cookie";
@@ -10,7 +10,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -37,11 +36,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const Signup = () => {
+const Signup = ({login, isModal}) => {
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [redirection, setRedirection] = useState(false)
   const [email, setEmail] = useState('');
+  const [modal, setModal] = useState(isModal)
 
   const dispatch = useDispatch();
 
@@ -53,6 +53,10 @@ const Signup = () => {
       password: password
     }
   };
+
+  const handleLogin = () =>{
+    {modal && login(true)};
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -152,9 +156,9 @@ const Signup = () => {
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link href="#" variant="body2">
-                Déjà inscrit ? Se connecter
-              </Link>
+              <Typography component={Link} to="/signin" variant="body2" onClick={handleLogin}>
+                {"Déjà inscrit ? Se connecter"}
+              </Typography>
             </Grid>
           </Grid>
         </form>

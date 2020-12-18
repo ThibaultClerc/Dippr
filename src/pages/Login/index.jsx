@@ -37,10 +37,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const Connection = () => {
+const Connection = ({signup, isModal}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [redirection, setRedirection] = useState(false);
+  const [modal, setModal] = useState(isModal)
   const classes = useStyles();
 
 
@@ -76,6 +77,10 @@ const Connection = () => {
       {redirection && <Redirect to='/signin'/>}
     })
   };
+
+  const handleSignup = () =>{
+    {modal && signup(true)};
+  }
 
 
   return (
@@ -138,7 +143,7 @@ const Connection = () => {
               </Typography>
             </Grid>
             <Grid item>
-              <Typography component={Link} to="/signup" variant="body2">
+              <Typography component={Link} to="/signup" variant="body2" onClick={handleSignup}>
                 {"Pas de compte? Inscrivez-vous"}
               </Typography>
             </Grid>
