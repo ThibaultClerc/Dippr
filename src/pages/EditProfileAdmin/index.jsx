@@ -28,7 +28,7 @@ const EditProfileAdmin = () => {
     const userStore = useSelector(state => state.user.user);
     const [data, setData] = useState([])
 
-    const [firstName, setFirstName] = useState(data.firstName);
+    const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [country, setCountry] = useState('');
     const [city, setCity] = useState('');
