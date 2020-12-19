@@ -22,9 +22,9 @@ const useStyles = makeStyles((theme) => ({
 
 const Profile = () => {
   const user = useSelector(state => state.user.user);
-  const [data, setData] = useState([])
-  let {profileId} = useParams();
+  const [data, setData] = useState([]);
   const classes = useStyles();
+  let {profileId} = useParams();
 
   const fetchData = (url) => {
     fetch(url, {
@@ -47,31 +47,26 @@ const Profile = () => {
   useEffect(() => {
     fetchData(`https://dippr-api-development.herokuapp.com/api/users/${profileId}`)
   }, [profileId])
- console.log("dataaaaaaaaaaa")
- console.log(data)
 
   return (
-    
-      
-      <div className="text">
-        {data.length !== 0 ?
-          <>
-          <br/><br/><br/>
-          <Container xs="8" className="">
+    <div className="text">
+      {data.length !== 0 ?
+        <>
+        <br/><br/><br/>
+        <Container xs="8" className="">
           <Row className="block border-dark">
-           
-           <Col xs="4">
+            <Col xs="4">
               <Avatar alt="Remy Sharp" src="../../assets/img/dishLogo.png" className={classes.large} />
               <p> {data.first_name !== "" ? data.first_name : ""}{' '}{data.last_name !== "" ? data.last_name : ""} 
-               <br/> {data.email} 
-               <br/> {data.dippers !== "" ? "Vous avez " + data.dippers + " dippers"  : ""}
-               </p>
-           </Col>
+                <br/> {data.email} 
+                <br/> {data.dippers !== "" ? "Vous avez " + data.dippers + " dippers"  : ""}
+              </p>
+            </Col>
             <Col xs="4">
               <p> Pays : {data.country !== "" ? data.country  : ""} <br/>
-               Ville : {data.city !== "" ? data.city  : ""} <br/>
-               {data.zip_code !== "" ? "Code postale : " + data.zip_code  : ""} <br/>
-               {data.street !== "" ? "Rue : " + data.street  : ""} <br/>
+                Ville : {data.city !== "" ? data.city  : ""} <br/>
+                {data.zip_code !== "" ? "Code postale : " + data.zip_code  : ""} <br/>
+                {data.street !== "" ? "Rue : " + data.street  : ""} <br/>
               {data.phone_number !== "" ? "Numéro de téléphone : " + data.phone_number  : ""} </p> 
             </Col>   
             <Col xs="4">
@@ -80,19 +75,15 @@ const Profile = () => {
               <br/><br/>
               {user.id === profileId ? <Button as={Link} to="/users/edit" variant="primary">Modifier mon profil</Button> : ""}
             </Col>
-         
           </Row>
           <br/><br/>
-          
           <h3>{user.id === profileId ? <UserDishes profileId={user.id}/> : ""}</h3>
-
         </Container>
-          </>
-          : <Loader/>
-        }
-      </div>
-     
-      
+        </>
+        : <Loader/>
+      }
+    </div> 
   );
-}
+};
+
 export default Profile;

@@ -89,9 +89,8 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const DishCard = ({market_dish_id, name, description, dish_rating, user_id, created_at, type, first_name, user_first_name, type_of_card, photo_url}) => {
+const DishCard = ({market_dish_id, name, description, dish_rating, user_id, created_at, user_first_name, type_of_card, photo_url}) => {
   const classes = useStyles();
-  const [expanded, setExpanded] = useState(false);
   const [cardType, setCardType] = useState(type_of_card)
   const history = useHistory();
 
@@ -118,7 +117,7 @@ const DishCard = ({market_dish_id, name, description, dish_rating, user_id, crea
     if (photo_url === undefined) {
       return noPhoto
     } else {
-      return `https://dippr-api-development.herokuapp.com${photo_url}`
+      return `http://dippr-api-development.herokuapp.com${photo_url}`
     }
   }
 

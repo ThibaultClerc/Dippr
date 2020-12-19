@@ -7,7 +7,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import Cookies from 'js-cookie';
 import Loader from '../../components/UI/Loader';
 import moment from 'moment'
-import MiniMap from '../../components/MiniMap'
+import MiniMap from '../../components/MiniMap';
+import PopupDialog from '../../components/PopupDialog';
+import { useSelector } from 'react-redux';
+import Alert from '@material-ui/lab/Alert';
+import CloseIcon from '@material-ui/icons/Close';
+import Collapse from '@material-ui/core/Collapse';
+import IconButton from '@material-ui/core/IconButton';
 
 const useStyles = makeStyles((theme) => ({
   mainContainer: {
@@ -151,15 +157,18 @@ const useStyles = makeStyles((theme) => ({
 
 const MarketDish = () => {
   const classes = useStyles();
+  const history = useHistory();
+  const user = useSelector(state => state.user.user);
   const { dishID } = useParams()
   const [data, setData] = useState(null)
   const [isSearching, setIsSearching] = useState(false);
-  const history = useHistory();
   const [open, setOpen] = useState(false);
-
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isCancelSuccess, setIsCancelSuccess] = useState(false);
+  const [alreadyAsked, setAlreadyAsked] = useState(null)
+  const [userTransaction, setUserTransaction] = useState([])
 
   useEffect(() => {
-    setIsSearching(true)
     fetch(`https://dippr-api-development.herokuapp.com/api/market_dishes/${dishID}`, {
       "method": "GET",
       "headers": {
@@ -169,12 +178,45 @@ const MarketDish = () => {
     .then((response) => response.json())
     .then((response) => {
       setData(response.data)
+      if (response.data.attributes.market_dish_type === "troc") {
+        fetchUserTransactions("trocs", response.data.id)
+      } else {
+        fetchUserTransactions("donations", response.data.id)
+      }
     }).catch(error => {
       console.log(error)
-    }).finally(() => {
-      setIsSearching(false)
     })
-  }, [])
+  }, [isSuccess, isCancelSuccess])
+
+  const fetchUserTransactions = (type, pageDishID) => {
+    fetch(`https://dippr-api-development.herokuapp.com/api/users/${user.id}/${type}`, {
+      "method": "GET",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": Cookies.get("token")
+      }
+    })
+    .then((response) => response.json())
+    .then((response) => {
+      if (response.data.length === 0) {
+        setAlreadyAsked(false)
+      } else {
+        console.log(response.data)
+        console.log(pageDishID)
+        const transaction = response.data
+          .filter(transaction => ((transaction.attributes.answer_dish_id == pageDishID) && ((transaction.attributes.status === 'pending') || (transaction.attributes.status === 'confirmed'))))
+          console.log(transaction)
+        if (transaction.length === 0) {
+          setAlreadyAsked(false)
+        } else {
+          setAlreadyAsked(true)
+          setUserTransaction([...transaction])
+        }
+      }
+    }).catch(error => {
+      console.log(error)
+    })
+  }
 
   const handleChipClick = (chipName) => {
     history.push({
@@ -190,20 +232,203 @@ const MarketDish = () => {
   }
 
   const handleAskClick = () => {
+    if (user.length === 0) {
+      return history.push({ pathname: '/signup'})
+    }
     if (data.attributes.market_dish_type === "troc") {
-      console.log("do this")
+      setOpen(true)
     } else {
-      console.log("do that")
+      handleTransactionCreation()
     }
   }
 
-  // const handleDialogAnnounce = () => {
-  //   setAnnounce(true);
-  // }
+  const handleCancelClick = () => {
+    if (data.attributes.market_dish_type === "troc") {
+      setAlreadyAsked(false)
+      handleTransactionDelete()
+    } else {
+      handleTransactionDelete()
+    }
+  }
+
+  const handleTransactionDelete = () => {
+    let transactionData;
+    let type;
+      if (data.attributes.market_dish_type === "troc") {
+      type = "trocs"
+      transactionData = {
+        status: 3
+      }
+    } else {
+      type = "donations"
+      transactionData = {
+        status: 0
+      }
+    }
+    console.log(userTransaction)
+    const actualTransaction = userTransaction[0]
+    fetch(`https://dippr-api-development.herokuapp.com/api/${type}/${actualTransaction.id}`, {
+      "method": "PUT",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": Cookies.get("token")
+      },
+      "body": JSON.stringify(transactionData)
+    })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("There was an error with the Rails API")
+      } else {
+      return response.json()
+      }
+    })
+    .then(() => {
+      setAlreadyAsked(false)
+      setIsCancelSuccess(true)
+    }).catch(error => {
+      console.log(error)
+    })
+  }
+
+  const handleTransactionCreation = (userMarketDish = 0) => {
+    let transactionData;
+    let type;
+      if (data.attributes.market_dish_type === "troc") {
+      type = "trocs"
+      transactionData = {
+        answerer_id: data.meta.user_dish.user_id,
+        caller_dish_id: userMarketDish,
+        answer_dish_id: data.id,
+        status: 0
+      }
+    } else {
+      type = "donations"
+      transactionData = {
+        answerer_id: data.meta.user_dish.user_id,
+        answer_dish_id: data.id,
+        status: 0
+      }
+    }
+    fetch(`https://dippr-api-development.herokuapp.com/api/${type}`, {
+      "method": "POST",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": Cookies.get("token")
+      },
+      "body": JSON.stringify(transactionData)
+    })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("There was an error with the Rails API")
+      } else {
+      return response.json()
+      }
+    })
+    .then(() => {
+      setAlreadyAsked(true)
+      setIsSuccess(true)
+    }).catch(error => {
+      console.log(error)
+    })
+  }
+
+  useEffect(() => {
+    let successTimeout;
+    if (isSuccess) {
+      successTimeout = setTimeout(() => {
+        setIsSuccess(false)
+      }, 3000)
+    }
+    return () => {
+      clearTimeout(successTimeout)
+    }
+  }, [isSuccess])
+
+  useEffect(() => {
+    let successTimeout;
+    if (isCancelSuccess) {
+      successTimeout = setTimeout(() => {
+        setIsCancelSuccess(false)
+      }, 3000)
+    }
+    return () => {
+      clearTimeout(successTimeout)
+    }
+  }, [isCancelSuccess])
 
   return (
     <>
+    {isSuccess && 
+      <Collapse
+        in={isSuccess}
+        style={{
+          zIndex: 10,
+          position: "absolute",
+          width: "100%"
+        }}
+        >
+        <Alert
+          severity="success"
+          action={
+            <IconButton
+              aria-label="close"
+              severity="success"
+              size="small"
+              onClick={() => {
+                setIsSuccess(false);
+              }}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          }
+        >
+          {data.attributes.market_dish_type === "troc" ? 
+            `La demande de troc a bien été envoyée à ${data.meta.user_first_name} !`
+            : `La demande de don a bien été envoyée à ${data.meta.user_first_name}`
+          }
+        </Alert>
+      </Collapse>
+    }
+    {isCancelSuccess && 
+      <Collapse
+        in={isCancelSuccess}
+        style={{
+          zIndex: 10,
+          position: "absolute",
+          width: "100%"
+        }}
+        >
+        <Alert
+          severity="info"
+          action={
+            <IconButton
+              aria-label="close"
+              severity="info"
+              size="small"
+              onClick={() => {
+                setIsCancelSuccess(false);
+              }}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          }
+        >
+          {data.attributes.market_dish_type === "troc" ? 
+            `Le troc a bien été annulé !`
+            : `Le don a bien été annulé !`
+          }
+        </Alert>
+      </Collapse>
+    }
     {isSearching && <Loader/>}
+    {open &&
+      <PopupDialog
+        userID={user.id}
+        open={open}
+        handleClose={(closeValue) => setOpen(closeValue)}
+        handleSelectedValue={(userMarketDish) => handleTransactionCreation(userMarketDish)}
+      />
+    }
     {(data !== null && !isSearching) &&
       <Container fixed className={classes.mainContainer}>
         <Grid container fixed spacing={3} className={classes.subMainContainer}>
@@ -215,21 +440,30 @@ const MarketDish = () => {
               className={classes.avatar}
               onClick={handleAvatarClick}
             />
-            <Button variant="contained" color="secondary" size="large" className={classes.askButton} handleClick={handleAskClick}>
-              {data.attributes.market_dish_type === "troc" ?
-              "PROPOSER UN TROC"
-              : "DEMANDER CE PLAT"
+            {!alreadyAsked ? 
+              <Button variant="contained" color="secondary" size="large" className={classes.askButton} onClick={handleAskClick}>
+                {data.attributes.market_dish_type === "troc" ?
+                "PROPOSER UN TROC"
+                : "DEMANDER CE PLAT"
+              }
+              </Button>
+            : <Button variant="contained" color="primary" size="large" className={classes.askButton} onClick={handleCancelClick}>
+                Annuler la demande
+              </Button>
             }
-            </Button>
-            
           </Grid>
           <Grid item xs={12} md={6} className={classes.textContainer}>
-          <Button variant="contained" color="secondary" size="large" className={classes.askButton2} handleClick={handleAskClick}>
-              {data.attributes.market_dish_type === "troc" ?
-              "PROPOSER UN TROC"
-              : "DEMANDER CE PLAT"
+            {!alreadyAsked ? 
+              <Button variant="contained" color="secondary" size="large" className={classes.askButton2} onClick={handleAskClick}>
+                  {data.attributes.market_dish_type === "troc" ?
+                  "PROPOSER UN TROC"
+                  : "DEMANDER CE PLAT"
+                }
+              </Button>
+              : <Button variant="contained" color="primary" size="large" className={classes.askButton2} onClick={handleCancelClick}>
+                  Annuler la demande
+                </Button>
             }
-            </Button>
             <Paper className={classes.textPaper}>
               <Typography variant="h2" gutterBottom className={classes.title}>
                 {data.meta.user_dish.name}
@@ -277,13 +511,8 @@ const MarketDish = () => {
         </Grid>
       </Container>
     }
-
     </>
-  )
-}
+  );
+};
 
-export default MarketDish
-
-
-
-
+export default MarketDish;
