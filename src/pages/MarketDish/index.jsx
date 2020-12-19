@@ -202,7 +202,8 @@ const MarketDish = () => {
         setAlreadyAsked(false)
       } else {
           const transaction = response.data
-            .filter(transaction => ((transaction.attributes.answer_dish_id == pageDishID) && ((transaction.attributes.status === 'pending') || (transaction.attributes.status === 'confirmed'))))
+            .filter(transaction => ((transaction.attributes.answer_dish_id == pageDishID)
+            && ((transaction.attributes.status === 'pending') || (transaction.attributes.status === 'confirmed'))))
         if (transaction.length === 0) {
           setAlreadyAsked(false)
         } else {

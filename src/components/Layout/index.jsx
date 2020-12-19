@@ -35,16 +35,12 @@ const Layout = () => {
         <Route              path="/search/:query"      component={Search}/>
         <Route              path="/search"             component={Search}/>
         <Route              path="/marketdish/:dishID" component={MarketDish}/>
-        <Route              path="/userdish/:dishID"   component={Dish}/>
+        {/* <Route              path="/userdish/:dishID"   component={Dish}/> */}
         <PrivateRoute       path="/profile/:profileId" component={Profile}/>
         <PrivateRoute       path="/users/edit"         component={EditProfile}/>
         <PrivateRoute       path="/edit/:userId"       component={EditProfileAdmin}/>
-
-        <PrivateRoute       path="/users/swap"         component={Swap}/>
-        <PrivateRoute       path="/users/dish"         component={Dish}/>
+        <PrivateRoute       path="/swap"         component={Swap}/>
         <PrivateRoute       path="/admin"              component={DashboardAdmin}/>
-
-
       </Switch> 
     </Router>
   )
