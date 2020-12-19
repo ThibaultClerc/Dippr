@@ -49,7 +49,7 @@ const EditProfile = () => {
   
   const handleSubmit = (e) => {
     e.preventDefault()
-    fetch(`https://dippr-api-development.herokuapp.com/api/users/${userStore.id}`, {
+    fetch(`https://dippr-api-production.herokuapp.com/api/users/${userStore.id}`, {
       "method": "PUT",
       "headers": {
         "Content-Type": "application/json",
