@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../../store/actions/index';
@@ -7,13 +7,13 @@ import dipprLogoTest2 from '../../assets/img/dipprLogoTest2.png'
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Checkout from '../../components/CheckoutProfile/Checkout'
+import { useForm, Controller } from 'react-hook-form';
+
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -37,48 +37,45 @@ const useStyles = makeStyles((theme) => ({
 
 
 const Signup = ({login, isModal}) => {
-  const [password, setPassword] = useState('');
-  const [passwordConfirm, setPasswordConfirm] = useState('');
-  const [redirection, setRedirection] = useState(false)
-  const [email, setEmail] = useState('');
-  const [modal, setModal] = useState(isModal)
-  const [checkout, setCheckout] = useState(null)
+  const { control, errors: fieldsErrors, handleSubmit, watch } = useForm({});
+  const [redirection, setRedirection] = useState(false);
+  const [modal, setModal] = useState(isModal);
+  const [checkout, setCheckout] = useState(null);
+  const [alert, setAlert] = useState(null);
+  const currentPassword = useRef({});
+  currentPassword.current = watch("password", "");
 
   const dispatch = useDispatch();
 
   const classes = useStyles();
 
-  const data = {
-    user: {
-      email: email,
-      password: password
-    }
-  };
-
   const handleLogin = () =>{
     {modal && login(true)};
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
+  const handleRealSubmit = data => {
     fetch("https://dippr-api-development.herokuapp.com/api/signup", {
       "method": "POST",
       "headers": {
         "Content-Type": "application/json"
       },
-      "body": JSON.stringify(data)
+      "body": JSON.stringify({
+        user: {
+          email: data.email,
+          password: data.password
+        }
+      }
+      )
     })
     .then((response) => {
+      {response.status === 200 && setCheckout(true)}
       Cookies.set('token', response.headers.get("Authorization"))
       return response.json()
     })
     .then((response) => {
       dispatch(loginUser(response.data))
-      setRedirection(true)
-      setCheckout(true)
     }).catch(error => {
-      setRedirection(false)
-      setCheckout(false)
+      setRedirection(true)
       console.log(error)
     })
   };
@@ -93,55 +90,84 @@ const Signup = ({login, isModal}) => {
       <Typography component="h1" variant="h5">
         Inscription
       </Typography>
-      <form className={classes.form} noValidate>
+      <form className={classes.form} noValidate onSubmit={handleSubmit(handleRealSubmit)}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
           </Grid>
           <Grid item xs={12}>
-            <TextField
-              variant="outlined"
-              required
-              value={email}
-              fullWidth
-              id="email"
-              label="Adresse email"
+            <Controller
               name="email"
-              autoComplete="email"
-              onChange={ e => setEmail(e.target.value) }
+              as={
+                <TextField
+                  id="email"
+                  variant="outlined"
+                  fullWidth
+                  required
+                  helperText={fieldsErrors.email ? fieldsErrors.email.message : null}
+                  label="Adresse email"
+                  error={fieldsErrors.email}
+                />
+              }
+              control={control}
+              defaultValue=""
+              rules={{
+                required: true,
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                  message: 'adresse email invalide'
+                }
+              }}
             />
           </Grid>
           <Grid item xs={12}>
-            <TextField
-              variant="outlined"
-              required
-              value={password}
-              fullWidth
+
+            <Controller
               name="password"
-              label="Mot de passe"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              onChange={ e => setPassword(e.target.value) }
+              as={
+                <TextField
+                  id="password"
+                  variant="outlined"
+                  fullWidth
+                  required
+                  type="password"
+                  helperText={fieldsErrors.password ? fieldsErrors.password.message : null}
+                  label="Mot de passe"
+                  error={fieldsErrors.password}
+                />
+              }
+              control={control}
+              defaultValue=""
+              rules={{
+                required: true,
+                minLength: {
+                  value: 6,
+                  message: 'min. 6 caractères'
+                }
+              }}
             />
+            {!fieldsErrors.password && <p>min. 6 caractères</p>}
           </Grid>
           <Grid item xs={12}>
-            <TextField
-              variant="outlined"
-              required
-              value={passwordConfirm}
-              fullWidth
-              name="password"
-              label="Confirmer mot de passe"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              onChange={ e => setPasswordConfirm(e.target.value) }
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <FormControlLabel
-              control={<Checkbox value="allowExtraEmails" color="primary" />}
-              label="I want to receive inspiration, marketing promotions and updates via email."
+            <Controller
+              name="password_confirmation"
+              as={
+                <TextField
+                  id="password-confirmation"
+                  variant="outlined"
+                  fullWidth
+                  required
+                  type="password"
+                  helperText={fieldsErrors.password_confirmation ? fieldsErrors.password_confirmation.message : null}
+                  label="Mot de passe"
+                  error={fieldsErrors.password_confirmation}
+                />
+              }
+              control={control}
+              defaultValue=""
+              rules={{
+                validate: value =>
+                value === currentPassword.current || "The passwords do not match"
+              }}
             />
           </Grid>
         </Grid>
@@ -169,8 +195,9 @@ const Signup = ({login, isModal}) => {
 
   return (
     <>
-      {checkout && <Checkout/>}
+      {(!redirection && checkout) && <Checkout/>}
       {!checkout && formSignup()}
+      {redirection && formSignup()}
     </>
 
   );
