@@ -158,7 +158,7 @@ const Signup = ({login, isModal}) => {
                   required
                   type="password"
                   helperText={fieldsErrors.password_confirmation ? fieldsErrors.password_confirmation.message : null}
-                  label="Mot de passe"
+                  label="Confirmer le mot de passe"
                   error={fieldsErrors.password_confirmation}
                 />
               }
