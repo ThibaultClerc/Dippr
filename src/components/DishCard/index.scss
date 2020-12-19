@@ -1,0 +1,17 @@
+.MuiCard-root {
+    margin: auto !important
+}
+
+.dishCard > .MuiCardContent-root {
+  height: 100px !important;
+}
+
+.MuiCardActions-root {
+  padding-left: 0 !important;
+}
+
+@media (max-width: 600px) {
+  .MuiCardActions-root {
+    display: none;
+  }
+}
