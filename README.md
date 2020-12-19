@@ -11,7 +11,7 @@
 
 # Contexte
 
-Tu es persuadé que ton gratin de courgettes est le meilleur de l'univers ? Même meilleur que celui d'un chef étoilé ? Alors proposes-le sur [DIPPR](https://dippr-development.herokuapp.com/) !
+Tu es persuadé que ton gratin de courgettes est le meilleur de l'univers ? Même meilleur que celui d'un chef étoilé ? Alors proposes-le sur [DIPPR](https://dippr-development.herokuapp.com/) ! (Voici aussi le [lien en dev](https://dippr-development.herokuapp.com/) si problèmes en prod... )
 
 # Qu'est-ce que DIPPR ?
 
