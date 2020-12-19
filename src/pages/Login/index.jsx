@@ -58,7 +58,7 @@ const Connection = ({signup, isModal}) => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    fetch("https://dippr-api-development.herokuapp.com/api/login", {
+    fetch("https://dippr-api-production.herokuapp.com/api/login", {
       "method": "POST",
       "headers": {
         "Content-Type": "application/json"

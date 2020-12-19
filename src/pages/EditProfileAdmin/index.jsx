@@ -86,12 +86,12 @@ const EditProfileAdmin = () => {
     };
     
     useEffect(() => {
-      fetchData(`https://dippr-api-development.herokuapp.com/api/users/${userId}`)
+      fetchData(`https://dippr-api-production.herokuapp.com/api/users/${userId}`)
     }, [])
     
     const handleSubmit = (e) => {
         e.preventDefault()
-        fetch(`https://dippr-api-development.herokuapp.com/api/users/${userId}`, {
+        fetch(`https://dippr-api-production.herokuapp.com/api/users/${userId}`, {
           "method": "PUT",
           "headers": {
             "Content-Type": "application/json",
