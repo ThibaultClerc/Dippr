@@ -201,11 +201,8 @@ const MarketDish = () => {
       if (response.data.length === 0) {
         setAlreadyAsked(false)
       } else {
-        console.log(response.data)
-        console.log(pageDishID)
-        const transaction = response.data
-          .filter(transaction => ((transaction.attributes.answer_dish_id == pageDishID) && ((transaction.attributes.status === 'pending') || (transaction.attributes.status === 'confirmed'))))
-          console.log(transaction)
+          const transaction = response.data
+            .filter(transaction => ((transaction.attributes.answer_dish_id == pageDishID) && ((transaction.attributes.status === 'pending') || (transaction.attributes.status === 'confirmed'))))
         if (transaction.length === 0) {
           setAlreadyAsked(false)
         } else {
@@ -244,7 +241,6 @@ const MarketDish = () => {
 
   const handleCancelClick = () => {
     if (data.attributes.market_dish_type === "troc") {
-      setAlreadyAsked(false)
       handleTransactionDelete()
     } else {
       handleTransactionDelete()
@@ -262,10 +258,9 @@ const MarketDish = () => {
     } else {
       type = "donations"
       transactionData = {
-        status: 0
+        status: 3
       }
     }
-    console.log(userTransaction)
     const actualTransaction = userTransaction[0]
     fetch(`https://dippr-api-development.herokuapp.com/api/${type}/${actualTransaction.id}`, {
       "method": "PUT",
