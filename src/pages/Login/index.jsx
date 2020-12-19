@@ -1,28 +1,47 @@
 import Cookies from 'js-cookie'
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import {loginUser} from '../../store/actions';
-import { Form, Button } from "react-bootstrap";
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
+
+import dipprLogoTest2 from '../../assets/img/dipprLogoTest2.png'
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import Typography from '@material-ui/core/Typography';
+import Container from '@material-ui/core/Container';
+import Button from '@material-ui/core/Button';
+
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
   paper: {
-    padding: theme.spacing(2),
-    color: theme.palette.text.secondary,
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
   },
 }));
 
 
-const Connection = () => {
+const Connection = ({signup, isModal}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [redirection, setRedirection] = useState(false);
+  const [modal, setModal] = useState(isModal)
   const classes = useStyles();
 
 
@@ -34,7 +53,7 @@ const Connection = () => {
   };
 
   const user = useSelector(state => state.user.user);
- 
+
   const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
@@ -55,41 +74,83 @@ const Connection = () => {
       setRedirection(true)
     }).catch(error => {
       console.log(error)
+      {redirection && <Redirect to='/signin'/>}
     })
   };
 
+  const handleSignup = () =>{
+    {modal && signup(true)};
+  }
+
+
   return (
     <>
-    <Grid
-        container
-        spacing={0}
-        direction="column"
-        alignItems="center"
-        justify="center"
-        >
-
-        {redirection && <Redirect to='/'/>}
-        <Grid item xs={12}>
-        <Paper className={classes.paper}>
-        <Form onSubmit={handleSubmit}>
-          <Form.Group controlId="email">
-            <Form.Label>Email</Form.Label>
-            <Form.Control type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)}/>
-            <Form.Text className="text-muted">
-            </Form.Text>
-          </Form.Group>
-          <Form.Group controlId="password">
-            <Form.Label>Mot de passe</Form.Label>
-            <Form.Control type="password" placeholder="Mot de passe" value={password} onChange={e => setPassword(e.target.value)}/>
-          </Form.Group>
-          <Button variant="primary" type="submit">
+    {redirection && <Redirect to='/'/>}
+    <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <div className={classes.paper}>
+          <Link to="/" className={classes.title} variant="h6" color='inherit'>
+            <img src={dipprLogoTest2} className="dipprFullLogo" ></img>
+          </Link>
+        <Typography component="h1" variant="h5">
+          Se connecter
+        </Typography>
+        <form className={classes.form} noValidate>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            value={email}
+            required
+            fullWidth
+            id="email"
+            label="Adresse email"
+            name="email"
+            autoComplete="email"
+            autoFocus
+            onChange={ e => setEmail(e.target.value)}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            value={password}
+            required
+            fullWidth
+            name="password"
+            label="Mot de passe"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+            onChange={ e => setPassword(e.target.value)}
+          />
+          <FormControlLabel
+            control={<Checkbox value="remember" color="primary" />}
+            label="Se souvenir de moi"
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            onClick={handleSubmit}
+          >
             Se connecter
           </Button>
-        </Form>
-        </Paper>
-        </Grid> 
-      </Grid> 
-
+          <Grid container>
+            <Grid item xs>
+              <Typography component={Link} to="/" variant="body2">
+                Mot de passe oublié ?
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Typography component={Link} to="/signup" variant="body2" onClick={handleSignup}>
+                {"Pas de compte? Inscrivez-vous"}
+              </Typography>
+            </Grid>
+          </Grid>
+        </form>
+      </div>
+    </Container>
     </>
 
   );

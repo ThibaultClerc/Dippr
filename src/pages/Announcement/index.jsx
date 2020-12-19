@@ -6,6 +6,7 @@ import Cookies from 'js-cookie'
 import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Connection from '../../pages/Login'
+import Signup from '../../pages/Signup'
 import PublishIcon from '@material-ui/icons/Publish';
 import { Button, ButtonGroup, Dialog, DialogActions, DialogContent, InputBase, IconButton  } from '@material-ui/core';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
@@ -31,15 +32,17 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
   const [tags, setTags] = useState([]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [open, setOpen] = React.useState(value);
-  const [publishSuccess, setPublishSuccess] = React.useState(alert)
-  const [file, setFile] = React.useState(null)
+  const [open, setOpen] = useState(value);
+  const [publishSuccess, setPublishSuccess] = useState(alert)
+  const [file, setFile] = useState(null)
   const imageSrc = React.useRef(null)
-  const [announceType, setAnnounceType] = React.useState(0)
-  const [date, setDate] = React.useState(moment().format("YYYY-MM-DD"))
+  const [announceType, setAnnounceType] = useState(0)
+  const [date, setDate] = useState(moment().format("YYYY-MM-DD"))
   const user = useSelector(state => state.user.user);
   const [currentTags, setCurrentTags] = useState([]);
   const [currentIngredients, setCurrentIngredients] = useState([]);
+  const [visibleSignup, setVisibleSignup] = useState(null)
+  const [visibleLogin, setVisibleLogin] = useState(true)
 
   const data = {
       name: name,
@@ -68,7 +71,17 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
   };
 
   const handleAnnounce = (value) =>{
-    setAnnounceType(value)
+    setAnnounceType(value);
+  };
+
+  const handleSignup = (value) =>{
+    setVisibleSignup(true);
+    setVisibleLogin(false);
+  };
+
+  const handleLogin = (value) =>{
+    setVisibleSignup(false);
+    setVisibleLogin(true);
   };
 
   const fetchIngredient = () => {
@@ -335,8 +348,8 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
 
   const loginContent = () => (
     <>
-      <h5>Connectes-toi et propose ta spécialité</h5>
-      <Connection/>
+      {visibleLogin && <Connection signup={()=>handleSignup(true)} isModal={true}/>}
+      {visibleSignup && <Signup login={()=>handleLogin(true)} isModal={true}/>}
     </>
   )
 
@@ -357,10 +370,10 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
       <div className={classes.root}>
         <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogContent>
-          {user.length === 0 && loginContent()}
-          {user.length !== 0 && announceContent()}
+          {(user === undefined || user.length === 0) && loginContent()}
+          {(user !== undefined && user.length !== 0) && announceContent()}
         </DialogContent>
-          {user.length !== 0 && announceAction()}
+          {(user !== undefined && user.length !== 0) && announceAction()}
       </Dialog>
     </div>
   );

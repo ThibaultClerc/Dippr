@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie'
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import {loginUser} from '../../store/actions';
 import { Form, Button } from "react-bootstrap";
@@ -41,7 +41,7 @@ const EditProfileAdmin = () => {
     const [redirection, setRedirection] = useState(false);
     const classes = useStyles();
 
-    const data = {
+    const datas = {
         
           first_name: firstName,
           last_name: lastName,
@@ -55,10 +55,40 @@ const EditProfileAdmin = () => {
           description: description
         
     };
-  
-   
-    // const dispatch = useDispatch();
-  
+    
+    const fetchData = (url) => {
+      fetch(url, {
+        "method": "GET",
+        "headers": {
+          "Content-Type": "application/json",
+          'Authorization': `${Cookies.get('token')}`
+        },
+      })
+      .then((response) => {
+        return response.json()
+      })
+      .then((response) => {
+        setFirstName(response.data.attributes.first_name)
+        setLastName(response.data.attributes.last_name)
+        setEmail(response.data.attributes.email)
+        setCountry(response.data.attributes.country)
+        setCity(response.data.attributes.city)
+        setZipCode(response.data.attributes.zip_code)
+        setStreet(response.data.attributes.street)
+        setPhoneNumber(response.data.attributes.phone_number)
+        setDescription(response.data.attributes.description)
+
+        console.log('lalalalalalalalal')
+        console.log(response)
+      }).catch(error => {
+        console.log(error)
+      })
+    };
+    
+    useEffect(() => {
+      fetchData(`https://dippr-api-development.herokuapp.com/api/users/${userId}`)
+    }, [])
+    
     const handleSubmit = (e) => {
         e.preventDefault()
         fetch(`https://dippr-api-development.herokuapp.com/api/users/${userId}`, {
@@ -68,7 +98,7 @@ const EditProfileAdmin = () => {
             'Authorization': `${Cookies.get('token')}`
 
           },
-          "body": JSON.stringify(data)
+          "body": JSON.stringify(datas)
         })
         .then((response) => {
           console.log(response)
@@ -77,18 +107,6 @@ const EditProfileAdmin = () => {
         .then((response) => {
           console.log("laaaa");
           console.log(response);
-          // dispatch(loginUser( { "id": userStore.id, "attributes": {
-          //     email: email,
-          //     first_name: firstName,
-          //     last_name: lastName,
-          //     country: country,
-          //     city: city,
-          //     zip_code: zipCode,
-          //     street: street,
-          //     description: description,
-          //     phone_number: phoneNumber,
-          //     dippers: dippers
-          // }}))
           console.log('updated')
           setRedirection(true);
         }).catch(error => {

@@ -14,6 +14,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 const useStyles = makeStyles({
   table: {
@@ -21,8 +22,8 @@ const useStyles = makeStyles({
   },
 });
 
-function createData(name, description, rate, photo_url) {
-  return { name, description, rate, photo_url };
+function createData(id, name, description, rate, icon, photo_url) {
+  return { id, name, description, rate, icon, photo_url };
 }
 
 const UserDishes = (profileId) => {
@@ -33,7 +34,7 @@ const UserDishes = (profileId) => {
 
   data.map(dish => {
     rows.push(
-      createData(dish.attributes.name, dish.attributes.description, dish.attributes.dish_rating, dish.attributes.photo_url) 
+      createData(dish.id, dish.attributes.name, dish.attributes.description, dish.attributes.dish_rating, <DeleteForeverIcon/> ,dish.attributes.photo_url) 
     );
   })
 
@@ -56,7 +57,7 @@ const UserDishes = (profileId) => {
   };
 
   useEffect(() => {
-    if (user.attributes.email === "admin@admin.fr" ) {
+    if (user.attributes.is_admin === true ) {
       fetchData(`https://dippr-api-development.herokuapp.com/api/user_dishes`)
     } else {
       fetchData(`https://dippr-api-development.herokuapp.com/api/users/${profileId.profileId}/user_dishes`)
@@ -68,19 +69,26 @@ const UserDishes = (profileId) => {
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>
+          <TableCell>Id </TableCell>
             <TableCell>Nom du plat </TableCell>
             <TableCell align="left">Description</TableCell>
             <TableCell align="left">Note</TableCell>
+            {user.attributes.is_admin === true ? <TableCell align="left">Supprimer</TableCell> : ''}
           </TableRow>
         </TableHead>
         <TableBody>
           {rows.map((row) => (
             <TableRow key={row.name}>
               <TableCell component="th" scope="row">
+                {row.id}
+              </TableCell>
+              <TableCell component="th" scope="row">
                 {row.name}
               </TableCell>
               <TableCell align="left">{row.description}</TableCell>
               <TableCell align="left">{row.rate}</TableCell>
+              {user.attributes.is_admin === true ? <TableCell align="left"><Button key="btn-logout" as={Link} to ={`/admin`} variant="outlined" color="secondary" >{row.icon}</Button></TableCell> : ''}
+
             </TableRow>
           ))}
         </TableBody>

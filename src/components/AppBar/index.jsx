@@ -112,7 +112,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function BottomAppBar() {
   const dispatch = useDispatch()
-  const user = useSelector(state => state.user.user);
+  let user = useSelector(state => state.user.user);
   const [searchTerm, setSearchTerm] = useState('');
   const [announce, setAnnounce] = useState(null);
   const [data, setData] = useState([]);
@@ -290,7 +290,7 @@ export default function BottomAppBar() {
             onOpen={toggleDrawer(anchor, true)}
           >
 
-            {state.bottom && (user.length !== 0? listLogin('bottom') : list('bottom'))}
+            {state.bottom && ((user !== undefined && user.length !== 0? listLogin('bottom') : list('bottom')))}
             {state.top && searchBar('top')}
       </SwipeableDrawer>
       <CssBaseline />
@@ -301,13 +301,13 @@ export default function BottomAppBar() {
             <HomeIcon fontSize ="default"/>
           </IconButton>
 
-          {user.length !== 0?(
+          {user !== undefined && user.length !== 0?(
             <IconButton color="inherit" button="true" component={Link} to="/users/swap">
               <ShoppingBasket fontSize ="default" />
             </IconButton>
           ):""}
 
-          {user.length !==0?(
+          {user !== undefined && user.length !==0?(
                     <IconButton edge="end" color="inherit"  button="true" component={Link} to="/users/dish">
                       <RestaurantIcon fontSize ="default"/>
                     </IconButton>
@@ -320,7 +320,7 @@ export default function BottomAppBar() {
 
           <div className={classes.grow} />
 
-          {user.length !== 0?(
+          {user !== undefined && user.length !== 0?(
             <IconButton color="inherit" button="true" component={Link} to="/">
               <MessageIcon fontSize ="default" />
             </IconButton>
