@@ -158,7 +158,6 @@ const Nav = () => {
     <Alert onClose={() =>setPublishSuccess(false)} severity="success">Votre plat est bien enregistré !</Alert>
   );
 
-
   const mobileMenuId = 'primary-search-account-menu-mobile';
 
   const renderMenu = (

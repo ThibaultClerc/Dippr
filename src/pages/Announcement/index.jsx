@@ -36,9 +36,8 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
   const [publishSuccess, setPublishSuccess] = useState(alert)
   const [file, setFile] = useState(null)
   const imageSrc = React.useRef(null)
-  const [announceType, setAnnounceType] = React.useState(0)
-  const [date, setDate] = seState(moment().format("YYYY-MM-DD"))
-
+  const [announceType, setAnnounceType] = useState(0)
+  const [date, setDate] = useState(moment().format("YYYY-MM-DD"))
   const user = useSelector(state => state.user.user);
   const [currentTags, setCurrentTags] = useState([]);
   const [currentIngredients, setCurrentIngredients] = useState([]);
@@ -133,7 +132,6 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log(data.file)
     fetch(`https://dippr-api-development.herokuapp.com/api/users/${user.id}/user_dishes`, {
       "method": "POST",
       "headers": {
@@ -166,12 +164,10 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
         "Content-Type": "application/json",
         "Authorization": Cookies.get("token")
       },
-      "body": JSON.stringify(
-        
-        {
-          user_dish_id: dish,
-          market_dish_type: announceType,
-          end_date: date
+      "body": JSON.stringify({
+        user_dish_id: dish,
+        market_dish_type: announceType,
+        end_date: date
         }
       )
     })
@@ -215,7 +211,6 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
         "Authorization": Cookies.get("token")
       },
       "body": JSON.stringify(
-        
         {
           user_dish_ingredient: {
             user_dish_id: dish,
@@ -241,7 +236,6 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
         "Authorization": Cookies.get("token")
       },
       "body": JSON.stringify(
-        
         {
           user_dish_tag: {
             user_dish_id: dish,
@@ -290,7 +284,6 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
         Ajouter une spécialité
       </Button>
     </ButtonGroup>
-
     <TextField
       required
       autoFocus
@@ -319,7 +312,6 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
       <br/>
       {tags.length !==0  && <SearchBar content={ tags } title="Type de plat" data={(content=>handleTagData(content))}/>}
       <br/>
-
       <ButtonGroup size="small" className="react-switch" color="primary" aria-label="outlined primary button group">
         <Button onClick={()=>imageSrc.current}>
             <label htmlFor="icon-button-file">
@@ -330,9 +322,7 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
             </label>        
           </Button>
       </ButtonGroup>
-
       {(announceType === 0 || announceType === 1) && dateContent()}
-
       <InputBase accept="image/*" id="icon-button-file" type="file"  hidden ref={imageSrc} onChange={handleFile}/>
       </>
     );
@@ -361,15 +351,14 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
       {visibleLogin && <Connection signup={()=>handleSignup(true)} isModal={true}/>}
       {visibleSignup && <Signup login={()=>handleLogin(true)} isModal={true}/>}
     </>
-
-  );
+  )
 
   const handleIngredientData = (content) =>{
-    setCurrentIngredients(content)
+    setCurrentIngredients(content);
   }
 
   const handleTagData = (content) =>{
-    setCurrentTags(content)
+    setCurrentTags(content);
   }
 
   useEffect(() => {
@@ -387,7 +376,7 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
           {(user !== undefined && user.length !== 0) && announceAction()}
       </Dialog>
     </div>
-  )
-}
+  );
+};
 
-export default Announcement
+export default Announcement;

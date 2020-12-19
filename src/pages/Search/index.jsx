@@ -35,7 +35,6 @@ const Search = () => {
         })
         .then((response) => {
           if (isMounted.current) {
-            console.log(response.data)
             setData(response.data)
           }
         }).catch(error => {
@@ -90,15 +89,15 @@ const Search = () => {
       {data.length > 0 &&
         <> 
           <SearchResults
-              data={filteredData}
-              listOrMapValue={listOrMaps}
-              isSearching={isSearching}
-              className="searchResults"
+            data={filteredData}
+            listOrMapValue={listOrMaps}
+            isSearching={isSearching}
+            className="searchResults"
           />
         </>
       }
     </>
-  )
-}
+  );
+};
 
-export default Search
+export default Search;
