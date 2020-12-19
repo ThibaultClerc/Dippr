@@ -1,9 +1,9 @@
 <h1 align="center">
   <br>
-  <a href="https://dippr-development.herokuapp.com/"><img src="https://i.ibb.co/XVVkLKR/dippr-Github-Logo.png" alt="logo" border="0" width="100px"></a>
+  <a href="https://dippr-production.herokuapp.com/"><img src="https://i.ibb.co/XVVkLKR/dippr-Github-Logo.png" alt="logo" border="0" width="100px"></a>
   <br>
   <br>
- <a href="https://dippr-development.herokuapp.com/"><img src="https://i.ibb.co/mqf1DKm/dippr-Main-Logo.png" alt="DIPPR" border="0" width="400px"></a>
+ <a href="https://dippr-production.herokuapp.com/"><img src="https://i.ibb.co/mqf1DKm/dippr-Main-Logo.png" alt="DIPPR" border="0" width="400px"></a>
   <br>
   <br>
 </h1>
