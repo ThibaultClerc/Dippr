@@ -14,6 +14,8 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
+import { useForm, Controller } from 'react-hook-form';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -38,43 +40,40 @@ const useStyles = makeStyles((theme) => ({
 
 
 const Connection = ({signup, isModal}) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [redirection, setRedirection] = useState(false);
+  const { control, errors: fieldsErrors, handleSubmit } = useForm({});
+  const [redirection, setRedirection] = useState(null);
+  const [alert, setAlert] = useState(null);
   const [modal, setModal] = useState(isModal)
   const classes = useStyles();
 
 
-  const data = {
-      user: {
-        email: email,
-        password: password
-      }
-  };
-
-  const user = useSelector(state => state.user.user);
+  const onSubmit = data => console.log(data);
 
   const dispatch = useDispatch();
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
+  const handleRealSubmit = data => {
     fetch("https://dippr-api-development.herokuapp.com/api/login", {
       "method": "POST",
       "headers": {
         "Content-Type": "application/json"
       },
-      "body": JSON.stringify(data)
+      "body": JSON.stringify({
+        user: {
+          email: data.email,
+          password: data.password
+        }
+      }
+      )
     })
     .then((response) => {
+      {response.status === 200 &&  setRedirection(true)}
       Cookies.set('token', response.headers.get("Authorization"))
       return response.json()
     })
     .then((response) => {
       dispatch(loginUser(response.data))
-      setRedirection(true)
     }).catch(error => {
       console.log(error)
-      {redirection && <Redirect to='/signin'/>}
     })
   };
 
@@ -86,6 +85,7 @@ const Connection = ({signup, isModal}) => {
   return (
     <>
     {redirection && <Redirect to='/'/>}
+    {!redirection && <Redirect to='/signin'/>}
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
@@ -95,37 +95,60 @@ const Connection = ({signup, isModal}) => {
         <Typography component="h1" variant="h5">
           Se connecter
         </Typography>
-        <form className={classes.form} noValidate>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            value={email}
-            required
-            fullWidth
-            id="email"
-            label="Adresse email"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            onChange={ e => setEmail(e.target.value)}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            value={password}
-            required
-            fullWidth
-            name="password"
-            label="Mot de passe"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            onChange={ e => setPassword(e.target.value)}
-          />
-          <FormControlLabel
+        <form className={classes.form} noValidate onSubmit={handleSubmit(handleRealSubmit)}>
+        <Controller
+              name="email"
+              as={
+                <TextField
+                  id="email"
+                  variant="outlined"
+                  fullWidth
+                  required
+                  helperText={fieldsErrors.email ? fieldsErrors.email.message : null}
+                  label="Adresse email"
+                  error={fieldsErrors.email}
+                />
+              }
+              control={control}
+              defaultValue=""
+              rules={{
+                required: true,
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                  message: 'Adresse email invalide'
+                }
+              }}
+            />
+            <br/>
+            <br/>
+            <Controller
+              name="password"
+              as={
+                <TextField
+                  id="password"
+                  variant="outlined"
+                  fullWidth
+                  required
+                  type="password"
+                  helperText={fieldsErrors.password ? fieldsErrors.password.message : null}
+                  label="Mot de passe"
+                  error={fieldsErrors.password}
+                />
+              }
+              control={control}
+              defaultValue=""
+              rules={{
+                required: true,
+                minLength: {
+                  value: 6,
+                  message: 'min. 6 caractères'
+                }
+              }}
+            />
+          {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Se souvenir de moi"
-          />
+          /> */}
           <Button
             type="submit"
             fullWidth
