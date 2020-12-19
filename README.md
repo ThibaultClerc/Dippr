@@ -8,6 +8,9 @@
   <br>
 </h1>
 
+### Identifiants administrateur
+* Email : admin@admin.fr
+* Mdp : admin
 
 # Contexte
 
