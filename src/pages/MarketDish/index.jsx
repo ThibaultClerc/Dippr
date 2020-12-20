@@ -352,8 +352,6 @@ const MarketDish = () => {
     }
   }, [isCancelSuccess])
 
-  // && data.meta.user_dish.user_id === user.id
-  console.log(data, user)
   return (
     <>
     {isSuccess && 
