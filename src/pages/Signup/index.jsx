@@ -114,7 +114,7 @@ const Signup = ({login, isModal}) => {
                 required: true,
                 pattern: {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-                  message: 'adresse email invalide'
+                  message: 'Adresse email invalide'
                 }
               }}
             />
@@ -158,7 +158,7 @@ const Signup = ({login, isModal}) => {
                   required
                   type="password"
                   helperText={fieldsErrors.password_confirmation ? fieldsErrors.password_confirmation.message : null}
-                  label="Mot de passe"
+                  label="Confirmer le mot de passe"
                   error={fieldsErrors.password_confirmation}
                 />
               }
