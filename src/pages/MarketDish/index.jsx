@@ -169,6 +169,7 @@ const MarketDish = () => {
   const [userTransaction, setUserTransaction] = useState([])
 
   useEffect(() => {
+    setIsSearching(true)
     fetch(`https://dippr-api-development.herokuapp.com/api/market_dishes/${dishID}`, {
       "method": "GET",
       "headers": {
@@ -213,7 +214,7 @@ const MarketDish = () => {
       }
     }).catch(error => {
       console.log(error)
-    })
+    }).finally(() => setIsSearching(false))
   }
 
   const handleChipClick = (chipName) => {
@@ -352,6 +353,8 @@ const MarketDish = () => {
     }
   }, [isCancelSuccess])
 
+  // && data.meta.user_dish.user_id === user.id
+  console.log(data, user)
   return (
     <>
     {isSuccess && 
@@ -416,7 +419,6 @@ const MarketDish = () => {
         </Alert>
       </Collapse>
     }
-    {isSearching && <Loader/>}
     {open &&
       <PopupDialog
         userID={user.id}
@@ -425,7 +427,7 @@ const MarketDish = () => {
         handleSelectedValue={(userMarketDish) => handleTransactionCreation(userMarketDish)}
       />
     }
-    {(data !== null && !isSearching) &&
+    {(data !== null && !isSearching) ?
       <Container fixed className={classes.mainContainer}>
         <Grid container fixed spacing={3} className={classes.subMainContainer}>
           <Grid item xs={12} md={6} className={classes.imgContainer}>
@@ -436,19 +438,30 @@ const MarketDish = () => {
               className={classes.avatar}
               onClick={handleAvatarClick}
             />
-            {!alreadyAsked ? 
-              <Button variant="contained" color="secondary" size="large" className={classes.askButton} onClick={handleAskClick}>
-                {data.attributes.market_dish_type === "troc" ?
-                "PROPOSER UN TROC"
-                : "DEMANDER CE PLAT"
+            {data.meta.user_dish.user_id != user.id &&
+              <>
+              {!alreadyAsked ? 
+                <Button variant="contained" color="secondary" size="large" className={classes.askButton} onClick={handleAskClick}>
+                  {data.attributes.market_dish_type === "troc" ?
+                  "PROPOSER UN TROC"
+                  : "DEMANDER CE PLAT"
+                }
+                </Button>
+              : <Button variant="contained" color="primary" size="large" className={classes.askButton} onClick={handleCancelClick}>
+                  Annuler la demande
+                </Button>
               }
-              </Button>
-            : <Button variant="contained" color="primary" size="large" className={classes.askButton} onClick={handleCancelClick}>
-                Annuler la demande
+              </>
+            } 
+            {data.meta.user_dish.user_id == user.id &&
+              <Button variant="contained" color="primary" size="large" className={classes.askButton}>
+                C'est votre plat !
               </Button>
             }
           </Grid>
           <Grid item xs={12} md={6} className={classes.textContainer}>
+          {data.meta.user_dish.user_id != user.id &&
+            <>
             {!alreadyAsked ? 
               <Button variant="contained" color="secondary" size="large" className={classes.askButton2} onClick={handleAskClick}>
                   {data.attributes.market_dish_type === "troc" ?
@@ -459,6 +472,13 @@ const MarketDish = () => {
               : <Button variant="contained" color="primary" size="large" className={classes.askButton2} onClick={handleCancelClick}>
                   Annuler la demande
                 </Button>
+            }
+            </>
+          }
+          {data.meta.user_dish.user_id == user.id &&
+              <Button variant="contained" color="primary" size="large" className={classes.askButton2}>
+                C'est votre plat !
+              </Button>
             }
             <Paper className={classes.textPaper}>
               <Typography variant="h2" gutterBottom className={classes.title}>
@@ -506,6 +526,7 @@ const MarketDish = () => {
           </Grid>
         </Grid>
       </Container>
+    : <Loader/>
     }
     </>
   );
