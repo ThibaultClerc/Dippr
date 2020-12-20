@@ -11,7 +11,9 @@ import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import Avatar from './Avatar';
 import General from './General';
-
+import {loginUser} from '../../store/actions';
+import { useSelector, useDispatch } from 'react-redux';
+import Cookies from 'js-cookie'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -55,13 +57,26 @@ export default function CheckoutProfile() {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
   const [file, setFile] = useState(null);
-  const [nickname, setNickName] = useState(null);
+  const [nickName, setNickName] = useState(null);
   const [city, setCity] = useState(null);
+  const [firstName, setFirstName] = useState(null);
   const [redirection, setRedirection] = useState(null);
+  const user = useSelector(state => state.user.user);
 
+  const data = {
+    first_name: firstName,
+    city: city,
+    nickname: nickName
+  };
+
+  const dispatch = useDispatch();
 
   const handleNext = () => {
+    if (activeStep === steps.length - 1){
+      handleSubmit()
+    }else{
     setActiveStep(activeStep + 1);
+    }
   };
 
   const handleRedirection = () => {
@@ -84,6 +99,38 @@ export default function CheckoutProfile() {
     setCity(value);
   };
 
+  const handleFirstName = (value) => {
+    setFirstName(value);
+  };
+
+  const handleSubmit = (e) => {
+    // e.preventDefault()
+    fetch(`https://dippr-api-development.herokuapp.com/api/users/${user.id}`, {
+      "method": "PUT",
+      "headers": {
+        "Content-Type": "application/json",
+        'Authorization': `${Cookies.get('token')}`
+
+      },
+      "body": JSON.stringify(data)
+    })
+    .then((response) => {
+      console.log(response)
+      return response.json()
+    })
+    .then((response) => {
+      dispatch(loginUser({ "id": user.id, "attributes": {
+        first_name: firstName,
+        city: city,
+        nickname: nickName,
+      }}))
+      setRedirection(true);
+    }).catch(error => {
+      console.log(error)
+    })
+  };
+
+
   const steps = ['Avatar', 'Infos'];
 
   function getStepContent(step) {
@@ -91,7 +138,7 @@ export default function CheckoutProfile() {
       case 0:
         return <Avatar picture={content => handlePicture(content)} />;
       case 1:
-        return <General name = {content => handleNickName(content)} city = {content => handleCityName(content)}/>;
+        return <General name = {content => handleNickName(content)} city = {content => handleCityName(content)} firstname = {content => handleFirstName(content)}/>;
       default:
         throw new Error('Unknown step');
     }
