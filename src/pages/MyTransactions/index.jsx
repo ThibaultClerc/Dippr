@@ -45,6 +45,8 @@ const useStyles = makeStyles((theme) => ({
   image: {
     borderRadius: 35,
     width: '70%',
+    margin: 'auto',
+    display: "block",
     [theme.breakpoints.down('xs')]: {
       display: 'none'
     }
@@ -455,8 +457,8 @@ const MyTransactions = () => {
         currentUser={user}
       />
     }
-      <Grid container fixed spacing={3} className={classes.subMainContainer}>
-        <Grid item xs={12} md={6} className={classes.imgContainer}>
+      <Grid container fixed spacing={3} className={classes.subMainContainer} alignItems="center">
+        <Grid item xs={12} md={6} className={classes.imgContainer} >
           <img className={classes.image} src={cooker} alt="cooker"></img>   
         </Grid>
         <Grid item xs={12} md={6} className={classes.textContainer}>
