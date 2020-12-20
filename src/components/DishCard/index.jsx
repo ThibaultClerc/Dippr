@@ -113,7 +113,6 @@ const DishCard = ({market_dish_id, name, description, dish_rating, user_id, crea
   }
 
   const handleImageCard = (noPhoto, photo_url) => {
-    console.log(photo_url)
     if (photo_url === undefined) {
       return noPhoto
     } else {

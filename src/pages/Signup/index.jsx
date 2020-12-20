@@ -73,6 +73,7 @@ const Signup = ({login, isModal}) => {
       return response.json()
     })
     .then((response) => {
+      console.log(response.data)
       dispatch(loginUser(response.data))
     }).catch(error => {
       setRedirection(true)

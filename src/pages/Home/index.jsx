@@ -1,7 +1,6 @@
 import React from 'react';
 import VisitorHome from './VisitorHome';
 import UserHome from './UserHome';
-
 import { useSelector } from 'react-redux';
 
 const Home = () => {

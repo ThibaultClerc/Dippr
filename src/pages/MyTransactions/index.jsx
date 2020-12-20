@@ -79,7 +79,7 @@ const useStyles = makeStyles((theme) => ({
     "&::-webkit-scrollbar": {
       display: 'none'
     },
-    msOverflowStyle: 'none',  /* IE and Edge */
+    msOverflowStyle: 'none',
     scrollbarWidth: 'none'
   },
   itemText: {
@@ -112,7 +112,6 @@ const MyTransactions = () => {
   const [isRefused, setIsRefused] = useState(false);
   const [isCancelled, setIsCancelled] = useState(false);
 
-
   useEffect(() => {
     fetchUserTransactions("trocs")
     fetchUserTransactions("donations")
@@ -134,17 +133,13 @@ const MyTransactions = () => {
     .then((response) => response.json())
     .then((response) => {
       if (type === "trocs") {
-        console.log(response.data, "response trocs")
         const trocs = response.data
           .filter(transaction => (transaction.attributes.status === 'pending') || (transaction.attributes.status === 'confirmed'))
         setTrocData(trocs)
-        console.log(trocs)
       } else {
-        console.log(response.data, "response donations")
         const donations = response.data
           .filter(transaction => (transaction.attributes.status === 'pending') || (transaction.attributes.status === 'confirmed'))
         setDonationData(donations) 
-        console.log(donations)
       }
     }).catch(error => {
       console.log(error)
@@ -153,9 +148,6 @@ const MyTransactions = () => {
   }
 
   useEffect(() => {
-    // if (trocData.length === 0 || donationData.length === 0) {
-    //   return
-    // }
     const allData = trocData.concat(donationData)
     allData.sort((a, b) => (b.attributes.updated_at).localeCompare((a.attributes.updated_at)))
     setAllData([...allData])

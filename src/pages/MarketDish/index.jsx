@@ -5,7 +5,6 @@ import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Cookies from 'js-cookie';
-import Loader from '../../components/UI/Loader';
 import moment from 'moment'
 import MiniMap from '../../components/MiniMap';
 import PopupDialog from '../../components/PopupDialog';
