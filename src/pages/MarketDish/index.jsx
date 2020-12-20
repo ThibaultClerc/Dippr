@@ -202,7 +202,8 @@ const MarketDish = () => {
         setAlreadyAsked(false)
       } else {
           const transaction = response.data
-            .filter(transaction => ((transaction.attributes.answer_dish_id == pageDishID) && ((transaction.attributes.status === 'pending') || (transaction.attributes.status === 'confirmed'))))
+            .filter(transaction => ((transaction.attributes.answer_dish_id == pageDishID)
+            && ((transaction.attributes.status === 'pending') || (transaction.attributes.status === 'confirmed'))))
         if (transaction.length === 0) {
           setAlreadyAsked(false)
         } else {
@@ -332,7 +333,7 @@ const MarketDish = () => {
     if (isSuccess) {
       successTimeout = setTimeout(() => {
         setIsSuccess(false)
-      }, 3000)
+      }, 2000)
     }
     return () => {
       clearTimeout(successTimeout)
@@ -344,7 +345,7 @@ const MarketDish = () => {
     if (isCancelSuccess) {
       successTimeout = setTimeout(() => {
         setIsCancelSuccess(false)
-      }, 3000)
+      }, 2000)
     }
     return () => {
       clearTimeout(successTimeout)

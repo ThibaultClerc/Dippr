@@ -9,6 +9,8 @@ import StoreIcon from '@material-ui/icons/Store';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { Grid, Button, ButtonGroup } from '@material-ui/core';
+import MyTransactions from '../MyTransactions'
+import MyMarketDishes from '../MyMarketDishes'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -50,6 +52,23 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
   },  grow: {
     flexGrow: 1,
+  },
+  tabsContainers: {
+    paddingRight: 15,
+    paddingLeft: 15,
+    marginRight: 'auto',
+    marginLeft: 'auto',
+
+    // Full width for (xs, extra-small: 0px or larger) and (sm, small: 600px or larger)
+    [theme.breakpoints.up('md')]: {  // medium: 960px or larger
+        width: 920,
+    },
+    [theme.breakpoints.up('lg')]: {  // large: 1280px or larger
+        width: 1170,
+    },
+    [theme.breakpoints.up('xl')]: {  // extra-large: 1920px or larger
+        width: 1366,
+    },
   }
 }));
 
@@ -75,17 +94,16 @@ const Swap = ()=> {
           textColor="primary"
           aria-label="scrollable force tabs example"
         >
-          
           <Tab label="Mes demandes" icon={<StoreIcon />} {...a11yProps(0)} />
-          <Tab label="Ma Wishlist" icon={<FavoriteIcon />} {...a11yProps(1)} />
+          <Tab label="Mes plats" icon={<FavoriteIcon />} {...a11yProps(1)} />
         </Tabs>
         </Grid>
       </AppBar>
-      <TabPanel value={value} index={0}>
-        Item One
+      <TabPanel value={value} index={0} className={classes.tabsContainers}>
+        <MyTransactions/>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Item Two
+        <MyMarketDishes/>
       </TabPanel>
     </div>
   );
