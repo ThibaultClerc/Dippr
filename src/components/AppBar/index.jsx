@@ -28,15 +28,9 @@ import AddIcon from '@material-ui/icons/Add';
 import SearchIcon from '@material-ui/icons/Search';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
-import SettingsIcon from '@material-ui/icons/Settings'
 import RestaurantIcon from '@material-ui/icons/Restaurant'
-import StarIcon from '@material-ui/icons/Star'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import HomeIcon from '@material-ui/icons/Home';
-import MessageIcon from '@material-ui/icons/Message';
-import ShoppingBasket from '@material-ui/icons/ShoppingBasket';
-
-
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -60,11 +54,13 @@ const useStyles = makeStyles((theme) => ({
   appBar: {
     top: 'auto',
     bottom: 0,
+    backgroundColor: "white"
   },
   grow: {
     flexGrow: 1,
   },
   fabButton: {
+    backgroundColor: "#D9414F",
     position: 'absolute',
     zIndex: 1,
     top: -30,
@@ -105,9 +101,14 @@ const useStyles = makeStyles((theme) => ({
     color: 'inherit',
   },inputInput: {
     padding: theme.spacing(3, 3, 3, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
   },
+  appBarSearchIcon: {
+    marginRight: "30px"
+  },
+  appBarRestaurantIcon: {
+    marginLeft: "21px",
+  }
 }));
 
 export default function BottomAppBar() {
@@ -115,16 +116,14 @@ export default function BottomAppBar() {
   let user = useSelector(state => state.user.user);
   const [searchTerm, setSearchTerm] = useState('');
   const [announce, setAnnounce] = useState(null);
-  const [data, setData] = useState([]);
-  const [isSearching, setIsSearching] = useState(false);
   const [publishSuccess, setPublishSuccess] = useState(null)
   const history = useHistory();
+  const classes = useStyles();
   const [state, setState] = useState({
     bottom: false,
     top: false,
   });
-
-  const classes = useStyles();
+  
 
   const handleClick = () => {
     Cookies.remove('token');
@@ -195,37 +194,21 @@ export default function BottomAppBar() {
       <List>
         <ListItem button component={Link} to={`/profile/${user.id}`}>
           <ListItemIcon> <AccountCircleIcon /></ListItemIcon>
-          <ListItemText primary={"Profile"} />
+          <ListItemText primary={"Mon Profil"} />
         </ListItem>
-
-        <ListItem  button component={Link} to="/" >
-          <ListItemIcon> <SettingsIcon /></ListItemIcon>
-          <ListItemText primary={"Paramètre Compte"} />
+        <ListItem  button component={Link} to="/swap" >
+          <ListItemIcon>
+            <RestaurantIcon/>
+          </ListItemIcon>
+          <ListItemText primary={"Mes annonces"} />
         </ListItem>
-
-        <ListItem  button component={Link} to="/" >
-          <ListItemIcon> <RestaurantIcon /></ListItemIcon>
-          <ListItemText primary={"Mes plats"} />
-        </ListItem>
-
-        <ListItem  button component={Link} to="/" >
-          <ListItemIcon> <StarIcon/></ListItemIcon>
-          <ListItemText primary={"Favoris"} />
-        </ListItem>
-
-        <ListItem  button component={Link} to="/" >
-          <ListItemIcon> <MessageIcon/></ListItemIcon>
-          <ListItemText primary={"Messages"} />
-        </ListItem>
-
       </List>
-
       <Divider />
       <List>
-          <ListItem  button component={Link} to="/" onClick={(e) => handleClick()}>
-            <ListItemIcon > <ExitToAppIcon /></ListItemIcon>
-            <ListItemText primary={"Se Déconnecter"} />
-          </ListItem>
+        <ListItem  button component={Link} to="/" onClick={(e) => handleClick()}>
+          <ListItemIcon > <ExitToAppIcon /></ListItemIcon>
+          <ListItemText primary={"Se Déconnecter"} />
+        </ListItem>
       </List>
     </div>
   );
@@ -239,19 +222,15 @@ export default function BottomAppBar() {
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
-
       <List  key="list-1">
-          <ListItem  button component={Link} to="/signin" key="signin">
-            <ListItemIcon> <AccountCircleIcon /></ListItemIcon>
-            <ListItemText primary={"Se Connecter"}/>
-          </ListItem>
-
-
-          <ListItem  button component={Link} to="/signup" key="signup">
-            <ListItemIcon > <ExitToAppIcon /></ListItemIcon>
-            <ListItemText primary={"S'inscrire"} />
-          </ListItem>
-
+        <ListItem  button component={Link} to="/signin" key="signin">
+          <ListItemIcon> <AccountCircleIcon /></ListItemIcon>
+          <ListItemText primary={"Se Connecter"}/>
+        </ListItem>
+        <ListItem  button component={Link} to="/signup" key="signup">
+          <ListItemIcon > <ExitToAppIcon /></ListItemIcon>
+          <ListItemText primary={"S'inscrire"} />
+        </ListItem>
       </List>
     </div>
   );
@@ -280,64 +259,50 @@ export default function BottomAppBar() {
   return (
     <div>
       {publishSuccess && successAlert()}
-    {announce && <Announcement value={announce} visibleModal={(()=>handleAddAnnounce(false))} Alert={publishSuccess} visibleAlert={content=>handlePublishSuccess(content)}/> }
-    {['top', 'bottom'].map((anchor) => (
-    <React.Fragment>
-      <SwipeableDrawer
-            anchor={anchor}
-            open={state[anchor]}
-            onClose={toggleDrawer(anchor, false)}
-            onOpen={toggleDrawer(anchor, true)}
-          >
-
-            {state.bottom && ((user !== undefined && user.length !== 0? listLogin('bottom') : list('bottom')))}
-            {state.top && searchBar('top')}
-      </SwipeableDrawer>
-      <CssBaseline />
-      <AppBar position="fixed" color="primary" className={classes.appBar}>
-        <Toolbar>
-
-        <IconButton color="inherit" button="true" component={Link} to="/">
-            <HomeIcon fontSize ="default"/>
-          </IconButton>
-
-          {user !== undefined && user.length !== 0?(
-            <IconButton color="inherit" button="true" component={Link} to="/users/swap">
-              <ShoppingBasket fontSize ="default" />
+      {announce &&
+        <Announcement
+          value={announce}
+          visibleModal={(()=>handleAddAnnounce(false))}
+          Alert={publishSuccess}
+          visibleAlert={content=>handlePublishSuccess(content)}
+        />
+      }
+      {['top', 'bottom'].map((anchor) => (
+      <>
+        <SwipeableDrawer
+          anchor={anchor}
+          open={state[anchor]}
+          onClose={toggleDrawer(anchor, false)}
+          onOpen={toggleDrawer(anchor, true)}
+        >
+          {state.bottom && ((user !== undefined && user.length !== 0? listLogin('bottom') : list('bottom')))}
+          {state.top && searchBar('top')}
+        </SwipeableDrawer>
+        <CssBaseline />
+        <AppBar position="fixed" className={classes.appBar}>
+          <Toolbar>
+            <IconButton  button="true" component={Link} to="/">
+              <HomeIcon fontSize ="default"/>
             </IconButton>
-          ):""}
-
-          {user !== undefined && user.length !==0?(
-                    <IconButton edge="end" color="inherit"  button="true" component={Link} to="/users/dish">
-                      <RestaurantIcon fontSize ="default"/>
-                    </IconButton>
-          )
-          :""}
-
+            {user !== undefined && user.length !== 0 ? (
+              <IconButton edge="end"  button="true" component={Link} to="/swap" className={classes.appBarRestaurantIcon}>
+                <RestaurantIcon fontSize="small"/>
+              </IconButton>
+            )
+            :""}
             <Fab color="secondary" aria-label="add" className={classes.fabButton}  onClick={handleModalChange}>
               <AddIcon fontSize ="default"/>
             </Fab>
-
-          <div className={classes.grow} />
-
-          {user !== undefined && user.length !== 0?(
-            <IconButton color="inherit" button="true" component={Link} to="/">
-              <MessageIcon fontSize ="default" />
+            <div className={classes.grow} />
+            <IconButton  onClick={toggleDrawer('top', true)} className={classes.appBarSearchIcon}>
+              <SearchIcon fontSize ="default"/>
             </IconButton>
-          ):""}
-
-          <IconButton color="inherit" onClick={toggleDrawer('top', true)}>
-            <SearchIcon fontSize ="default"/>
-          </IconButton>
-
-          <IconButton edge="start" color="inherit" aria-label="open drawer" id="simple-menu"  onClick={toggleDrawer('bottom', true)}>
-            <MenuIcon fontSize ="default"/>
-          </IconButton>
-
-
-        </Toolbar>
-      </AppBar>
-    </React.Fragment>
+            <IconButton edge="start"  aria-label="open drawer" id="simple-menu"  onClick={toggleDrawer('bottom', true)}>
+              <MenuIcon fontSize ="default"/>
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+      </>
       ))}
   </div>
   );
