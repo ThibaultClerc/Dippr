@@ -1,15 +1,10 @@
-import React, { useState } from 'react';
-import Search from '../../Search';
-import Paper from '@material-ui/core/Paper';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import MapIcon from '@material-ui/icons/Map';
-import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
-import { Grid, Button, ButtonGroup, Divider } from '@material-ui/core';
+import React, { useState, useEffect } from 'react';
+import { Grid, Divider } from '@material-ui/core';
 import dipprLogo from '../../../assets/img/dipprLogo.png';
 import dipprMini from '../../../assets/img/dipprMini.png'
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import SearchResults from '../../../pages/Search/SearchResults'
 
 const useStyles = makeStyles((theme) => ({
   mainWelcomeContainer: {
@@ -29,11 +24,6 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('xl')]: {
         width: 1366,
     },
-  },
-  mainContainer: {
-  },
-  imageContainer: {
-
   },
   image: {
     width: '50%',
@@ -62,8 +52,6 @@ const useStyles = makeStyles((theme) => ({
       textJustify: 'inter-word'
     }
   },
-  listOrMapContainer: {
-  },
   newContainer: {
     margin: "5em 10em",
     [theme.breakpoints.down('xs')]: {
@@ -78,32 +66,35 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const UserHome = () => {
-  const [categoryValue, setCategoryValue] = useState(1);
-  const [listOrMaps, setListOrMaps] = useState("list");
+  const [data, setData] = useState([]);
   const classes = useStyles();
+
+  useEffect(
+    () => {
+      fetch(`http://localhost:3090/api/market_dishes`, {
+        "method": "GET",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+      })
+      .then((response) => {
+        return response.json()
+      })
+      .then((response) => {
+        const cropData = response.data.slice(0, 12)
+        console.log(cropData)
+        cropData.sort((a, b) => (b.attributes.created_at).localeCompare((a.attributes.created_at)))
+        setData(cropData)
+      }).catch(error => {
+        console.log(error)
+      }).finally(() => {
+      });
+    },
+    []
+  );
 
   return (
     <>
-      <Paper square  style={{backgroundColor: '#ebeff5'}}>
-        <Grid container item justify='center' alignItems='center'>
-          <Tabs
-            value={categoryValue}
-            indicatorColor="primary"
-            aria-label="disabled tabs example"
-          >
-            <Tab value={1} label="Trocs" onClick={(e) => setCategoryValue(1)} style={{outline: 'none'}}/>
-            <Tab value={2} label="Dons" onClick={(e) => setCategoryValue(2)} style={{outline: 'none'}}/>
-          </Tabs>
-          <ButtonGroup className={classes.listOrMapContainer} size="small" color="primary" aria-label="outlined primary button group">
-              <Button onClick={(e) => setListOrMaps("list")}>
-                <FormatListBulletedIcon/>
-              </Button>
-              <Button onClick={(e) => setListOrMaps("map")}>
-                <MapIcon/>
-              </Button>
-            </ButtonGroup>
-        </Grid>
-      </Paper>
       <Grid className={classes.mainContainer}>
         <Grid className={classes.mainWelcomeContainer}>
           <Grid container fixed className={classes.welcomeContainer}>
@@ -133,8 +124,15 @@ const UserHome = () => {
               Nouveautés
           </Typography>
           <Divider variant="middle" />
-          
         </Grid>
+        {data.length > 0 &&
+          <> 
+            <SearchResults
+              data={data}
+              className="searchResults"
+            />
+          </>
+        }
       </Grid>
     </>
   )

@@ -123,8 +123,6 @@ const MyTransactions = () => {
     return () => clearInterval(interval);
   }, [])
 
-  
-
   const fetchUserTransactions = (type) => {
     fetch(`http://localhost:3090/api/users/${user.id}/${type}`, {
       "method": "GET",
