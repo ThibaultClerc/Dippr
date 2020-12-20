@@ -333,7 +333,7 @@ const MarketDish = () => {
     if (isSuccess) {
       successTimeout = setTimeout(() => {
         setIsSuccess(false)
-      }, 3000)
+      }, 2000)
     }
     return () => {
       clearTimeout(successTimeout)
@@ -345,7 +345,7 @@ const MarketDish = () => {
     if (isCancelSuccess) {
       successTimeout = setTimeout(() => {
         setIsCancelSuccess(false)
-      }, 3000)
+      }, 2000)
     }
     return () => {
       clearTimeout(successTimeout)
