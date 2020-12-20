@@ -15,6 +15,7 @@ import Alert from '@material-ui/lab/Alert';
 import CloseIcon from '@material-ui/icons/Close';
 import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
+import './index.scss';
 
 const useStyles = makeStyles((theme) => ({
   mainContainer: {
@@ -30,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
       paddingRight: 0,
       paddingTop: 0,
       width: '100vw !important',
-      margin: '0 !important'
+      margin: '0 !important',
     }
   },
   imgContainer : {
@@ -53,9 +54,6 @@ const useStyles = makeStyles((theme) => ({
       paddingLeft: '0 !important',
       paddingRight: '0 !important',
       paddingTop: '0 !important',
-      position: 'absolute',
-      top: '50%',
-      width: '100vw'
     }
   },
   textPaper: {
@@ -65,12 +63,16 @@ const useStyles = makeStyles((theme) => ({
     minHeight: 500,
     maxHeight: 500,
     overflow: 'auto',
+    webkitBoxShadow: 'inset -2px -15px 70px -40px rgba(0,0,0,0.30)',
+    mozBoxShadow: 'inset -2px -15px 70px -40px rgba(0,0,0,0.30)',
+    boxShadow: 'inset -2px -15px 70px -40px rgba(0,0,0,0.30)',
     [theme.breakpoints.down('xs')]: {
+      borderRadius: 0,
       marginBottom: 0,
-      borderRadius: '35px 35px 0px 0px',
-      webkitBoxShadow: '0px -18px 100px 0px rgba(0,0,0,0.60)',
-      mozBoxShadow: '0px -18px 100px 0px rgba(0,0,0,0.60)',
-      boxShadow: '0px -18px 100px 0px rgba(0,0,0,0.60)'
+      webkitBoxShadow: '0px 0px 0px 0px rgba(0,0,0,0)',
+      mozBoxShadow: '0px 0px 0px 0px rgba(0,0,0,0)',
+      boxShadow: '0px 0px 0px 0px rgba(0,0,0,0)',
+      maxHeight: 'none',
     },
     "&::-webkit-scrollbar": {
       display: 'none'
@@ -79,7 +81,10 @@ const useStyles = makeStyles((theme) => ({
     scrollbarWidth: 'none'
   },
   itemText: {
-    marginRight: '20px'
+    marginRight: '20px',
+    [theme.breakpoints.down('xs')]: {
+      fontSize: "smaller"
+    },
   },
   pending: {
     marginLeft: '20px',
@@ -109,7 +114,14 @@ const MyTransactions = () => {
   useEffect(() => {
     fetchUserTransactions("trocs")
     fetchUserTransactions("donations")
+    const interval = setInterval(() => {
+      fetchUserTransactions("trocs")
+      fetchUserTransactions("donations")
+    }, 10000);
+    return () => clearInterval(interval);
   }, [])
+
+  
 
   const fetchUserTransactions = (type) => {
     fetch(`https://dippr-api-development.herokuapp.com/api/users/${user.id}/${type}`, {
@@ -122,13 +134,17 @@ const MyTransactions = () => {
     .then((response) => response.json())
     .then((response) => {
       if (type === "trocs") {
+        console.log(response.data, "response trocs")
         const trocs = response.data
           .filter(transaction => (transaction.attributes.status === 'pending') || (transaction.attributes.status === 'confirmed'))
         setTrocData(trocs)
+        console.log(trocs)
       } else {
+        console.log(response.data, "response donations")
         const donations = response.data
           .filter(transaction => (transaction.attributes.status === 'pending') || (transaction.attributes.status === 'confirmed'))
         setDonationData(donations) 
+        console.log(donations)
       }
     }).catch(error => {
       console.log(error)
@@ -137,9 +153,9 @@ const MyTransactions = () => {
   }
 
   useEffect(() => {
-    if (trocData.length === 0 || donationData.length === 0) {
-      return
-    }
+    // if (trocData.length === 0 || donationData.length === 0) {
+    //   return
+    // }
     const allData = trocData.concat(donationData)
     allData.sort((a, b) => (b.attributes.updated_at).localeCompare((a.attributes.updated_at)))
     setAllData([...allData])
@@ -164,6 +180,7 @@ const MyTransactions = () => {
               />
             </ListItemAvatar>
             <ListItemText
+              dense
               className={classes.itemText}
               id={transaction.id}
               primary={`${transaction.meta.caller.first_name} vous propose son
@@ -331,6 +348,7 @@ const MyTransactions = () => {
   }, [isCancelled])
 
   
+  
   return (
     <>
     {isAccepted && 
@@ -437,7 +455,6 @@ const MyTransactions = () => {
         currentUser={user}
       />
     }
-    <Container fixed className={classes.mainContainer}>
       <Grid container fixed spacing={3} className={classes.subMainContainer}>
         <Grid item xs={12} md={6} className={classes.imgContainer}>
           <img className={classes.image} src={cooker} alt="cooker"></img>   
@@ -452,7 +469,6 @@ const MyTransactions = () => {
           </Paper>
         </Grid>
       </Grid>
-    </Container>
     </>
   )
 }

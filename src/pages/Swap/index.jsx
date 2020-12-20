@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -7,8 +7,7 @@ import Tab from '@material-ui/core/Tab';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import StoreIcon from '@material-ui/icons/Store';
 import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
-import { Grid, Button, ButtonGroup } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import MyTransactions from '../MyTransactions'
 import MyMarketDishes from '../MyMarketDishes'
 
@@ -24,9 +23,9 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box p={3}>
+        <>
           <Typography>{children}</Typography>
-        </Box>
+        </>
       )}
     </div>
   );
@@ -58,6 +57,10 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: 15,
     marginRight: 'auto',
     marginLeft: 'auto',
+    [theme.breakpoints.down('xs')]: {  // medium: 960px or larger
+      paddingLeft: 0,
+      height: "fit-content"
+  },
 
     // Full width for (xs, extra-small: 0px or larger) and (sm, small: 600px or larger)
     [theme.breakpoints.up('md')]: {  // medium: 960px or larger
