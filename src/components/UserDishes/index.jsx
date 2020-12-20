@@ -58,9 +58,9 @@ const UserDishes = (profileId) => {
 
   useEffect(() => {
     if (user.attributes.is_admin === true ) {
-      fetchData(`https://dippr-api-development.herokuapp.com/api/user_dishes`)
+      fetchData(`http://localhost:3090/api/user_dishes`)
     } else {
-      fetchData(`https://dippr-api-development.herokuapp.com/api/users/${profileId.profileId}/user_dishes`)
+      fetchData(`http://localhost:3090/api/users/${profileId.profileId}/user_dishes`)
     }
   }, []);
       

@@ -170,7 +170,7 @@ const MarketDish = () => {
 
   useEffect(() => {
     setIsSearching(true)
-    fetch(`https://dippr-api-development.herokuapp.com/api/market_dishes/${dishID}`, {
+    fetch(`http://localhost:3090/api/market_dishes/${dishID}`, {
       "method": "GET",
       "headers": {
         "Content-Type": "application/json"
@@ -190,7 +190,7 @@ const MarketDish = () => {
   }, [isSuccess, isCancelSuccess])
 
   const fetchUserTransactions = (type, pageDishID) => {
-    fetch(`https://dippr-api-development.herokuapp.com/api/users/${user.id}/${type}`, {
+    fetch(`http://localhost:3090/api/users/${user.id}/${type}`, {
       "method": "GET",
       "headers": {
         "Content-Type": "application/json",
@@ -264,7 +264,7 @@ const MarketDish = () => {
       }
     }
     const actualTransaction = userTransaction[0]
-    fetch(`https://dippr-api-development.herokuapp.com/api/${type}/${actualTransaction.id}`, {
+    fetch(`http://localhost:3090/api/${type}/${actualTransaction.id}`, {
       "method": "PUT",
       "headers": {
         "Content-Type": "application/json",
@@ -306,7 +306,7 @@ const MarketDish = () => {
         status: 0
       }
     }
-    fetch(`https://dippr-api-development.herokuapp.com/api/${type}`, {
+    fetch(`http://localhost:3090/api/${type}`, {
       "method": "POST",
       "headers": {
         "Content-Type": "application/json",
@@ -427,7 +427,7 @@ const MarketDish = () => {
         handleSelectedValue={(userMarketDish) => handleTransactionCreation(userMarketDish)}
       />
     }
-    {(data !== null && !isSearching) ?
+    {(data !== null) &&
       <Container fixed className={classes.mainContainer}>
         <Grid container fixed spacing={3} className={classes.subMainContainer}>
           <Grid item xs={12} md={6} className={classes.imgContainer}>
@@ -526,7 +526,6 @@ const MarketDish = () => {
           </Grid>
         </Grid>
       </Container>
-    : <Loader/>
     }
     </>
   );

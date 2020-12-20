@@ -123,10 +123,8 @@ const MyTransactions = () => {
     return () => clearInterval(interval);
   }, [])
 
-  
-
   const fetchUserTransactions = (type) => {
-    fetch(`https://dippr-api-development.herokuapp.com/api/users/${user.id}/${type}`, {
+    fetch(`http://localhost:3090/api/users/${user.id}/${type}`, {
       "method": "GET",
       "headers": {
         "Content-Type": "application/json",
@@ -285,7 +283,7 @@ const MyTransactions = () => {
         status: userAnswer
       }
     }
-    fetch(`https://dippr-api-development.herokuapp.com/api/${type}/${selectedTransaction.id}`, {
+    fetch(`http://localhost:3090/api/${type}/${selectedTransaction.id}`, {
       "method": "PUT",
       "headers": {
         "Content-Type": "application/json",

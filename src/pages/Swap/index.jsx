@@ -49,7 +49,9 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     width: '100%',
     backgroundColor: theme.palette.background.paper,
-  },  grow: {
+    position: 'sticky !important'
+  },
+  grow: {
     flexGrow: 1,
   },
   tabsContainers: {
@@ -57,19 +59,17 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: 15,
     marginRight: 'auto',
     marginLeft: 'auto',
-    [theme.breakpoints.down('xs')]: {  // medium: 960px or larger
+    [theme.breakpoints.down('xs')]: {
       paddingLeft: 0,
       height: "fit-content"
   },
-
-    // Full width for (xs, extra-small: 0px or larger) and (sm, small: 600px or larger)
-    [theme.breakpoints.up('md')]: {  // medium: 960px or larger
+    [theme.breakpoints.up('md')]: {
         width: 920,
     },
-    [theme.breakpoints.up('lg')]: {  // large: 1280px or larger
+    [theme.breakpoints.up('lg')]: {
         width: 1170,
     },
-    [theme.breakpoints.up('xl')]: {  // extra-large: 1920px or larger
+    [theme.breakpoints.up('xl')]: {
         width: 1366,
     },
   }

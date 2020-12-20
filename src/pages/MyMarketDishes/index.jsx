@@ -12,7 +12,7 @@ const MyMarketDishes = () => {
   useEffect(
     () => {
       setIsSearching(true)
-      fetch(`https://dippr-api-development.herokuapp.com/api/users/${user.id}/market_dishes`, {
+      fetch(`http://localhost:3090/api/users/${user.id}/market_dishes`, {
         "method": "GET",
         "headers": {
           "Content-Type": "application/json"
