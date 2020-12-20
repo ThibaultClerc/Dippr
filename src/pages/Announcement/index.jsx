@@ -85,7 +85,7 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
   };
 
   const fetchIngredient = () => {
-    fetch("https://dippr-api-development.herokuapp.com/api/ingredients", {
+    fetch("http://localhost:3090/api/ingredients", {
       "method": "GET",
       "headers": {
         "Content-Type": "application/json"
@@ -108,7 +108,7 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
   };
 
   const fetchTag = () => {
-    fetch("https://dippr-api-development.herokuapp.com/api/tags", {
+    fetch("http://localhost:3090/api/tags", {
       "method": "GET",
       "headers": {
         "Content-Type": "application/json"
@@ -132,7 +132,7 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    fetch(`https://dippr-api-development.herokuapp.com/api/users/${user.id}/user_dishes`, {
+    fetch(`http://localhost:3090/api/users/${user.id}/user_dishes`, {
       "method": "POST",
       "headers": {
         "Content-Type": "application/json",
@@ -158,7 +158,7 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
   };
 
   const handleMarketDish = (dish) => {
-    fetch(`https://dippr-api-development.herokuapp.com/api/users/${user.id}/market_dishes`, {
+    fetch(`http://localhost:3090/api/users/${user.id}/market_dishes`, {
       "method": "POST",
       "headers": {
         "Content-Type": "application/json",
@@ -183,7 +183,7 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
   const handleFileUpload = (user_dish_id) => {
     const formData = new FormData();
     formData.append("file", file);
-    fetch(`https://dippr-api-development.herokuapp.com/api/users/${user.id}/user_dishes/${user_dish_id}`, {
+    fetch(`http://localhost:3090/api/users/${user.id}/user_dishes/${user_dish_id}`, {
       "method": "PUT",
       "headers": {
         "Authorization": Cookies.get("token")
@@ -204,7 +204,7 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
   };
 
   const handleIngredients = (dish, ingredient) => {
-    fetch(`https://dippr-api-development.herokuapp.com/api/user_dish_ingredients`, {
+    fetch(`http://localhost:3090/api/user_dish_ingredients`, {
       "method": "POST",
       "headers": {
         "Content-Type": "application/json",
@@ -229,7 +229,7 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
   };
 
   const handleTags = (dish, tags) => {
-    fetch(`https://dippr-api-development.herokuapp.com/api/user_dish_tags`, {
+    fetch(`http://localhost:3090/api/user_dish_tags`, {
       "method": "POST",
       "headers": {
         "Content-Type": "application/json",

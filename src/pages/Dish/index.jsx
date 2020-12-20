@@ -142,8 +142,8 @@ const Dish = ()=> {
   };
   
   useEffect(() => {
-    fetchData(`https://dippr-api-development.herokuapp.com/api/users/${user.id}/user_dishes`);
-    fetchMarketData(`https://dippr-api-development.herokuapp.com/api/users/${user.id}/market_dishes`)
+    fetchData(`http://localhost:3090/api/users/${user.id}/user_dishes`);
+    fetchMarketData(`http://localhost:3090/api/users/${user.id}/market_dishes`)
   }, []);
 
   return (

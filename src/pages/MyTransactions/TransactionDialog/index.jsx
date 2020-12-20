@@ -107,7 +107,7 @@ const TransactionDialog = ({open, handleSelectedValue, handleClose, transaction,
             </DialogContent>
             <MuiDialogActions>
               <Button autoFocus onClick={() => handleListItemClick(3)} color="secondary">
-                ANNULER
+                ANNULER LA DEMANDE
               </Button>
             </MuiDialogActions>
           </>
@@ -138,7 +138,7 @@ const TransactionDialog = ({open, handleSelectedValue, handleClose, transaction,
             </DialogContent>
             <MuiDialogActions>
               <Button autoFocus onClick={() => handleListItemClick(3)} color="secondary">
-                ANNULER
+                ANNULER LA DEMANDE
               </Button>
             </MuiDialogActions>
           </>

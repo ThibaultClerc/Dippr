@@ -52,7 +52,7 @@ const Connection = ({signup, isModal}) => {
   const dispatch = useDispatch();
 
   const handleRealSubmit = data => {
-    fetch("https://dippr-api-development.herokuapp.com/api/login", {
+    fetch("http://localhost:3090/api/login", {
       "method": "POST",
       "headers": {
         "Content-Type": "application/json"

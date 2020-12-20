@@ -24,7 +24,7 @@ const Search = () => {
       if (location.search !== "") {
         const query = location.search.split('?').pop()
         setIsSearching(true);
-        fetch(`https://dippr-api-development.herokuapp.com/api/marketdishes/search?query=${query}`, {
+        fetch(`http://localhost:3090/api/marketdishes/search?query=${query}`, {
           "method": "GET",
           "headers": {
             "Content-Type": "application/json"
@@ -66,7 +66,7 @@ const Search = () => {
 
   return (
     <>
-    <Paper square>
+    <Paper square style={{backgroundColor: "rgb(241 243 247)"}}>
       <Grid container item justify='center' alignItems='center'>
         <Tabs
           value={categoryValue}
@@ -76,7 +76,7 @@ const Search = () => {
           <Tab value={1} label="Trocs" onClick={(e) => setCategoryValue(1)} style={{outline: 'none'}}/>
           <Tab value={2} label="Dons" onClick={(e) => setCategoryValue(2)} style={{outline: 'none'}}/>
         </Tabs>
-        <ButtonGroup size="small" className="react-switch" color="primary" aria-label="outlined primary button group">
+        <ButtonGroup size="small" color="primary" aria-label="outlined primary button group">
             <Button onClick={(e) => setListOrMaps("list")}>
               <FormatListBulletedIcon/>
             </Button>
