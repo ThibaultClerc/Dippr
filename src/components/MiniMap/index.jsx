@@ -38,7 +38,6 @@ const MiniMap = ({dishID, dishLat, dishLng}) => {
   if (loadError) return "Error loading maps";
   if (!isLoaded) return <Loader/>
 
-  console.log(dishLat, dishLng)
   return (
     <>
     <GoogleMap
