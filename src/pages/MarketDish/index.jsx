@@ -5,7 +5,6 @@ import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Cookies from 'js-cookie';
-import Loader from '../../components/UI/Loader';
 import moment from 'moment'
 import MiniMap from '../../components/MiniMap';
 import PopupDialog from '../../components/PopupDialog';
@@ -170,7 +169,7 @@ const MarketDish = () => {
 
   useEffect(() => {
     setIsSearching(true)
-    fetch(`http://localhost:3090/api/market_dishes/${dishID}`, {
+    fetch(`https://dippr-api-production.herokuapp.com/api/market_dishes/${dishID}`, {
       "method": "GET",
       "headers": {
         "Content-Type": "application/json"
@@ -190,7 +189,7 @@ const MarketDish = () => {
   }, [isSuccess, isCancelSuccess])
 
   const fetchUserTransactions = (type, pageDishID) => {
-    fetch(`http://localhost:3090/api/users/${user.id}/${type}`, {
+    fetch(`https://dippr-api-production.herokuapp.com/api/users/${user.id}/${type}`, {
       "method": "GET",
       "headers": {
         "Content-Type": "application/json",
@@ -264,7 +263,7 @@ const MarketDish = () => {
       }
     }
     const actualTransaction = userTransaction[0]
-    fetch(`http://localhost:3090/api/${type}/${actualTransaction.id}`, {
+    fetch(`https://dippr-api-production.herokuapp.com/api/${type}/${actualTransaction.id}`, {
       "method": "PUT",
       "headers": {
         "Content-Type": "application/json",
@@ -306,7 +305,7 @@ const MarketDish = () => {
         status: 0
       }
     }
-    fetch(`http://localhost:3090/api/${type}`, {
+    fetch(`https://dippr-api-production.herokuapp.com/api/${type}`, {
       "method": "POST",
       "headers": {
         "Content-Type": "application/json",
@@ -353,8 +352,6 @@ const MarketDish = () => {
     }
   }, [isCancelSuccess])
 
-  // && data.meta.user_dish.user_id === user.id
-  console.log(data, user)
   return (
     <>
     {isSuccess && 
@@ -431,7 +428,7 @@ const MarketDish = () => {
       <Container fixed className={classes.mainContainer}>
         <Grid container fixed spacing={3} className={classes.subMainContainer}>
           <Grid item xs={12} md={6} className={classes.imgContainer}>
-            <img className={classes.image} src={`https://dippr-api-development.herokuapp.com${data.meta.user_dish.photo_url}`} alt="dish-photo"></img>   
+            <img className={classes.image} src={`https://dippr-api-production.herokuapp.com${data.meta.user_dish.photo_url}`} alt="dish-photo"></img>   
             <Chip
               avatar={<Avatar alt="Natacha" src="/static/images/avatar/1.jpg" />}
               label={data.meta.user_first_name}

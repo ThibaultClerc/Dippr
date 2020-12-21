@@ -87,7 +87,6 @@ const Swap = ()=> {
     <div className={classes.root}>
       <AppBar position="static" color="default">
         <Grid container item justify='center' alignItems='center'>
-
         <Tabs
           value={value}
           onChange={handleChange}

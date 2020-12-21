@@ -34,6 +34,7 @@ const SearchResults = ({data, listOrMapValue = null, isSearching = null}) => {
               return (
                 <Grid item xs={6} sm={4} md={3} lg={2} key={dish.id} width={300}>
                   <DishCard
+                    key={dish.id}
                     market_dish_id={dish.id}
                     user_first_name={dish.meta.user_first_name}
                     name={dishData.name}
@@ -79,7 +80,6 @@ const SearchResults = ({data, listOrMapValue = null, isSearching = null}) => {
                     user_id={dishData.user_id}
                     created_at={dishData.created_at}
                     type={dish.attributes.market_dish_type}
-                    type_of_card='market_dish'
                     photo_url={dishData.photo_url}
                   />
                 </Grid>

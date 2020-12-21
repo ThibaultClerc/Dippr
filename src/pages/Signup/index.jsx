@@ -54,7 +54,7 @@ const Signup = ({login, isModal}) => {
   }
 
   const handleRealSubmit = data => {
-    fetch("http://localhost:3090/api/signup", {
+    fetch("https://dippr-api-production.herokuapp.com/api/signup", {
       "method": "POST",
       "headers": {
         "Content-Type": "application/json"
@@ -73,6 +73,7 @@ const Signup = ({login, isModal}) => {
       return response.json()
     })
     .then((response) => {
+      console.log(response.data)
       dispatch(loginUser(response.data))
     }).catch(error => {
       setRedirection(true)

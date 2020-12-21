@@ -7,7 +7,7 @@ import {
   InfoWindow
 } from '@react-google-maps/api';
 import dishLogo from '../../assets/img/dishLogo.png';
-import DishCard from '../DishCard'
+import DishCard from '../DishCard';
 
 const libraries = ["places"]
 
@@ -62,17 +62,21 @@ const Map = ({data}) => {
                 }}
                 />
       })}
-      {selected ? (<InfoWindow position={{lat: parseFloat(selected.meta.user_lat), lng: parseFloat(selected.meta.user_lng)}}>
-        <DishCard
-          key={selected.id}
-          market_dish_id={selected.id}
-          name={selected.meta.user_dish.name}
-          description={selected.meta.user_dish.description}
-          dish_rating={selected.meta.user_dish.dish_rating}
-          user_id={selected.meta.user_dish.user_id}
-          created_at={selected.meta.user_dish.created_at}
-          type={selected.attributes.market_dish_type}
-        />
+      {selected ? (
+        <InfoWindow
+          position={{lat: parseFloat(selected.meta.user_lat), lng: parseFloat(selected.meta.user_lng)}}
+          onCloseClick={() => {
+            setSelected(null)
+          }}>
+          <DishCard
+            key={selected.id}
+            market_dish_id={selected.id}
+            name={selected.meta.user_dish.name}
+            description={selected.meta.user_dish.description}
+            dish_rating={selected.meta.user_dish.dish_rating}
+            user_id={selected.meta.user_dish.user_id}
+            created_at={selected.meta.user_dish.created_at}
+          />
       </InfoWindow>) : null}
     </GoogleMap>
     

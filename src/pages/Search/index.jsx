@@ -18,13 +18,14 @@ const Search = () => {
   const [data, setData] = useState([]);
   const isMounted = useRef(false)
 
+  console.log(location.search)
   useEffect(
     () => {
       isMounted.current = true
       if (location.search !== "") {
         const query = location.search.split('?').pop()
         setIsSearching(true);
-        fetch(`http://localhost:3090/api/marketdishes/search?query=${query}`, {
+        fetch(`https://dippr-api-production.herokuapp.com/api/marketdishes/search?query=${query}`, {
           "method": "GET",
           "headers": {
             "Content-Type": "application/json"

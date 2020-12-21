@@ -85,7 +85,7 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
   };
 
   const fetchIngredient = () => {
-    fetch("http://localhost:3090/api/ingredients", {
+    fetch("https://dippr-api-production.herokuapp.com/api/ingredients", {
       "method": "GET",
       "headers": {
         "Content-Type": "application/json"
@@ -108,7 +108,7 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
   };
 
   const fetchTag = () => {
-    fetch("http://localhost:3090/api/tags", {
+    fetch("https://dippr-api-production.herokuapp.com/api/tags", {
       "method": "GET",
       "headers": {
         "Content-Type": "application/json"
@@ -132,7 +132,7 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    fetch(`http://localhost:3090/api/users/${user.id}/user_dishes`, {
+    fetch(`https://dippr-api-production.herokuapp.com/api/users/${user.id}/user_dishes`, {
       "method": "POST",
       "headers": {
         "Content-Type": "application/json",
@@ -158,7 +158,7 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
   };
 
   const handleMarketDish = (dish) => {
-    fetch(`http://localhost:3090/api/users/${user.id}/market_dishes`, {
+    fetch(`https://dippr-api-production.herokuapp.com/api/users/${user.id}/market_dishes`, {
       "method": "POST",
       "headers": {
         "Content-Type": "application/json",
@@ -183,7 +183,7 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
   const handleFileUpload = (user_dish_id) => {
     const formData = new FormData();
     formData.append("file", file);
-    fetch(`http://localhost:3090/api/users/${user.id}/user_dishes/${user_dish_id}`, {
+    fetch(`https://dippr-api-production.herokuapp.com/api/users/${user.id}/user_dishes/${user_dish_id}`, {
       "method": "PUT",
       "headers": {
         "Authorization": Cookies.get("token")
@@ -204,7 +204,7 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
   };
 
   const handleIngredients = (dish, ingredient) => {
-    fetch(`http://localhost:3090/api/user_dish_ingredients`, {
+    fetch(`https://dippr-api-production.herokuapp.com/api/user_dish_ingredients`, {
       "method": "POST",
       "headers": {
         "Content-Type": "application/json",
@@ -229,7 +229,7 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
   };
 
   const handleTags = (dish, tags) => {
-    fetch(`http://localhost:3090/api/user_dish_tags`, {
+    fetch(`https://dippr-api-production.herokuapp.com/api/user_dish_tags`, {
       "method": "POST",
       "headers": {
         "Content-Type": "application/json",
@@ -271,7 +271,7 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
     <>
     {announceType === 0 && <h5>Proposer un troc</h5>}
     {announceType === 1 && <h5>Proposer un don</h5>}
-    {announceType === 2 && <h5>Proposer une spécialité</h5>}
+    {/* {announceType === 2 && <h5>Proposer une spécialité</h5>} */}
 
     <ButtonGroup fullWidth size="small" className="react-switch" color="primary" aria-label="outlined primary button group">
       <Button onClick={()=>handleAnnounce(0)}>
@@ -280,9 +280,9 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
       <Button onClick={()=>handleAnnounce(1)}>
         Publier un don
       </Button>
-      <Button onClick={()=>handleAnnounce(2)}>
+      {/* <Button onClick={()=>handleAnnounce(2)}>
         Ajouter une spécialité
-      </Button>
+      </Button> */}
     </ButtonGroup>
     <TextField
       required
