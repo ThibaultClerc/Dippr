@@ -8,8 +8,6 @@ import {
 } from '@react-google-maps/api';
 import dishLogo from '../../assets/img/dishLogo.png';
 import DishCard from '../DishCard';
-import { useHistory } from "react-router-dom";
-
 
 const libraries = ["places"]
 
@@ -29,17 +27,10 @@ const options = {
 
 const Map = ({data}) => {
   const [selected, setSelected] = useState(null);
-  const history = useHistory();
   const {isLoaded, loadError} = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries,
   })
-
-  const handleCardClick = (cardID) => {
-    history.push({
-      pathname: `/marketdish/${cardID}`
-    });
-  }
 
   const mapRef = useRef();
   const onMapLoad = useCallback((map) => {
