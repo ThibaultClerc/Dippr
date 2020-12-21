@@ -109,7 +109,7 @@ const DishCard = ({market_dish_id, name, description, dish_rating, user_id, crea
     if (photo_url === undefined) {
       return noPhoto
     } else {
-      return `http://dippr-api-development.herokuapp.com${photo_url}`
+      return `https://dippr-api-production.herokuapp.com${photo_url}`
     }
   }
 

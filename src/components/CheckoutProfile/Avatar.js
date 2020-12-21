@@ -18,7 +18,7 @@ export default function Avatar({picture}) {
   const handleFileUpload = (user_id) => {
     const formData = new FormData();
     formData.append("file", file);
-    fetch(`https://dippr-api-development.herokuapp.com/api/users/${user.id}`, {
+    fetch(`https://dippr-api-production.herokuapp.com/api/users/${user.id}`, {
       "method": "PUT",
       "headers": {
         "Authorization": Cookies.get("token")

@@ -77,21 +77,18 @@ const EditProfileAdmin = () => {
         setStreet(response.data.attributes.street)
         setPhoneNumber(response.data.attributes.phone_number)
         setDescription(response.data.attributes.description)
-
-        console.log('lalalalalalalalal')
-        console.log(response)
       }).catch(error => {
         console.log(error)
       })
     };
     
     useEffect(() => {
-      fetchData(`http://localhost:3090/api/users/${userId}`)
+      fetchData(`https://dippr-api-production.herokuapp.com/api/users/${userId}`)
     }, [])
     
     const handleSubmit = (e) => {
         e.preventDefault()
-        fetch(`http://localhost:3090/api/users/${userId}`, {
+        fetch(`https://dippr-api-production.herokuapp.com/api/users/${userId}`, {
           "method": "PUT",
           "headers": {
             "Content-Type": "application/json",

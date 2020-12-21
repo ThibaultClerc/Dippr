@@ -46,7 +46,7 @@ const TransactionDialog = ({open, handleSelectedValue, handleClose, transaction,
       if (answerer.id == currentUser.id) {
         return (
           <>
-            <img className={classes.image} src={`https://dippr-api-development.herokuapp.com${transaction.meta.caller_dish.photo_url}`}></img>
+            <img className={classes.image} src={`https://dippr-api-production.herokuapp.com${transaction.meta.caller_dish.photo_url}`}></img>
             <ListItem key={transaction.id} button>
               <ListItemAvatar>
                 <Avatar
@@ -78,7 +78,7 @@ const TransactionDialog = ({open, handleSelectedValue, handleClose, transaction,
       } else {
         return (
           <>
-            <img className={classes.image} src={`https://dippr-api-development.herokuapp.com${transaction.meta.answer_dish.photo_url}`}></img>
+            <img className={classes.image} src={`https://dippr-api-production.herokuapp.com${transaction.meta.answer_dish.photo_url}`}></img>
             <ListItem key={transaction.id} button>
               <ListItemAvatar>
                 <Avatar
@@ -109,7 +109,7 @@ const TransactionDialog = ({open, handleSelectedValue, handleClose, transaction,
       if (caller.id == currentUser.id) {
         return (
           <>
-            <img className={classes.image} src={`https://dippr-api-development.herokuapp.com${transaction.meta.answer_dish.photo_url}`}></img>
+            <img className={classes.image} src={`https://dippr-api-production.herokuapp.com${transaction.meta.answer_dish.photo_url}`}></img>
             <ListItem key={transaction.id} button>
               <ListItemAvatar>
                 <Avatar
@@ -138,7 +138,7 @@ const TransactionDialog = ({open, handleSelectedValue, handleClose, transaction,
       } else {
         return (
         <>
-          <img className={classes.image} src={`https://dippr-api-development.herokuapp.com${transaction.meta.answer_dish.photo_url}`}></img>
+          <img className={classes.image} src={`https://dippr-api-production.herokuapp.com${transaction.meta.answer_dish.photo_url}`}></img>
           <ListItem key={transaction.id} button>
             <ListItemAvatar>
               <Avatar

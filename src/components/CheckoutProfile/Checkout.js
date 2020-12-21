@@ -105,7 +105,7 @@ export default function CheckoutProfile() {
 
   const handleSubmit = (e) => {
     // e.preventDefault()
-    fetch(`https://dippr-api-development.herokuapp.com/api/users/${user.id}`, {
+    fetch(`https://dippr-api-production.herokuapp.com/api/users/${user.id}`, {
       "method": "PUT",
       "headers": {
         "Content-Type": "application/json",

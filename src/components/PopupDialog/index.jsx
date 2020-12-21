@@ -53,7 +53,7 @@ const PopupDialog = ({userID, open, handleSelectedValue, handleClose}) => {
   }
 
   useEffect(() => {
-    fetch(`http://localhost:3090/api/users/${userID}/market_dishes`, {
+    fetch(`https://dippr-api-production.herokuapp.com/api/users/${userID}/market_dishes`, {
       "method": "GET",
       "headers": {
         "Content-Type": "application/json"

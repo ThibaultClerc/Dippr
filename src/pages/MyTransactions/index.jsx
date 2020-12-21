@@ -123,7 +123,7 @@ const MyTransactions = () => {
   }, [])
 
   const fetchUserTransactions = (type) => {
-    fetch(`http://localhost:3090/api/users/${user.id}/${type}`, {
+    fetch(`https://dippr-api-production.herokuapp.com/api/users/${user.id}/${type}`, {
       "method": "GET",
       "headers": {
         "Content-Type": "application/json",
@@ -275,7 +275,7 @@ const MyTransactions = () => {
         status: userAnswer
       }
     }
-    fetch(`http://localhost:3090/api/${type}/${selectedTransaction.id}`, {
+    fetch(`https://dippr-api-production.herokuapp.com/api/${type}/${selectedTransaction.id}`, {
       "method": "PUT",
       "headers": {
         "Content-Type": "application/json",

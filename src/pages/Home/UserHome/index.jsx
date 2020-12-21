@@ -102,7 +102,7 @@ const UserHome = () => {
     if ((user.attributes.lat !== null) && (user.attributes.lng !== null)) {
       return
     }
-    fetch(`http://localhost:3090/api/users/${user.id}`, {
+    fetch(`https://dippr-api-production.herokuapp.com/api/users/${user.id}`, {
       "method": "PUT",
       "headers": {
         "Content-Type": "application/json",
@@ -127,7 +127,7 @@ const UserHome = () => {
 
   useEffect(
     () => {
-      fetch(`http://localhost:3090/api/market_dishes`, {
+      fetch(`https://dippr-api-production.herokuapp.com/api/market_dishes`, {
         "method": "GET",
         "headers": {
           "Content-Type": "application/json"

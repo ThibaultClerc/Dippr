@@ -50,7 +50,7 @@ const UserDishes = (profileId) => {
       };
 
       useEffect(() => {
-        fetchData(`http://localhost:3090/api/users`)
+        fetchData(`https://dippr-api-production.herokuapp.com/api/users`)
       }, []);
 
       const rows = [];
