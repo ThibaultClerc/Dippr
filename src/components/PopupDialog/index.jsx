@@ -84,9 +84,6 @@ const PopupDialog = ({userID, open, handleSelectedValue, handleClose}) => {
                 </ListItemAvatar>
                 <ListItemText primary={dataItem.meta.user_dish.name} />
               </ListItem>
-              <Button autoFocus  color="primary" onClick={handleClick} className={classes.submitBtn}>
-                Envoyer la demande
-              </Button>
             </>
             ))
             :
@@ -100,6 +97,11 @@ const PopupDialog = ({userID, open, handleSelectedValue, handleClose}) => {
             </DialogContent>
           }
         </List>
+        {data.length !== 0 &&
+          <Button autoFocus  color="primary" onClick={handleClick} className={classes.submitBtn}>
+            Envoyer la demande
+          </Button>
+        }
       </Dialog>
     </>
   );

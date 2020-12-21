@@ -77,9 +77,6 @@ const EditProfileAdmin = () => {
         setStreet(response.data.attributes.street)
         setPhoneNumber(response.data.attributes.phone_number)
         setDescription(response.data.attributes.description)
-
-        console.log('lalalalalalalalal')
-        console.log(response)
       }).catch(error => {
         console.log(error)
       })

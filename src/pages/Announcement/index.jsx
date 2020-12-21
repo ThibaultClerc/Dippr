@@ -271,7 +271,7 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
     <>
     {announceType === 0 && <h5>Proposer un troc</h5>}
     {announceType === 1 && <h5>Proposer un don</h5>}
-    {announceType === 2 && <h5>Proposer une spécialité</h5>}
+    {/* {announceType === 2 && <h5>Proposer une spécialité</h5>} */}
 
     <ButtonGroup fullWidth size="small" className="react-switch" color="primary" aria-label="outlined primary button group">
       <Button onClick={()=>handleAnnounce(0)}>
@@ -280,9 +280,9 @@ const Announcement = ({value, visibleModal, alert, visibleAlert}) => {
       <Button onClick={()=>handleAnnounce(1)}>
         Publier un don
       </Button>
-      <Button onClick={()=>handleAnnounce(2)}>
+      {/* <Button onClick={()=>handleAnnounce(2)}>
         Ajouter une spécialité
-      </Button>
+      </Button> */}
     </ButtonGroup>
     <TextField
       required

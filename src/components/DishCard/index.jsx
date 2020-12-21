@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { withRouter, useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -89,21 +89,14 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const DishCard = ({market_dish_id, name, description, dish_rating, user_id, created_at, user_first_name, type_of_card, photo_url}) => {
+const DishCard = ({market_dish_id, name, description, dish_rating, user_id, created_at, user_first_name, photo_url}) => {
   const classes = useStyles();
-  const [cardType, setCardType] = useState(type_of_card)
   const history = useHistory();
 
   const handleCardClick = () => {
-    if (cardType ==="market_dish"){
     history.push({
       pathname: `/marketdish/${market_dish_id}`
     });
-  } else if (cardType ==="user_dish"){
-    history.push({
-      pathname: `/userdish/${market_dish_id}`
-    });
-    }
   }
 
   const handleProfileClick = () => {
@@ -113,11 +106,10 @@ const DishCard = ({market_dish_id, name, description, dish_rating, user_id, crea
   }
 
   const handleImageCard = (noPhoto, photo_url) => {
-    console.log(photo_url)
     if (photo_url === undefined) {
       return noPhoto
     } else {
-      return `http://dippr-api-production.herokuapp.com${photo_url}`
+      return `https://dippr-api-production.herokuapp.com${photo_url}`
     }
   }
 

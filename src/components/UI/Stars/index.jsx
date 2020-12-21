@@ -15,7 +15,7 @@ const Stars = ({dish_rating}) => {
   const starsRender = (dish_rating) => {
     const stars = []
     for(let i=1; i <= dish_rating ; i++) {
-      stars.push(<StarIcon className={classes.star}/>)
+      stars.push(<StarIcon key={i} className={classes.star}/>)
     }
     return stars
   }
