@@ -26,8 +26,8 @@ const MiniMap = ({dishID, dishLat, dishLng}) => {
   })
 
   const center = {
-    lat: Number.parseFloat(dishLat),
-    lng: Number.parseFloat(dishLng)
+    lat: dishLat !== null ? Number.parseFloat(dishLat) : 48.858370,
+    lng: dishLng !== null ? Number.parseFloat(dishLng) : 2.294481
   }
 
   const mapRef = useRef();
@@ -38,6 +38,7 @@ const MiniMap = ({dishID, dishLat, dishLng}) => {
   if (loadError) return "Error loading maps";
   if (!isLoaded) return <Loader/>
 
+  console.log(dishLat, dishLng)
   return (
     <>
     <GoogleMap
