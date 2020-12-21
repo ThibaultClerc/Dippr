@@ -77,7 +77,7 @@ const UserHome = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (user.length === 0) {
+    if (typeof user === 'undefined') {
       return
     }
     if ((user.attributes.lat !== null) && (user.attributes.lng !== null)) {
@@ -96,7 +96,7 @@ const UserHome = () => {
   }, [])
 
   useEffect(() => {
-    if (user.length === 0) {
+    if (typeof user === 'undefined') {
       return
     }
     if ((user.attributes.lat !== null) && (user.attributes.lng !== null)) {
