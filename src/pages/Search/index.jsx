@@ -18,6 +18,7 @@ const Search = () => {
   const [data, setData] = useState([]);
   const isMounted = useRef(false)
 
+  console.log(location.search)
   useEffect(
     () => {
       isMounted.current = true

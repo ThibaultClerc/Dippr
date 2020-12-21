@@ -80,7 +80,6 @@ const SearchResults = ({data, listOrMapValue = null, isSearching = null}) => {
                     user_id={dishData.user_id}
                     created_at={dishData.created_at}
                     type={dish.attributes.market_dish_type}
-                    type_of_card='market_dish'
                     photo_url={dishData.photo_url}
                   />
                 </Grid>

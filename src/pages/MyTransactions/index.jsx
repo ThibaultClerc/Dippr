@@ -454,14 +454,9 @@ const MyTransactions = () => {
         <Grid item xs={12} md={6} className={classes.textContainer}>
           <Paper className={classes.textPaper}>
           <List className={classes.root}>
-            {allData.length > 0 ?
-            <> 
-              {allData.map((data) => {
-                return handleItemListDisplay(data, user)
-              })}
-            </>
-            : <ListItem style={{justifyContent: 'center'}}>Vous n'avez pas encore de demandes !</ListItem>
-            }
+            {allData && allData.map((data) => {
+              return handleItemListDisplay(data, user)
+            })}
           </List>
           </Paper>
         </Grid>

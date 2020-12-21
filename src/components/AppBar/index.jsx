@@ -54,7 +54,8 @@ const useStyles = makeStyles((theme) => ({
   appBar: {
     top: 'auto',
     bottom: 0,
-    backgroundColor: "white"
+    backgroundColor: "white",
+    height: 60
   },
   grow: {
     flexGrow: 1,
@@ -125,6 +126,7 @@ export default function BottomAppBar() {
   });
   
 
+  console.log(searchTerm)
   const handleClick = () => {
     Cookies.remove('token');
     dispatch(logoutUser())
@@ -135,6 +137,7 @@ export default function BottomAppBar() {
   };
 
   useDebouncedEffect(() => {
+    console.log("la")
     if (searchTerm !== "") {
       history.push({
         pathname: '/search/',
@@ -279,7 +282,7 @@ export default function BottomAppBar() {
           {state.top && searchBar('top')}
         </SwipeableDrawer>
         <CssBaseline />
-        <AppBar position="fixed" className={classes.appBar}>
+        <AppBar  className={classes.appBar}>
           <Toolbar>
             <IconButton  button="true" component={Link} to="/">
               <HomeIcon fontSize ="default"/>

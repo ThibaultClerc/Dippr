@@ -152,7 +152,7 @@ const UserHome = () => {
     <>
       <Grid className={classes.mainContainer}>
         <Grid className={classes.mainWelcomeContainer}>
-          <Grid container fixed className={classes.welcomeContainer}>
+          <Grid container className={classes.welcomeContainer}>
             <Grid container item xs={12} md={5} alignItems="center">
               <img src={dipprLogo} className={classes.image}></img>
             </Grid>
