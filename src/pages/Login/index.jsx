@@ -127,11 +127,7 @@ const Connection = ({signup, isModal}) => {
               control={control}
               defaultValue=""
               rules={{
-                required: true,
-                minLength: {
-                  value: 6,
-                  message: 'min. 6 caractères'
-                }
+                required: true
               }}
             />
           <Button
