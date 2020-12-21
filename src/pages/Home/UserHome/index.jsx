@@ -5,9 +5,9 @@ import dipprMini from '../../../assets/img/dipprMini.png'
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import SearchResults from '../../../pages/Search/SearchResults'
-import { useSelector, useDispatch } from 'react-redux';
-import Cookies from 'js-cookie';
-import {loginUser} from '../../../store/actions';
+// import { useSelector, useDispatch } from 'react-redux';
+// import Cookies from 'js-cookie';
+// import {loginUser} from '../../../store/actions';
 
 const useStyles = makeStyles((theme) => ({
   mainWelcomeContainer: {
@@ -71,59 +71,59 @@ const useStyles = makeStyles((theme) => ({
 const UserHome = () => {
   const [data, setData] = useState([]);
   const classes = useStyles();
-  const user = useSelector(state => state.user.user);
-  const [userLat, setUserLat] = useState(null)
-  const [userLng, setUserLng] = useState(null)
-  const dispatch = useDispatch();
+  // const user = useSelector(state => state.user.user);
+  // const [userLat, setUserLat] = useState(null)
+  // const [userLng, setUserLng] = useState(null)
+  // const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (typeof user === 'undefined') {
-      return
-    }
-    if ((user.attributes.lat !== null) && (user.attributes.lng !== null)) {
-      return
-    }
-    if ("geolocation" in navigator) {
-      console.log("ici")
-      navigator.geolocation.getCurrentPosition(function(position) {
-        setUserLat(position.coords.latitude.toFixed(6));
-        setUserLng(position.coords.longitude.toFixed(6));
-      });
-    } else {
-      setUserLat(48.858370);
-      setUserLng(2.294481);
-    }
-  }, [])
+  // useEffect(() => {
+  //   if (typeof user === 'undefined') {
+  //     return
+  //   }
+  //   if ((user.attributes.lat !== null) && (user.attributes.lng !== null)) {
+  //     return
+  //   }
+  //   if ("geolocation" in navigator) {
+  //     console.log("ici")
+  //     navigator.geolocation.getCurrentPosition(function(position) {
+  //       setUserLat(position.coords.latitude.toFixed(6));
+  //       setUserLng(position.coords.longitude.toFixed(6));
+  //     });
+  //   } else {
+  //     setUserLat(48.858370);
+  //     setUserLng(2.294481);
+  //   }
+  // }, [])
 
-  useEffect(() => {
-    if (typeof user === 'undefined') {
-      return
-    }
-    if ((user.attributes.lat !== null) && (user.attributes.lng !== null)) {
-      return
-    }
-    fetch(`https://dippr-api-production.herokuapp.com/api/users/${user.id}`, {
-      "method": "PUT",
-      "headers": {
-        "Content-Type": "application/json",
-        "Authorization": Cookies.get("token")
-      },
-      "body": JSON.stringify(
-        {
-          lat: userLat,
-          lng: userLng
-        }
-      )
-    })
-    .then((response) => {
-      return response.json()
-    })
-    .then((response) => {
-      dispatch(loginUser(response.data))
-    }).catch(error => {
-      console.log(error)
-    })
-  }, [])
+  // useEffect(() => {
+  //   if (typeof user === 'undefined') {
+  //     return
+  //   }
+  //   if ((user.attributes.lat !== null) && (user.attributes.lng !== null)) {
+  //     return
+  //   }
+  //   fetch(`https://dippr-api-production.herokuapp.com/api/users/${user.id}`, {
+  //     "method": "PUT",
+  //     "headers": {
+  //       "Content-Type": "application/json",
+  //       "Authorization": Cookies.get("token")
+  //     },
+  //     "body": JSON.stringify(
+  //       {
+  //         lat: userLat,
+  //         lng: userLng
+  //       }
+  //     )
+  //   })
+  //   .then((response) => {
+  //     return response.json()
+  //   })
+  //   .then((response) => {
+  //     dispatch(loginUser(response.data))
+  //   }).catch(error => {
+  //     console.log(error)
+  //   })
+  // }, [])
 
   useEffect(
     () => {
