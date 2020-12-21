@@ -125,28 +125,34 @@ const UserHome = () => {
   //   })
   // }, [])
 
-  useEffect(
-    () => {
-      fetch(`https://dippr-api-production.herokuapp.com/api/market_dishes`, {
-        "method": "GET",
-        "headers": {
-          "Content-Type": "application/json"
-        },
-      })
-      .then((response) => {
-        return response.json()
-      })
-      .then((response) => {
-        const cropData = response.data.slice(0, 12)
-        cropData.sort((a, b) => (b.attributes.created_at).localeCompare((a.attributes.created_at)))
-        setData(cropData)
-      }).catch(error => {
-        console.log(error)
-      }).finally(() => {
-      });
-    },
-    []
-  );
+  const fetchLastMarketDishes = () => {
+    fetch(`https://dippr-api-production.herokuapp.com/api/market_dishes`, {
+      "method": "GET",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+    })
+    .then((response) => {
+      return response.json()
+    })
+    .then((response) => {
+      console.log(response.data)
+      const orderedResponse = response.data
+        .sort((a, b) => (b.attributes.created_at).localeCompare((a.attributes.created_at)))
+      const cropData = orderedResponse.slice(0, 12)
+      setData(cropData)
+    }).catch(error => {
+      console.log(error)
+    })
+  }
+
+  useEffect(() => {
+    fetchLastMarketDishes()
+    const interval = setInterval(() => {
+      fetchLastMarketDishes()
+    }, 10000);
+    return () => clearInterval(interval);
+  }, [])
 
   return (
     <>
