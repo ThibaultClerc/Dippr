@@ -40,7 +40,6 @@ const Map = ({data}) => {
   if (loadError) return "Error loading maps";
   if (!isLoaded) return <Loader/>
 
-  console.log(data)
   return (
     <>
     <GoogleMap

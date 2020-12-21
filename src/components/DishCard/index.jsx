@@ -113,7 +113,6 @@ const DishCard = ({market_dish_id, name, description, dish_rating, user_id, crea
     }
   }
 
-  console.log(photo_url)
   return (
     <Card className={classes.dishCard} onClick={(e) => handleCardClick(e)}>
       <CardHeader

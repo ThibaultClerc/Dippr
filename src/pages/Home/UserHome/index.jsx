@@ -136,7 +136,6 @@ const UserHome = () => {
       return response.json()
     })
     .then((response) => {
-      console.log(response.data)
       const orderedResponse = response.data
         .sort((a, b) => (b.attributes.created_at).localeCompare((a.attributes.created_at)))
       const cropData = orderedResponse.slice(0, 12)
