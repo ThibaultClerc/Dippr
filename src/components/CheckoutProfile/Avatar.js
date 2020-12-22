@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import AvatarCard from './AvatarCard'
-import { useSelector } from 'react-redux';
-
 
 export default function Avatar({picture, imageAvatar }) {
   const [file, setFile] = useState(imageAvatar === null ? null:imageAvatar);

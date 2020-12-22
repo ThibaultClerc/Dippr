@@ -102,8 +102,7 @@ export default function CheckoutProfile() {
     setFirstName(value);
   };
 
-  const handleSubmit = (e) => {
-    // e.preventDefault()
+  const handleSubmit = () => {
     fetch(`https://dippr-api-production.herokuapp.com/api/users/${user.id}`, {
       "method": "PUT",
       "headers": {
@@ -114,7 +113,6 @@ export default function CheckoutProfile() {
       "body": JSON.stringify(data)
     })
     .then((response) => {
-      console.log(response)
       return response.json()
     })
     .then((response) => {
@@ -168,7 +166,10 @@ export default function CheckoutProfile() {
 
   return (
     <Fragment>
-      {redirection && <Redirect to="/"/>}
+      {redirection && <Redirect to={{
+        pathname: "/",
+        state: {alert: "SignupSuccessAlert"}
+      }}/>}
       <CssBaseline />
       <main className={classes.layout}>
         <Paper className={classes.paper}>

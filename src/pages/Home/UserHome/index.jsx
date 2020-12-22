@@ -5,6 +5,7 @@ import dipprMini from '../../../assets/img/dipprMini.png'
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import SearchResults from '../../../pages/Search/SearchResults'
+import { useHistory } from 'react-router-dom'
 // import { useSelector, useDispatch } from 'react-redux';
 // import Cookies from 'js-cookie';
 // import {loginUser} from '../../../store/actions';
@@ -68,9 +69,11 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const UserHome = () => {
+const UserHome = ({alert}) => {
   const [data, setData] = useState([]);
+  const [currentAlert, SetCurrentAlert] = useState(null);
   const classes = useStyles();
+  const history = useHistory();
   // const user = useSelector(state => state.user.user);
   // const [userLat, setUserLat] = useState(null)
   // const [userLng, setUserLng] = useState(null)
@@ -147,11 +150,19 @@ const UserHome = () => {
 
   useEffect(() => {
     fetchLastMarketDishes()
+    console.log(history)
+    if (history.location.state !==undefined){
+      SetCurrentAlert(history.location.state.alert)
+    }
     const interval = setInterval(() => {
       fetchLastMarketDishes()
     }, 10000);
     return () => clearInterval(interval);
   }, [])
+
+  useEffect(() => {
+    console.log(currentAlert)
+  }, [currentAlert])
 
   return (
     <>
