@@ -51,16 +51,6 @@ export default function General({name, city, firstname}) {
           />
           <br/>
           <br/>
-            {/* <TextField
-            required
-            id="lastName"
-            name="lastName"
-            label="Nom de famille"
-            fullWidth
-            autoComplete="family-name"
-          />
-            <br/>
-            <br/> */}
             <TextField
             required
             id="nickName"
