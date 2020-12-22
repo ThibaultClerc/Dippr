@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment} from 'react';
+import React, { useState, Fragment, useEffect} from 'react';
 import { Redirect} from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -7,7 +7,6 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
-import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import Avatar from './Avatar';
 import General from './General';
@@ -129,14 +128,37 @@ export default function CheckoutProfile() {
       console.log(error)
     })
   };
+  
+  const handleFileUpload = (user_id) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    fetch(`https://dippr-api-production.herokuapp.com/api/users/${user.id}`, {
+      "method": "PUT",
+      "headers": {
+        "Authorization": Cookies.get("token")
+      },
+      "body": formData
+    })
+    .then((response) => {
+      return response.json()
+    })
+    .then((response) => {
+    }).catch(error => {
+      console.log(error)
+    }).finally(() => {
+    })
+  };
 
+  useEffect(()=>{
+    handleFileUpload(user.id)
+  },[file])
 
   const steps = ['Avatar', 'Infos'];
 
   function getStepContent(step) {
     switch (step) {
       case 0:
-        return <Avatar picture={content => handlePicture(content)} />;
+        return <Avatar picture={content => handlePicture(content)} imageAvatar={file}/>;
       case 1:
         return <General name = {content => handleNickName(content)} city = {content => handleCityName(content)} firstname = {content => handleFirstName(content)}/>;
       default:
