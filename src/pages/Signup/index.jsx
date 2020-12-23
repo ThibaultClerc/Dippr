@@ -13,6 +13,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Checkout from '../../components/CheckoutProfile/Checkout'
 import { useForm, Controller } from 'react-hook-form';
+import AlertSnackBar from '../../components/Snackbar'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -38,10 +39,10 @@ const useStyles = makeStyles((theme) => ({
 
 const Signup = ({login, isModal}) => {
   const { control, errors: fieldsErrors, handleSubmit, watch } = useForm({  mode: 'onBlur',});
-  const [redirection, setRedirection] = useState(false);
   const [modal, setModal] = useState(isModal);
   const [checkout, setCheckout] = useState(null);
-  const [alert, setAlert] = useState(null);
+  const [currentAlert, setCurrentAlert] = useState(null);
+  const [showAlert, setShowAlert]= useState(null);
   const currentPassword = useRef({});
   currentPassword.current = watch("password", "");
 
@@ -49,11 +50,16 @@ const Signup = ({login, isModal}) => {
 
   const classes = useStyles();
 
-  const handleLogin = () =>{
+  const handleLogin = () => {
     {modal && login(true)};
-  }
+  };
+
+  const handleClose = () => {
+    setShowAlert(false)
+  };
 
   const handleRealSubmit = data => {
+    console.log(data)
     fetch("https://dippr-api-production.herokuapp.com/api/signup", {
       "method": "POST",
       "headers": {
@@ -69,19 +75,26 @@ const Signup = ({login, isModal}) => {
     })
     .then((response) => {
       {response.status === 200 && setCheckout(true)}
+      {response.status === 500 && handleAlert()}
+      console.log("hello")
       Cookies.set('token', response.headers.get("Authorization"))
       return response.json()
     })
     .then((response) => {
       dispatch(loginUser(response.data))
     }).catch(error => {
-      setRedirection(true)
       console.log(error)
     })
   };
 
+  const handleAlert = () =>{
+    setCurrentAlert("SignupError");
+    setShowAlert(true);
+  };
+
   const formSignup = () => (
     <Container component="main" maxWidth="xs">
+    {showAlert && <AlertSnackBar alertMessage={"Le compte email existe déjà. Veuillez en utiliser un autre ou connectez-vous"} alertType={currentAlert} closeAlert={content=>handleClose(content)}/>}
     <CssBaseline />
     <div className={classes.paper}>
         <Link to="/" className={classes.title} variant="h6" color='inherit'>
@@ -166,7 +179,7 @@ const Signup = ({login, isModal}) => {
               defaultValue=""
               rules={{
                 validate: value =>
-                value === currentPassword.current || "The passwords do not match"
+                value === currentPassword.current || "Les mots de passes doivent être identiques"
               }}
             />
           </Grid>
@@ -195,9 +208,8 @@ const Signup = ({login, isModal}) => {
 
   return (
     <>
-      {(!redirection && checkout) && <Checkout/>}
+      {checkout && <Checkout/>}
       {!checkout && formSignup()}
-      {redirection && formSignup()}
     </>
 
   );

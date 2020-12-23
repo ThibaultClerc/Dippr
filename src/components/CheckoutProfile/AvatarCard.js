@@ -25,9 +25,16 @@ export default function AvatarCard({picture, imageAvatar}) {
   const [file, setFile] = useState(null)
 
   const handleFile = ({target}) =>{
-    setFile(target.files[0]);
-    picture(target.files[0]);
-    setCurrentAvatar(URL.createObjectURL(target.files[0]));
+    if (target === undefined || target.files[0] === undefined){
+      return setCurrentAvatar(URL.createObjectURL(imageAvatar))
+    }
+
+    if (target !== undefined){
+      setFile(target.files[0]);
+      picture(target.files[0]);
+      setCurrentAvatar(URL.createObjectURL(target.files[0]));
+    }
+
   };
 
 

@@ -148,7 +148,9 @@ export default function CheckoutProfile() {
   };
 
   useEffect(()=>{
+    if (user !== undefined){
     handleFileUpload(user.id)
+    };
   },[file])
 
   const steps = ['Avatar', 'Infos'];

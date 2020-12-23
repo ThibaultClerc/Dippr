@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function AlertSnackBar({alertMessage,alertType}) {
+export default function AlertSnackBar({alertMessage, alertType , closeAlert}) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState(null)
@@ -32,19 +32,30 @@ export default function AlertSnackBar({alertMessage,alertType}) {
     }
 
     setOpen(false);
+    closeAlert(false);
   };
 
+  const switchMessage = (alert) =>{
+  switch (alert) {
+  case 'SignupSuccessAlert':
+    setMessage(alertMessage)
+    setAlertSeverity('info')
+    break;
+  case 'SignupError':
+    setMessage(alertMessage)
+    setAlertSeverity('error')
+    break;
+}
+  }
+
   useEffect(() => {
-    if (alertType ==="SignupSuccessAlert"){
-      setMessage(alertMessage)
-      setAlertSeverity('info')
-      handleOpen();
-    }
+    switchMessage(alertType);
+    handleOpen();
   }, [])
 
   return (
     <div className={classes.root}>
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical:"top", horizontal :"center"}}>
+      <Snackbar open={open} autoHideDuration={5000} onClose={handleClose} anchorOrigin={{ vertical:"top", horizontal :"center"}}>
         <Alert onClose={handleClose} severity={alertSeverity}>
           {message}
         </Alert>
