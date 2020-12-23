@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const Signup = ({login, isModal}) => {
-  const { control, errors: fieldsErrors, handleSubmit, watch } = useForm({});
+  const { control, errors: fieldsErrors, handleSubmit, watch } = useForm({  mode: 'onBlur',});
   const [redirection, setRedirection] = useState(false);
   const [modal, setModal] = useState(isModal);
   const [checkout, setCheckout] = useState(null);
