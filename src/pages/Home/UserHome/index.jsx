@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import SearchResults from '../../../pages/Search/SearchResults'
 import { useHistory } from 'react-router-dom'
+import AlertSnackBar from '../../../components/Snackbar'
 // import { useSelector, useDispatch } from 'react-redux';
 // import Cookies from 'js-cookie';
 // import {loginUser} from '../../../store/actions';
@@ -72,6 +73,7 @@ const useStyles = makeStyles((theme) => ({
 const UserHome = ({alert}) => {
   const [data, setData] = useState([]);
   const [currentAlert, SetCurrentAlert] = useState(null);
+  const [showAlert, setShowAlert]= useState(null);
   const classes = useStyles();
   const history = useHistory();
   // const user = useSelector(state => state.user.user);
@@ -128,6 +130,10 @@ const UserHome = ({alert}) => {
   //   })
   // }, [])
 
+  const handleClose = (value) =>{
+    setShowAlert(value)
+  };
+
   const fetchLastMarketDishes = () => {
     fetch(`https://dippr-api-production.herokuapp.com/api/market_dishes`, {
       "method": "GET",
@@ -150,8 +156,8 @@ const UserHome = ({alert}) => {
 
   useEffect(() => {
     fetchLastMarketDishes()
-    console.log(history)
     if (history.location.state !==undefined){
+      setShowAlert(true)
       SetCurrentAlert(history.location.state.alert)
     }
     const interval = setInterval(() => {
@@ -160,12 +166,10 @@ const UserHome = ({alert}) => {
     return () => clearInterval(interval);
   }, [])
 
-  useEffect(() => {
-    console.log(currentAlert)
-  }, [currentAlert])
 
   return (
     <>
+    {showAlert && <AlertSnackBar alertMessage={"Bienvenue sur Dippr!"} alertType={currentAlert} closeAlert={content=>handleClose(content)}/>}
       <Grid className={classes.mainContainer}>
         <Grid className={classes.mainWelcomeContainer}>
           <Grid container className={classes.welcomeContainer}>
