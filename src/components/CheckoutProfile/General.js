@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+import AddressSearchBar from '../../components/AddressSearchBar'
+import { Add } from '@material-ui/icons';
 
 export default function General({name, city, firstname}) {
   const [nickName, setNickName] = useState('');
-  const [cityName, setCityName] = useState('');
+  const [cityName, setCityName] = useState([]);
   const [firstName, setFirstName] = useState('');
 
   const handleNickName =(value)=>{
@@ -13,7 +15,8 @@ export default function General({name, city, firstname}) {
   };
 
   const handleCityName =(value)=>{
-    city(value)
+    setCityName(value);
+    city(value);
   };
 
   const handleFirstName =(value)=>{
@@ -41,7 +44,6 @@ export default function General({name, city, firstname}) {
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <TextField
-            required
             id="firstName"
             name="firstName"
             label="Prénom"
@@ -52,7 +54,6 @@ export default function General({name, city, firstname}) {
           <br/>
           <br/>
             <TextField
-            required
             id="nickName"
             value={nickName}
             name="nickname"
@@ -62,17 +63,8 @@ export default function General({name, city, firstname}) {
             autoComplete="nick-name"
           />
             <br/>
-            <br/>
-            <TextField
-            required
-            value={cityName}
-            id="city"
-            name="city"
-            label="Ville"
-            fullWidth
-            onChange={e =>setCityName(e.target.value)}
-            autoComplete="city"
-          />
+            <br/> 
+          <AddressSearchBar city={content => handleCityName(content)}/>
         </Grid>
       </Grid>
 
