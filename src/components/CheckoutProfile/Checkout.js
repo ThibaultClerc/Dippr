@@ -95,6 +95,7 @@ export default function CheckoutProfile() {
   };
 
   const handleCityName = (value) => {
+    console.log(value)
     setCity(value);
   };
 

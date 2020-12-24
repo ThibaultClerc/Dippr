@@ -59,7 +59,6 @@ const Signup = ({login, isModal}) => {
   };
 
   const handleRealSubmit = data => {
-    console.log(data)
     fetch("https://dippr-api-production.herokuapp.com/api/signup", {
       "method": "POST",
       "headers": {
@@ -76,7 +75,6 @@ const Signup = ({login, isModal}) => {
     .then((response) => {
       {response.status === 200 && setCheckout(true)}
       {response.status === 500 && handleAlert()}
-      console.log("hello")
       Cookies.set('token', response.headers.get("Authorization"))
       return response.json()
     })
