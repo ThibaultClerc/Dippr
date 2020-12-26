@@ -26,8 +26,8 @@ const MiniMap = ({dishID, dishLat, dishLng}) => {
   })
 
   const center = {
-    lat: Number.parseFloat(dishLat),
-    lng: Number.parseFloat(dishLng)
+    lat: dishLat !== null ? Number.parseFloat(dishLat) : 48.858370,
+    lng: dishLng !== null ? Number.parseFloat(dishLng) : 2.294481
   }
 
   const mapRef = useRef();
@@ -48,14 +48,25 @@ const MiniMap = ({dishID, dishLat, dishLng}) => {
       onLoad={onMapLoad}
       scrollwheel={false}
       >
-      <Marker
-        key={dishID}
-        position={{lat: Number.parseFloat(dishLat), lng: Number.parseFloat(dishLng)}}
-        icon={{
-          url: dishLogo,
-          scaledSize: new window.google.maps.Size(50, 50)
-        }}
-      />
+      {(dishLat === null || dishLng === null) ?
+        <Marker
+          key={dishID}
+          position={{lat: 48.858370, lng: 2.294481}}
+          icon={{
+            url: dishLogo,
+            scaledSize: new window.google.maps.Size(50, 50)
+          }}
+        />
+      : <Marker
+          key={dishID}
+          position={{lat: Number.parseFloat(dishLat), lng: Number.parseFloat(dishLng)}}
+          icon={{
+            url: dishLogo,
+            scaledSize: new window.google.maps.Size(50, 50)
+          }}
+        />
+      }
+      
     </GoogleMap>
     </>
   )

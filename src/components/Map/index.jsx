@@ -7,7 +7,7 @@ import {
   InfoWindow
 } from '@react-google-maps/api';
 import dishLogo from '../../assets/img/dishLogo.png';
-import DishCard from '../DishCard'
+import DishCard from '../DishCard';
 
 const libraries = ["places"]
 
@@ -52,7 +52,10 @@ const Map = ({data}) => {
       {data.map(dish => {
         return <Marker
                 key={dish.attributes.id}
-                position={{lat: Number.parseFloat(dish.meta.user_lat), lng: Number.parseFloat(dish.meta.user_lng)}}
+                position={{
+                  lat: dish.meta.user_lat !== null ? Number.parseFloat(dish.meta.user_lat) : 48.858370,
+                  lng: dish.meta.user_lng !== null ? Number.parseFloat(dish.meta.user_lng) : 2.294481
+                }}
                 icon={{
                   url: dishLogo,
                   scaledSize: new window.google.maps.Size(45, 45)
@@ -62,17 +65,22 @@ const Map = ({data}) => {
                 }}
                 />
       })}
-      {selected ? (<InfoWindow position={{lat: parseFloat(selected.meta.user_lat), lng: parseFloat(selected.meta.user_lng)}}>
-        <DishCard
-          key={selected.id}
-          market_dish_id={selected.id}
-          name={selected.meta.user_dish.name}
-          description={selected.meta.user_dish.description}
-          dish_rating={selected.meta.user_dish.dish_rating}
-          user_id={selected.meta.user_dish.user_id}
-          created_at={selected.meta.user_dish.created_at}
-          type={selected.attributes.market_dish_type}
-        />
+      {selected ? (
+        <InfoWindow
+          position={{lat: parseFloat(selected.meta.user_lat), lng: parseFloat(selected.meta.user_lng)}}
+          onCloseClick={() => {
+            setSelected(null)
+          }}>
+          <DishCard
+            key={selected.id}
+            market_dish_id={selected.id}
+            name={selected.meta.user_dish.name}
+            description={selected.meta.user_dish.description}
+            dish_rating={selected.meta.user_dish.dish_rating}
+            user_id={selected.meta.user_dish.user_id}
+            created_at={selected.meta.user_dish.created_at}
+            photo_url={selected.meta.photo_url}
+          />
       </InfoWindow>) : null}
     </GoogleMap>
     

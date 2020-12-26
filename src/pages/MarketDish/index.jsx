@@ -5,7 +5,6 @@ import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Cookies from 'js-cookie';
-import Loader from '../../components/UI/Loader';
 import moment from 'moment'
 import MiniMap from '../../components/MiniMap';
 import PopupDialog from '../../components/PopupDialog';
@@ -169,7 +168,8 @@ const MarketDish = () => {
   const [userTransaction, setUserTransaction] = useState([])
 
   useEffect(() => {
-    fetch(`https://dippr-api-development.herokuapp.com/api/market_dishes/${dishID}`, {
+    setIsSearching(true)
+    fetch(`https://dippr-api-production.herokuapp.com/api/market_dishes/${dishID}`, {
       "method": "GET",
       "headers": {
         "Content-Type": "application/json"
@@ -189,7 +189,7 @@ const MarketDish = () => {
   }, [isSuccess, isCancelSuccess])
 
   const fetchUserTransactions = (type, pageDishID) => {
-    fetch(`https://dippr-api-development.herokuapp.com/api/users/${user.id}/${type}`, {
+    fetch(`https://dippr-api-production.herokuapp.com/api/users/${user.id}/${type}`, {
       "method": "GET",
       "headers": {
         "Content-Type": "application/json",
@@ -202,7 +202,8 @@ const MarketDish = () => {
         setAlreadyAsked(false)
       } else {
           const transaction = response.data
-            .filter(transaction => ((transaction.attributes.answer_dish_id == pageDishID) && ((transaction.attributes.status === 'pending') || (transaction.attributes.status === 'confirmed'))))
+            .filter(transaction => ((transaction.attributes.answer_dish_id == pageDishID)
+            && ((transaction.attributes.status === 'pending') || (transaction.attributes.status === 'confirmed'))))
         if (transaction.length === 0) {
           setAlreadyAsked(false)
         } else {
@@ -212,7 +213,7 @@ const MarketDish = () => {
       }
     }).catch(error => {
       console.log(error)
-    })
+    }).finally(() => setIsSearching(false))
   }
 
   const handleChipClick = (chipName) => {
@@ -262,7 +263,7 @@ const MarketDish = () => {
       }
     }
     const actualTransaction = userTransaction[0]
-    fetch(`https://dippr-api-development.herokuapp.com/api/${type}/${actualTransaction.id}`, {
+    fetch(`https://dippr-api-production.herokuapp.com/api/${type}/${actualTransaction.id}`, {
       "method": "PUT",
       "headers": {
         "Content-Type": "application/json",
@@ -304,7 +305,7 @@ const MarketDish = () => {
         status: 0
       }
     }
-    fetch(`https://dippr-api-development.herokuapp.com/api/${type}`, {
+    fetch(`https://dippr-api-production.herokuapp.com/api/${type}`, {
       "method": "POST",
       "headers": {
         "Content-Type": "application/json",
@@ -332,7 +333,7 @@ const MarketDish = () => {
     if (isSuccess) {
       successTimeout = setTimeout(() => {
         setIsSuccess(false)
-      }, 3000)
+      }, 2000)
     }
     return () => {
       clearTimeout(successTimeout)
@@ -344,7 +345,7 @@ const MarketDish = () => {
     if (isCancelSuccess) {
       successTimeout = setTimeout(() => {
         setIsCancelSuccess(false)
-      }, 3000)
+      }, 2000)
     }
     return () => {
       clearTimeout(successTimeout)
@@ -415,7 +416,6 @@ const MarketDish = () => {
         </Alert>
       </Collapse>
     }
-    {isSearching && <Loader/>}
     {open &&
       <PopupDialog
         userID={user.id}
@@ -424,30 +424,41 @@ const MarketDish = () => {
         handleSelectedValue={(userMarketDish) => handleTransactionCreation(userMarketDish)}
       />
     }
-    {(data !== null && !isSearching) &&
+    {(data !== null) &&
       <Container fixed className={classes.mainContainer}>
         <Grid container fixed spacing={3} className={classes.subMainContainer}>
           <Grid item xs={12} md={6} className={classes.imgContainer}>
-            <img className={classes.image} src={`https://dippr-api-development.herokuapp.com${data.meta.user_dish.photo_url}`} alt="dish-photo"></img>   
+            <img className={classes.image} src={`https://dippr-api-production.herokuapp.com${data.meta.user_dish.photo_url}`} alt="dish-photo"></img>   
             <Chip
               avatar={<Avatar alt="Natacha" src="/static/images/avatar/1.jpg" />}
               label={data.meta.user_first_name}
               className={classes.avatar}
               onClick={handleAvatarClick}
             />
-            {!alreadyAsked ? 
-              <Button variant="contained" color="secondary" size="large" className={classes.askButton} onClick={handleAskClick}>
-                {data.attributes.market_dish_type === "troc" ?
-                "PROPOSER UN TROC"
-                : "DEMANDER CE PLAT"
+            {data.meta.user_dish.user_id != user.id &&
+              <>
+              {!alreadyAsked ? 
+                <Button variant="contained" color="secondary" size="large" className={classes.askButton} onClick={handleAskClick}>
+                  {data.attributes.market_dish_type === "troc" ?
+                  "PROPOSER UN TROC"
+                  : "DEMANDER CE PLAT"
+                }
+                </Button>
+              : <Button variant="contained" color="primary" size="large" className={classes.askButton} onClick={handleCancelClick}>
+                  Annuler la demande
+                </Button>
               }
-              </Button>
-            : <Button variant="contained" color="primary" size="large" className={classes.askButton} onClick={handleCancelClick}>
-                Annuler la demande
+              </>
+            } 
+            {data.meta.user_dish.user_id == user.id &&
+              <Button variant="contained" color="primary" size="large" className={classes.askButton}>
+                C'est votre plat !
               </Button>
             }
           </Grid>
           <Grid item xs={12} md={6} className={classes.textContainer}>
+          {data.meta.user_dish.user_id != user.id &&
+            <>
             {!alreadyAsked ? 
               <Button variant="contained" color="secondary" size="large" className={classes.askButton2} onClick={handleAskClick}>
                   {data.attributes.market_dish_type === "troc" ?
@@ -458,6 +469,13 @@ const MarketDish = () => {
               : <Button variant="contained" color="primary" size="large" className={classes.askButton2} onClick={handleCancelClick}>
                   Annuler la demande
                 </Button>
+            }
+            </>
+          }
+          {data.meta.user_dish.user_id == user.id &&
+              <Button variant="contained" color="primary" size="large" className={classes.askButton2}>
+                C'est votre plat !
+              </Button>
             }
             <Paper className={classes.textPaper}>
               <Typography variant="h2" gutterBottom className={classes.title}>

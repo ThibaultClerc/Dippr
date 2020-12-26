@@ -1,22 +1,17 @@
 import Cookies from 'js-cookie'
-import React, {useState, useEffect} from 'react'
-import { useSelector, useDispatch } from 'react-redux';
+import React, {useState } from 'react'
+import { useDispatch } from 'react-redux';
 import {loginUser} from '../../store/actions';
 import { Redirect, Link } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
-
 import dipprLogoTest2 from '../../assets/img/dipprLogoTest2.png'
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
 import { useForm, Controller } from 'react-hook-form';
-
-
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -30,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: '100%',
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -42,17 +37,12 @@ const useStyles = makeStyles((theme) => ({
 const Connection = ({signup, isModal}) => {
   const { control, errors: fieldsErrors, handleSubmit } = useForm({});
   const [redirection, setRedirection] = useState(null);
-  const [alert, setAlert] = useState(null);
   const [modal, setModal] = useState(isModal)
   const classes = useStyles();
-
-
-  const onSubmit = data => console.log(data);
-
   const dispatch = useDispatch();
 
   const handleRealSubmit = data => {
-    fetch("https://dippr-api-development.herokuapp.com/api/login", {
+    fetch("https://dippr-api-production.herokuapp.com/api/login", {
       "method": "POST",
       "headers": {
         "Content-Type": "application/json"
@@ -80,7 +70,6 @@ const Connection = ({signup, isModal}) => {
   const handleSignup = () =>{
     {modal && signup(true)};
   }
-
 
   return (
     <>
@@ -138,17 +127,9 @@ const Connection = ({signup, isModal}) => {
               control={control}
               defaultValue=""
               rules={{
-                required: true,
-                minLength: {
-                  value: 6,
-                  message: 'min. 6 caractères'
-                }
+                required: true
               }}
             />
-          {/* <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Se souvenir de moi"
-          /> */}
           <Button
             type="submit"
             fullWidth
@@ -175,7 +156,6 @@ const Connection = ({signup, isModal}) => {
       </div>
     </Container>
     </>
-
   );
 }
 export default Connection

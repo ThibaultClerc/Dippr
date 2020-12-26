@@ -2,17 +2,25 @@ import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+import AddressSearchBar from '../../components/AddressSearchBar'
+import { Add } from '@material-ui/icons';
 
-export default function General({name, city}) {
+export default function General({name, city, firstname}) {
   const [nickName, setNickName] = useState('');
-  const [cityName, setCityName] = useState('');
+  const [cityName, setCityName] = useState([]);
+  const [firstName, setFirstName] = useState('');
 
   const handleNickName =(value)=>{
     name(value)
   };
 
   const handleCityName =(value)=>{
-    city(value)
+    setCityName(value);
+    city(value);
+  };
+
+  const handleFirstName =(value)=>{
+    firstname(value)
   };
 
   useEffect(()=>{
@@ -23,6 +31,11 @@ export default function General({name, city}) {
     handleCityName(cityName)
   },[cityName]);
 
+
+  useEffect(()=>{
+    handleFirstName(firstName)
+  },[firstName]);
+
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
@@ -30,28 +43,17 @@ export default function General({name, city}) {
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          {/* <TextField
-            required
+          <TextField
             id="firstName"
             name="firstName"
             label="Prénom"
             fullWidth
             autoComplete="given-name"
+            onChange={e =>setFirstName(e.target.value)}
           />
           <br/>
           <br/>
             <TextField
-            required
-            id="lastName"
-            name="lastName"
-            label="Nom de famille"
-            fullWidth
-            autoComplete="family-name"
-          />
-            <br/>
-            <br/> */}
-            <TextField
-            required
             id="nickName"
             value={nickName}
             name="nickname"
@@ -61,17 +63,8 @@ export default function General({name, city}) {
             autoComplete="nick-name"
           />
             <br/>
-            <br/>
-            <TextField
-            required
-            value={cityName}
-            id="city"
-            name="city"
-            label="Ville"
-            fullWidth
-            onChange={e =>setCityName(e.target.value)}
-            autoComplete="city"
-          />
+            <br/> 
+          <AddressSearchBar city={content => handleCityName(content)}/>
         </Grid>
       </Grid>
 

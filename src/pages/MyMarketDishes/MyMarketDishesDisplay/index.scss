@@ -1,0 +1,16 @@
+.dishImg {
+  height: 5rem;
+}
+
+.resultsContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: column;
+  height: 100%;
+}
+
+.cardContainer > .MuiCardContent-root {
+  height: 120px;
+  padding-bottom: 5px !important;
+}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment} from 'react';
+import React, { useState, Fragment, useEffect} from 'react';
 import { Redirect} from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -7,11 +7,12 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
-import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import Avatar from './Avatar';
 import General from './General';
-
+import {loginUser} from '../../store/actions';
+import { useSelector, useDispatch } from 'react-redux';
+import Cookies from 'js-cookie'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -55,13 +56,26 @@ export default function CheckoutProfile() {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
   const [file, setFile] = useState(null);
-  const [nickname, setNickName] = useState(null);
+  const [nickName, setNickName] = useState(null);
   const [city, setCity] = useState(null);
+  const [firstName, setFirstName] = useState(null);
   const [redirection, setRedirection] = useState(null);
+  const user = useSelector(state => state.user.user);
 
+  const data = {
+    first_name: firstName,
+    city: city,
+    nickname: nickName
+  };
+
+  const dispatch = useDispatch();
 
   const handleNext = () => {
+    if (activeStep === steps.length - 1){
+      handleSubmit()
+    }else{
     setActiveStep(activeStep + 1);
+    }
   };
 
   const handleRedirection = () => {
@@ -81,17 +95,73 @@ export default function CheckoutProfile() {
   };
 
   const handleCityName = (value) => {
+    console.log(value)
     setCity(value);
   };
+
+  const handleFirstName = (value) => {
+    setFirstName(value);
+  };
+
+  const handleSubmit = () => {
+    fetch(`https://dippr-api-production.herokuapp.com/api/users/${user.id}`, {
+      "method": "PUT",
+      "headers": {
+        "Content-Type": "application/json",
+        'Authorization': `${Cookies.get('token')}`
+
+      },
+      "body": JSON.stringify(data)
+    })
+    .then((response) => {
+      return response.json()
+    })
+    .then((response) => {
+      dispatch(loginUser({ "id": user.id, "attributes": {
+        first_name: firstName,
+        city: city,
+        nickname: nickName,
+      }}))
+      setRedirection(true);
+    }).catch(error => {
+      console.log(error)
+    })
+  };
+  
+  const handleFileUpload = (user_id) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    fetch(`https://dippr-api-production.herokuapp.com/api/users/${user.id}`, {
+      "method": "PUT",
+      "headers": {
+        "Authorization": Cookies.get("token")
+      },
+      "body": formData
+    })
+    .then((response) => {
+      return response.json()
+    })
+    .then((response) => {
+    }).catch(error => {
+      console.log(error)
+    }).finally(() => {
+    })
+  };
+
+  useEffect(()=>{
+    if (user !== undefined){
+    handleFileUpload(user.id)
+    };
+  },[file])
 
   const steps = ['Avatar', 'Infos'];
 
   function getStepContent(step) {
     switch (step) {
       case 0:
-        return <Avatar picture={content => handlePicture(content)} />;
+        return <Avatar picture={content => handlePicture(content)} imageAvatar={file}/>;
       case 1:
-        return <General name = {content => handleNickName(content)} city = {content => handleCityName(content)}/>;
+        return <General name = {content => handleNickName(content)} city = {content => handleCityName(content)} firstname = {content => handleFirstName(content)}/>;
       default:
         throw new Error('Unknown step');
     }
@@ -99,7 +169,10 @@ export default function CheckoutProfile() {
 
   return (
     <Fragment>
-      {redirection && <Redirect to="/"/>}
+      {redirection && <Redirect to={{
+        pathname: "/",
+        state: {alert: "SignupSuccessAlert"}
+      }}/>}
       <CssBaseline />
       <main className={classes.layout}>
         <Paper className={classes.paper}>

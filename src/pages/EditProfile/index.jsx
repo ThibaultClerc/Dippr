@@ -28,6 +28,7 @@ const EditProfile = () => {
   const [street, setStreet] = useState(userStore.attributes.street);
   const [phoneNumber, setPhoneNumber] = useState(userStore.attributes.phone_number);
   const [description, setDescription] = useState(userStore.attributes.description);
+  const [nickName, setNickName] = useState(userStore.attributes.nickname);
   const dippers = useState(userStore.attributes.dippers);
   const [email, setEmail] = useState(userStore.attributes.email);
   const [password, setPassword] = useState();
@@ -44,12 +45,14 @@ const EditProfile = () => {
     zip_code: zipCode,
     street: street,
     phone_number: phoneNumber,
-    description: description
+    description: description,
+    nickname: nickName,
+
   };
   
   const handleSubmit = (e) => {
     e.preventDefault()
-    fetch(`https://dippr-api-development.herokuapp.com/api/users/${userStore.id}`, {
+    fetch(`https://dippr-api-production.herokuapp.com/api/users/${userStore.id}`, {
       "method": "PUT",
       "headers": {
         "Content-Type": "application/json",
@@ -73,7 +76,8 @@ const EditProfile = () => {
         street: street,
         description: description,
         phone_number: phoneNumber,
-        dippers: dippers
+        dippers: dippers,
+        nickname: nickName
       }}))
       console.log('updated')
       console.log(userStore)
@@ -99,6 +103,12 @@ const EditProfile = () => {
           <Form.Group controlId="firstName">
             <Form.Label>Prénom</Form.Label>
             <Form.Control type="firstName" value={firstName !== '' ? firstName : "Prénom"} onChange={e => setFirstName(e.target.value)}/>
+            <Form.Text className="text-muted">
+            </Form.Text>
+          </Form.Group>
+          <Form.Group controlId="nickName">
+            <Form.Label>Pseudo</Form.Label>
+            <Form.Control type="nickname" value={nickName !== '' ? nickName : "Pseudo"} onChange={e => setNickName(e.target.value)}/>
             <Form.Text className="text-muted">
             </Form.Text>
           </Form.Group>

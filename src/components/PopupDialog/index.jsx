@@ -53,7 +53,7 @@ const PopupDialog = ({userID, open, handleSelectedValue, handleClose}) => {
   }
 
   useEffect(() => {
-    fetch(`https://dippr-api-development.herokuapp.com/api/users/${userID}/market_dishes`, {
+    fetch(`https://dippr-api-production.herokuapp.com/api/users/${userID}/market_dishes`, {
       "method": "GET",
       "headers": {
         "Content-Type": "application/json"
@@ -84,9 +84,6 @@ const PopupDialog = ({userID, open, handleSelectedValue, handleClose}) => {
                 </ListItemAvatar>
                 <ListItemText primary={dataItem.meta.user_dish.name} />
               </ListItem>
-              <Button autoFocus  color="primary" onClick={handleClick} className={classes.submitBtn}>
-                Envoyer la demande
-              </Button>
             </>
             ))
             :
@@ -100,6 +97,11 @@ const PopupDialog = ({userID, open, handleSelectedValue, handleClose}) => {
             </DialogContent>
           }
         </List>
+        {data.length !== 0 &&
+          <Button autoFocus  color="primary" onClick={handleClick} className={classes.submitBtn}>
+            Envoyer la demande
+          </Button>
+        }
       </Dialog>
     </>
   );

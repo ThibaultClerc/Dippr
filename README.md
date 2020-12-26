@@ -1,70 +1,84 @@
-# Getting Started with Create React App
+<h1 align="center">
+  <br>
+  <a href="https://dippr-production.herokuapp.com/"><img src="https://i.ibb.co/XVVkLKR/dippr-Github-Logo.png" alt="logo" border="0" width="100px"></a>
+  <br>
+  <br>
+ <a href="https://dippr-production.herokuapp.com/"><img src="https://i.ibb.co/mqf1DKm/dippr-Main-Logo.png" alt="DIPPR" border="0" width="400px"></a>
+  <br>
+  <br>
+</h1>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### Identifiants administrateur
+* Email : admin@admin.fr
+* Mdp : admin
 
-## Available Scripts
+# Contexte
 
-In the project directory, you can run:
+Tu es persuadé que ton gratin de courgettes est le meilleur de l'univers ? Même meilleur que celui d'un chef étoilé ? Alors proposes-le sur [DIPPR](https://dippr-development.herokuapp.com/) ! (Voici aussi le [lien en dev](https://dippr-development.herokuapp.com/) si problèmes en prod... )
 
-### `yarn start`
+# Qu'est-ce que DIPPR ?
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+DIPPR est une application destinée aux particuliers  souhaitant troquer ou donner des plats maisons à d'autres particuliers ou des associations. L'idée est de créer un réseau communautaire et solidaire afin de partager ses spécialités tout en aidant les personnes dans le besoin.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Pourquoi les particuliers utiliseraient-ils UPSTR ?
 
-### `yarn test`
+* Partager au plus grand monde des spécialités maisons
+* Découvrir de nouveaux plats autour de chez soi
+* Aider des associations de distribution alimentaire ou de maraude
+* Accéder à un réseau de passionés
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+# Parcours utilisateur
 
-### `yarn build`
+Le parcours utilisateur est très simple :
+<br/>
+* Landing page présentant le concept
+* Barre de recherche dans laquelle il est possible de rechercher des plats ouverts au troc, ou des plats ouverts au don
+* Connexion/inscription puis redirection sur la page d'accueil qui contient les plats les plus récents autour de l'utilisateur (géolocalisation)
+* Possibilité de mettre sur le marché un plat de type troc ou don, ou de le stocker dans "Mes spécialités"
+* Si un plat mit sur le marché est de type troc, il est possible de faire une demande de troc en échange d'un plat
+* Si un plat mit sur le marché est de type don, il est possible de faire une demande de don
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Caractéristiques
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Base de données
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Tables 
 
-### `yarn eject`
+* Une table et un model `User` (Devise)
+* Une table et un model `UserDish`
+* Une table et un model `MarketDish`
+* Une table et un model `Tag` (Devise)
+* Une table et un model `Ingredient`
+* Plusieurs tables de jointures entre les `Tag`, `Ingredient` et `MarketDish
+* Une table et un model `Troc`
+* Une table et un model `Donation`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Models
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+* Un `User` a plusieurs `UserDish`, `MarketDish`, `Troc` et `Donation`
+* Un `UserDish` a plusieurs `Ingredient` et `Tags`, et `MarketDish`
+* Un `Troc` appartient à un `caller` et `answerer` (table `User`), et un `caller_dish` et un `answer_dish` (table `MarketDish`)
+* Un `Donation` appartient à un `caller` et `answerer` (table `User`), et un `answer_dish` (table `MarketDish`)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Backend
 
-## Learn More
+* RAILS API avec Devise-JWT
+* Active Storage pour gérer les uploads de photos (blobs), les envoyer sur un bucket AWS S3 et retourner un URL pour le front
+* Utilisation de la gem `pg_search` pour pouvoir générer une requête de recherche dans 3 tables différentes en même temps pour les `MarketDish`
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Frontend
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Nous avons pensé l'application comme une PWA. L'UI est scindée en `Desktop` et `Mobile`.
+  
+* L'API Google Maps Javascript et Google Places afin d'afficher les plats sur la carte
+* React Redux pour gérer le User connecté
+* CSS géré avec React Material-UI au maximum responsive
+*
+* etc...
 
-### Code Splitting
+# Team
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+* 👨‍🚀 @DamVador
+* 👨‍🚀 @Bakbledy93
+* 👨‍🚀 @ThibaultClerc
