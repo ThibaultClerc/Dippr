@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const Connection = ({signup, isModal}) => {
-  const { control, errors: fieldsErrors, handleSubmit } = useForm({});
+  const { control, errors: fieldsErrors, handleSubmit } = useForm({  mode: 'onBlur',});
   const [redirection, setRedirection] = useState(null);
   const [modal, setModal] = useState(isModal)
   const [currentAlert, setCurrentAlert] = useState(null);
