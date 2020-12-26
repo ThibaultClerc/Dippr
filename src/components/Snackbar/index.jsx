@@ -45,6 +45,10 @@ export default function AlertSnackBar({alertMessage, alertType , closeAlert}) {
     setMessage(alertMessage)
     setAlertSeverity('error')
     break;
+  case 'SigninError':
+    setMessage(alertMessage)
+    setAlertSeverity('error')
+    break;
 }
   }
 
