@@ -1,10 +1,11 @@
 import Cookies from 'js-cookie'
-import React, {useState } from 'react'
+import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
 import {loginUser} from '../../store/actions';
 import { Redirect, Link } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
+
 import dipprLogoTest2 from '../../assets/img/dipprLogoTest2.png'
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -12,6 +13,8 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
 import { useForm, Controller } from 'react-hook-form';
+import AlertSnackBar from '../../components/Snackbar'
+
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -25,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%',
+    width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -35,14 +38,19 @@ const useStyles = makeStyles((theme) => ({
 
 
 const Connection = ({signup, isModal}) => {
-  const { control, errors: fieldsErrors, handleSubmit } = useForm({});
+  const { control, errors: fieldsErrors, handleSubmit } = useForm({  mode: 'onBlur',});
   const [redirection, setRedirection] = useState(null);
   const [modal, setModal] = useState(isModal)
+  const [currentAlert, setCurrentAlert] = useState(null);
+  const [showAlert, setShowAlert]= useState(null);
   const classes = useStyles();
+
+  const onSubmit = data => console.log(data);
+
   const dispatch = useDispatch();
 
   const handleRealSubmit = data => {
-    fetch("https://dippr-api-production.herokuapp.com/api/login", {
+    fetch("https://dippr-api-development.herokuapp.com/api/login", {
       "method": "POST",
       "headers": {
         "Content-Type": "application/json"
@@ -57,6 +65,7 @@ const Connection = ({signup, isModal}) => {
     })
     .then((response) => {
       {response.status === 200 &&  setRedirection(true)}
+      {response.status === 401 && handleAlert()}
       Cookies.set('token', response.headers.get("Authorization"))
       return response.json()
     })
@@ -71,10 +80,19 @@ const Connection = ({signup, isModal}) => {
     {modal && signup(true)};
   }
 
+  const handleAlert = () =>{
+    setCurrentAlert("SigninError");
+    setShowAlert(true);
+  };
+
+  const handleClose = () => {
+    setShowAlert(false)
+  };
+
   return (
     <>
     {redirection && <Redirect to='/'/>}
-    {!redirection && <Redirect to='/signin'/>}
+    {showAlert && <AlertSnackBar alertMessage={"Email ou mot de passe incorrect"} alertType={currentAlert} closeAlert={content=>handleClose(content)}/>}
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
@@ -127,7 +145,11 @@ const Connection = ({signup, isModal}) => {
               control={control}
               defaultValue=""
               rules={{
-                required: true
+                required: true,
+                minLength: {
+                  value: 6,
+                  message: 'min. 6 caractères'
+                }
               }}
             />
           <Button
@@ -156,6 +178,7 @@ const Connection = ({signup, isModal}) => {
       </div>
     </Container>
     </>
+
   );
 }
 export default Connection
