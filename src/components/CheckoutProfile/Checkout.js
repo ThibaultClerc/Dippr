@@ -67,7 +67,9 @@ export default function CheckoutProfile() {
   const data = {
     first_name: firstName,
     city: city,
-    nickname: nickName
+    nickname: nickName,
+    lat: lat,
+    lng: lng
   };
 
   const dispatch = useDispatch();

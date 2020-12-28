@@ -48,6 +48,9 @@ const Profile = () => {
     fetchData(`https://dippr-api-production.herokuapp.com/api/users/${profileId}`)
   }, [profileId])
 
+  useEffect(() => {
+    console.log(data)
+  }, [data])
   return (
     <div className="text">
       {data.length !== 0 ?
