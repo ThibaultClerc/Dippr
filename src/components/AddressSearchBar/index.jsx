@@ -32,7 +32,7 @@ const options = {
   disableDefaultUI: true
 }
 
-const AddressSearchBar = ({city}) => {
+const AddressSearchBar = ({city, lat , lng}) => {
   const [cityName, setCityName] = useState([])
   const {isLoaded, loadError} = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -46,12 +46,24 @@ const AddressSearchBar = ({city}) => {
   }, [])
   
   const handleCity = (value) => {
-    city(value);
+    const lat1 = value[0].geometry.viewport.Wa.i;
+    const lat2 = value[0].geometry.viewport.Wa.j;
+    const Lat = (lat1 + lat2)/2;
+
+    const lng1 = value[0].geometry.viewport.Ra.i
+    const lng2 = value[0].geometry.viewport.Ra.j
+    const Lng = (lng1 + lng2)/2;
+
+    lat(Lat);
+    lng(Lng);
+    city(value[0].vicinity);
     setCityName(value);
   };
 
-  const onPlacesChanged = () => handleCity(searchBox.current.gm_accessors_.places.qe.searchBoxPlaces);
-
+  const onPlacesChanged = () => {
+    handleCity(searchBox.current.gm_accessors_.places.qe.searchBoxPlaces);
+  };
+  
   if (loadError) return "Error loading maps";
   if (!isLoaded) return <Loader/>
 

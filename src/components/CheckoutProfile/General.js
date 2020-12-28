@@ -5,7 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import AddressSearchBar from '../../components/AddressSearchBar'
 import { Add } from '@material-ui/icons';
 
-export default function General({name, city, firstname}) {
+export default function General({name, city, firstname, lat, lng}) {
   const [nickName, setNickName] = useState('');
   const [cityName, setCityName] = useState([]);
   const [firstName, setFirstName] = useState('');
@@ -21,6 +21,14 @@ export default function General({name, city, firstname}) {
 
   const handleFirstName =(value)=>{
     firstname(value)
+  };
+
+  const handleLat = (value) => {
+    lat(value)
+  };
+
+  const handleLng = (value) => {
+    lng(value)
   };
 
   useEffect(()=>{
@@ -64,7 +72,7 @@ export default function General({name, city, firstname}) {
           />
             <br/>
             <br/> 
-          <AddressSearchBar city={content => handleCityName(content)}/>
+          <AddressSearchBar city={content => handleCityName(content)} lat={content => handleLat(content)} lng={content => handleLng(content)}/>
         </Grid>
       </Grid>
 

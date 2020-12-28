@@ -60,6 +60,8 @@ export default function CheckoutProfile() {
   const [city, setCity] = useState(null);
   const [firstName, setFirstName] = useState(null);
   const [redirection, setRedirection] = useState(null);
+  const [lat, setLat] = useState(null);
+  const [lng, setLng] = useState(null);
   const user = useSelector(state => state.user.user);
 
   const data = {
@@ -103,6 +105,16 @@ export default function CheckoutProfile() {
     setFirstName(value);
   };
 
+  const handleLat = (value) => {
+    console.log(value)
+    setLat(value)
+  };
+
+  const handleLng = (value) => {
+    console.log(value)
+    setLng(value)
+  };
+
   const handleSubmit = () => {
     fetch(`https://dippr-api-production.herokuapp.com/api/users/${user.id}`, {
       "method": "PUT",
@@ -121,6 +133,8 @@ export default function CheckoutProfile() {
         first_name: firstName,
         city: city,
         nickname: nickName,
+        lat: lat,
+        lng: lng
       }}))
       setRedirection(true);
     }).catch(error => {
@@ -161,7 +175,7 @@ export default function CheckoutProfile() {
       case 0:
         return <Avatar picture={content => handlePicture(content)} imageAvatar={file}/>;
       case 1:
-        return <General name = {content => handleNickName(content)} city = {content => handleCityName(content)} firstname = {content => handleFirstName(content)}/>;
+        return <General name = {content => handleNickName(content)} city = {content => handleCityName(content)} firstname = {content => handleFirstName(content)} lat={content => handleLat(content)} lng={content => handleLng(content)}/>;
       default:
         throw new Error('Unknown step');
     }
