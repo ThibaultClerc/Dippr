@@ -50,8 +50,8 @@ const AddressSearchBar = ({city, lat , lng}) => {
     const lat2 = value[0].geometry.viewport.Wa.j;
     const Lat = (lat1 + lat2)/2;
 
-    const lng1 = value[0].geometry.viewport.Ra.i
-    const lng2 = value[0].geometry.viewport.Ra.j
+    const lng1 = value[0].geometry.viewport.Qa.i
+    const lng2 = value[0].geometry.viewport.Qa.j
     const Lng = (lng1 + lng2)/2;
 
     lat(Lat);
