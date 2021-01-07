@@ -76,9 +76,9 @@ const AddressSearchBar = ({city, lat , lng}) => {
       }
     >
       <TextField
-      id="city"
-      name="city"
-      label="Ville"
+      id="address"
+      name="address"
+      label="Adresse"
       fullWidth
     />
     </StandaloneSearchBox>
