@@ -14,7 +14,7 @@ export default function Avatar({picture, imageAvatar }) {
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
-        Avatar
+        Photo de profil
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12}>

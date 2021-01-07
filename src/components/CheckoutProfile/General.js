@@ -5,12 +5,12 @@ import TextField from '@material-ui/core/TextField';
 import AddressSearchBar from '../../components/AddressSearchBar'
 import { Add } from '@material-ui/icons';
 
-export default function General({name, city, firstname, lat, lng}) {
-  const [nickName, setNickName] = useState('');
+export default function General({name, city, firstname, lat, lng, currentlastname, currentfirstname}) {
+  const [lastName, setLastName] = useState(currentlastname === null ? '':currentlastname);
   const [cityName, setCityName] = useState([]);
-  const [firstName, setFirstName] = useState('');
+  const [firstName, setFirstName] = useState(currentfirstname === null ? '':currentfirstname);
 
-  const handleNickName =(value)=>{
+  const handleLastName =(value)=>{
     name(value)
   };
 
@@ -32,8 +32,8 @@ export default function General({name, city, firstname, lat, lng}) {
   };
 
   useEffect(()=>{
-    handleNickName(nickName)
-  },[nickName]);
+    handleLastName(lastName)
+  },[lastName]);
 
   useEffect(()=>{
     handleCityName(cityName)
@@ -53,6 +53,7 @@ export default function General({name, city, firstname, lat, lng}) {
         <Grid item xs={12}>
           <TextField
             id="firstName"
+            value={firstName}
             name="firstName"
             label="Prénom"
             fullWidth
@@ -62,17 +63,22 @@ export default function General({name, city, firstname, lat, lng}) {
           <br/>
           <br/>
             <TextField
-            id="nickName"
-            value={nickName}
-            name="nickname"
-            label="Surnom"
+            id="lastName"
+            value={lastName}
+            name="lastname"
+            label="Nom de famille"
             fullWidth
-            onChange={e =>setNickName(e.target.value)}
-            autoComplete="nick-name"
+            onChange={e =>setLastName(e.target.value)}
+            autoComplete="last-name"
           />
+          <Typography variant="body2" gutterBottom>
+            Votre nom de famille restera confidentielle, seul votre prénom sera affiché.
+          </Typography>
             <br/>
-            <br/> 
           <AddressSearchBar city={content => handleCityName(content)} lat={content => handleLat(content)} lng={content => handleLng(content)}/>
+          <Typography variant="body2" gutterBottom>
+            Votre adresse restera confidentielle, un point aléatoire sera placé à 500 m sur la carte autour de l'adresse indiqué.
+          </Typography>
         </Grid>
       </Grid>
 

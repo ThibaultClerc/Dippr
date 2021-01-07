@@ -1,6 +1,6 @@
 import React, { useState, Fragment, useEffect} from 'react';
 import { Redirect} from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Paper from '@material-ui/core/Paper';
 import Stepper from '@material-ui/core/Stepper';
@@ -13,18 +13,26 @@ import General from './General';
 import {loginUser} from '../../store/actions';
 import { useSelector, useDispatch } from 'react-redux';
 import Cookies from 'js-cookie'
-
+import GridButtons from './GridButtons'
+import MobileStepper from '@material-ui/core/MobileStepper';
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import useDeviceDetect from "../DeviceDetect";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
     position: 'relative',
+  },
+  root: {
+    maxWidth: 400,
+    flexGrow: 1,
   },
   layout: {
     width: 'auto',
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
     [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
-      width: 600,
+      width: 900,
       marginLeft: 'auto',
       marginRight: 'auto',
     },
@@ -52,22 +60,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function CheckoutProfile() {
+const CheckoutProfile = () => {
   const classes = useStyles();
+  const theme = useTheme();
+
   const [activeStep, setActiveStep] = useState(0);
   const [file, setFile] = useState(null);
-  const [nickName, setNickName] = useState(null);
+  const [lastName, setLastName] = useState(null);
   const [city, setCity] = useState(null);
   const [firstName, setFirstName] = useState(null);
   const [redirection, setRedirection] = useState(null);
   const [lat, setLat] = useState(null);
   const [lng, setLng] = useState(null);
+  const [specialties, setSpecialties] = useState(null);
+  const [culinariesDiscovery, setCulinariesDiscovery] = useState(null);
   const user = useSelector(state => state.user.user);
+  const { isMobile } = useDeviceDetect();
+
 
   const data = {
     first_name: firstName,
     city: city,
-    nickname: nickName,
+    last_name: lastName,
     lat: lat,
     lng: lng
   };
@@ -94,12 +108,11 @@ export default function CheckoutProfile() {
     setFile(value);
   };
 
-  const handleNickName = (value) => {
-    setNickName(value);
+  const handleLastName = (value) => {
+    setLastName(value);
   };
 
   const handleCityName = (value) => {
-    console.log(value)
     setCity(value);
   };
 
@@ -108,13 +121,21 @@ export default function CheckoutProfile() {
   };
 
   const handleLat = (value) => {
-    console.log(value)
-    setLat(value)
+    setLat(value);
   };
 
   const handleLng = (value) => {
-    console.log(value)
-    setLng(value)
+    setLng(value);
+  };
+
+  const handleSpecialties = (value) => {
+    console.log(value);
+    setSpecialties(value);
+  };
+
+  const handleCulinariesDiscovery = (value) => {
+    console.log(value);
+    setCulinariesDiscovery(value);
   };
 
   const handleSubmit = () => {
@@ -134,7 +155,7 @@ export default function CheckoutProfile() {
       dispatch(loginUser({ "id": user.id, "attributes": {
         first_name: firstName,
         city: city,
-        nickname: nickName,
+        last_name: lastName,
         lat: lat,
         lng: lng
       }}))
@@ -170,14 +191,39 @@ export default function CheckoutProfile() {
     };
   },[file])
 
-  const steps = ['Avatar', 'Infos'];
+  useEffect(() => {
+  }, [isMobile])
 
-  function getStepContent(step) {
+  const steps = ['Photo de profil', 'Infos', 'Spécialités', 'Découverte culinaire'];
+
+  const getStepContent =(step)=> {
     switch (step) {
       case 0:
         return <Avatar picture={content => handlePicture(content)} imageAvatar={file}/>;
       case 1:
-        return <General name = {content => handleNickName(content)} city = {content => handleCityName(content)} firstname = {content => handleFirstName(content)} lat={content => handleLat(content)} lng={content => handleLng(content)}/>;
+        return <General 
+        name = {content => handleLastName(content)} 
+        city = {content => handleCityName(content)} 
+        firstname = {content => handleFirstName(content)} 
+        lat={content => handleLat(content)} 
+        lng={content => handleLng(content)}
+        currentlastname={lastName}
+        currentfirstname={firstName}
+        />;
+      case 2:
+        return <GridButtons title = {"Choisis tes 3 spécialités :" } 
+        selectedDishes = {content =>handleSpecialties(content)}
+        currentDishes = {specialties}
+        />
+      case 3:
+        return (
+        <div>
+        <GridButtons title = {"Découvres 3 spécialités :"}  
+        selectedDishes = {content =>handleCulinariesDiscovery(content)}
+        currentDishes = {culinariesDiscovery}
+        />
+        </div>
+        )
       default:
         throw new Error('Unknown step');
     }
@@ -193,15 +239,36 @@ export default function CheckoutProfile() {
       <main className={classes.layout}>
         <Paper className={classes.paper}>
           <Typography component="h1" variant="h4" align="center">
-            Remplir son Profil
+            Remplis ton profil
           </Typography>
-          <Stepper activeStep={activeStep} className={classes.stepper}>
+          {!isMobile && (<Stepper activeStep={activeStep} alternativeLabel>
             {steps.map((label) => (
               <Step key={label}>
                 <StepLabel>{label}</StepLabel>
               </Step>
             ))}
-          </Stepper>
+          </Stepper>)}
+          
+          {isMobile && (<MobileStepper
+            variant="dots"
+            steps={steps.length}
+            position="static"
+            activeStep={activeStep}
+            // className={classes.root}
+            nextButton={
+              <Button size="small" onClick={handleNext} color="primary">
+                {activeStep === steps.length - 1 ? 'Sauvegarder' : 'Suivant'}
+                {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+              </Button>
+            }
+            backButton={
+              <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
+                {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+                Retour
+              </Button>
+            }
+          />)}
+
           <Fragment>
             {activeStep === steps.length ? (
             <Fragment>
@@ -210,28 +277,30 @@ export default function CheckoutProfile() {
             ) : (
               <Fragment>
                 {getStepContent(activeStep)}
-                <div className={classes.buttons}>
-                <Button
-                    onClick={handleRedirection}
-                    className={classes.button}
-                  >
-                    Plus tard
-                  </Button>
-                  {activeStep !== 0 && (
-                    <Button onClick={handleBack} className={classes.button}>
-                      Retour
-                    </Button>
-                  )}
-
+                {!isMobile &&(
+                  <div className={classes.buttons}>
                   <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleNext}
-                    className={classes.button}
-                  >
-                    {activeStep === steps.length - 1 ? 'Sauvegarder' : 'Suivant'}
-                  </Button>
-                </div>
+                      onClick={handleRedirection}
+                      className={classes.button}
+                    >
+                      Plus tard
+                    </Button>
+                    {activeStep !== 0 && (
+                      <Button onClick={handleBack} className={classes.button}>
+                        Retour
+                      </Button>
+                    )}
+  
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleNext}
+                      className={classes.button}
+                    >
+                      {activeStep === steps.length - 1 ? 'Sauvegarder' : 'Suivant'}
+                    </Button>
+                  </div>
+                )}  
               </Fragment>
             )}
           </Fragment>
@@ -240,3 +309,5 @@ export default function CheckoutProfile() {
     </Fragment>
   );
 }
+
+export default CheckoutProfile;

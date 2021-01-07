@@ -15,11 +15,17 @@ import Swap from "../../pages/Swap"
 import Dish from "../../pages/Dish"
 import DashboardAdmin from "../../components/DashboardAdmin"
 import MarketDish from '../../pages/MarketDish'
+import Paper from '@material-ui/core/Paper';
+import { makeStyles } from '@material-ui/core/styles';
 
-
+const useStyles = makeStyles((theme) => ({
+  toolbar: theme.mixins.toolbar,
+}));
 
 const Layout = () => {
   const { isMobile } = useDeviceDetect();
+  const classes = useStyles();
+
 
   useEffect(() => {
   }, [isMobile])
@@ -42,6 +48,9 @@ const Layout = () => {
         <PrivateRoute       path="/swap"         component={Swap}/>
         <PrivateRoute       path="/admin"              component={DashboardAdmin}/>
       </Switch> 
+      {isMobile && (<Paper elevation={0}>
+        <div className={classes.toolbar} />
+      </Paper>)}
     </Router>
   )
 }
